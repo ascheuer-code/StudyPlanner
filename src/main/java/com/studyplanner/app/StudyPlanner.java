@@ -3,6 +3,7 @@ package com.studyplanner.app;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
 
 import com.calendarfx.model.Calendar;
@@ -13,18 +14,20 @@ import com.calendarfx.view.CalendarView;
 import impl.com.calendarfx.view.NumericTextField;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class StudyPlanner extends Application {
 int FENSTER_SCHON_OFFEN_ZÄHLER=0;
+LocalTime Beginn_Zeit_Event;
+LocalTime End_Zeit_Event;
    List Module = new ArrayList();
+   List Events = new ArrayList();
    ListView listbox= new ListView();
 
 
@@ -70,11 +73,19 @@ int FENSTER_SCHON_OFFEN_ZÄHLER=0;
         updateTimeThread.setDaemon(true);
         updateTimeThread.start();
 
+        List ladentest = new ArrayList();
+        Modul eins = new Modul("eins",1);
+        Modul eins2 = new Modul("zwei",2);
+        Modul eins3 = new Modul("drei",3);
+        Modul eins4 = new Modul("vier",4);
+        ladentest.add(eins);
+        ladentest.add(eins2);
+        ladentest.add(eins3);
+        ladentest.add(eins4);
+
         Button Event_Eintragen = new Button ("neuer Eintrag");
         Event_Eintragen.setOnAction(
-                event -> {if(event.getSource()== Event_Eintragen){
-                    if (FENSTER_SCHON_OFFEN_ZÄHLER<1){ neuesEvent();FENSTER_SCHON_OFFEN_ZÄHLER++;}
-                    else{FensterSchonOffenExeptionWimdow();}}});
+                event -> {if(event.getSource()== Event_Eintragen){neuesEvent("Platzhalter");}});
 
         Button Modul_Anlegen = new Button("Modul anlegen");
         Modul_Anlegen.setOnAction(
@@ -85,20 +96,25 @@ int FENSTER_SCHON_OFFEN_ZÄHLER=0;
         BorderPane layout = new BorderPane();
         VBox buttonbox = new VBox();
         buttonbox.getChildren().addAll( Event_Eintragen,Modul_Anlegen);
-
-
-
-
         layout.setTop(buttonbox);
         layout.setBottom(listbox);
+        for(Object var :ladentest){
+            Button button = new Button(""+var);
+            listbox.getItems().add(button);
+            button.setOnAction(actionEvent -> { neuesEvent(button.getText());});
+
+        }
+
 
         //linke Hälfte
-        Pane bar = new Pane(layout);// ist die toolbar
+         Pane bar = new Pane(layout);// ist die toolbar
         // rechte Hälfte
-        Pane calender = new Pane(calendarView);// ist der calender
-        calender.autosize();
+        GridPane calender = new GridPane();// ist der calender
+        calender.getChildren().add(calendarView);
+
+        calender.setMaxSize(Double.MAX_VALUE,Double.MAX_VALUE);
         SplitPane split = new SplitPane(bar,calender);
-        split.setDividerPosition(0,0.01);
+        split.setDividerPosition(0,0.18);
         Scene sceneO = new Scene(split);
         stage.setScene(sceneO);
         stage.setWidth(1000);
@@ -128,13 +144,11 @@ int FENSTER_SCHON_OFFEN_ZÄHLER=0;
         stage.show();
         Modul_Speichern.setOnAction(
                 event -> {if(event.getSource()== Modul_Speichern){
-                    Modul modul = new Modul();
-                    modul.ECTS = Integer. parseInt(Ects_Einlesen.getText());
-                    modul.Modulname = Modulname_Einlesen.getText();
+                    Modul modul = new Modul(Modulname_Einlesen.getText(),Integer. parseInt(Ects_Einlesen.getText()));
                     Module.add(modul);
-                    listbox.getItems().add(modul);
-
-
+                    Button button= new Button(""+modul);
+                    listbox.getItems().add(button);
+                    button.setOnAction( actionEvent -> { neuesEvent(button.getText());});
                     stage.close();
 
                     }});
@@ -143,55 +157,122 @@ int FENSTER_SCHON_OFFEN_ZÄHLER=0;
 
         // anlegen eines neuen events im neuen fenster
         //@max
-        public void neuesEvent(){
-            Button button= new Button("Close");
-            HBox box = new HBox();
-            BorderPane layoutHilfe= new BorderPane();
-            BorderPane layout = new BorderPane();
-            Scene scene= new Scene(layout);
-            Stage stage= new Stage();
-
-            box.getChildren().addAll(button);
-            layoutHilfe.setRight(box);
-            layout.setTop(layoutHilfe);
+        public void neuesEvent(String string ){
 
 
+            Text Modulname = new Text("Modulname");
+            Text modulname = new Text(string);
+            Text anfangszeit= new Text("Anfangszeit");
+            Text endzeit = new Text("Endzeit");
+            Text beschreibung = new Text("Beschreibung");
+            String Beschreibung;
+            TextField beschreibungtext = new TextField();
+
+            // uhrzeit Picker für neues Event
+            ChoiceBox zeitenanfang = new ChoiceBox();
+            int  stundeanfang =8;
+            int minuteanfang =0;
+            LocalTime x = LocalTime.of(stundeanfang, minuteanfang);
+            for(int i=0; i<= 24;i++){
+                zeitenanfang.getItems().addAll(x);
+                x= x.plusMinutes(30);}
+
+            zeitenanfang.setOnAction((event) -> {
+                int selectedIndex = zeitenanfang.getSelectionModel().getSelectedIndex();
+                LocalTime beginnzeit = (LocalTime) zeitenanfang.getSelectionModel().getSelectedItem();
+                setBeginn_Zeit_Event(beginnzeit);
+            });
+
+            ChoiceBox zeitenende = new ChoiceBox();
+            int  stundeende =8;
+            int minuteende =30;
+            LocalTime y = LocalTime.of(stundeende, minuteende);
+            for(int i=0; i<= 24;i++){
+                zeitenende.getItems().addAll(y);
+                y= y.plusMinutes(30);}
+            zeitenende.setOnAction((event) -> {
+                int selectedIndex = zeitenende.getSelectionModel().getSelectedIndex();
+                LocalTime zeitende= (LocalTime) zeitenende.getSelectionModel().getSelectedItem();
+                setEnd_Zeit_Event(zeitende);
+            });
+            // DatumPicker für neues event
+            Text datum = new Text("Datum");
+            LocalDate Datumausen ;
+            DatePicker datumpicker = new DatePicker();
+            Button button = new Button("Datum wählen");
+            button.setOnAction(action -> {
+                LocalDate Datum = datumpicker.getValue();
+            });
+
+
+            VBox links = new VBox();
+            VBox rechts = new VBox();
+            Text platzhalter1 = new Text();
+            Text platzhalter2= new Text();
+            Text platzhalter3 = new Text();
+            Text platzhalter4= new Text();
+            links.getChildren().addAll(Modulname,platzhalter1,anfangszeit,platzhalter2,endzeit,platzhalter3,datum,platzhalter4,beschreibung);
+           rechts.getChildren().addAll(modulname,platzhalter1,zeitenanfang,platzhalter2,zeitenende,platzhalter3,datumpicker,platzhalter4,beschreibungtext);
+
+           Button Event_Speichern = new Button("Event sichern :");
+           // kein lamda weil hat mit lamda nicht funktioniert
+            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e)
+                {Event event1 = new Event(string,Beginn_Zeit_Event,End_Zeit_Event,datumpicker.getValue(),beschreibungtext.getText());
+                    Events.add(event1);
+                    System.out.println(event1);}};
+                 Event_Speichern.setOnAction(event);
+
+
+            SplitPane splitpane = new SplitPane(links,rechts);
+            BorderPane borderPane= new BorderPane();
+            borderPane.setCenter(splitpane);
+            borderPane.setBottom(Event_Speichern);
+            Scene scene= new Scene(borderPane);
+            Stage stage = new Stage();
             stage.setScene(scene);
-            stage.setHeight(150);
-            stage.setWidth(150);
+            stage.setHeight(300);
+            stage.setWidth(600);
             stage.show();
+    }
 
-            button.setOnAction(event ->{if(event.getSource()== button){stage.close(); FENSTER_SCHON_OFFEN_ZÄHLER--;}});
 
 
-        }
+
 
 
 
 
     // Offnet Fenster wen aufgerufen welches anzeigt , dass fenster bereits offen
-    public void FensterSchonOffenExeptionWimdow(){
-        Stage stage= new Stage();
+//    public void FensterSchonOffenExeptionWimdow(){
+//        Stage stage= new Stage();
+//
+//        VBox layout = new VBox();
+//
+//        Scene scene= new Scene(layout);
+//
+//        Button close_window = new Button("Close Window");
+//        Text text= new Text("Es ist bereits ein Fenster dieser Art offen ");
+//
+//        layout.getChildren().addAll( text,close_window );
+//
+//        // Schliest das Fenster auf Knopfdruck
+//        close_window.setOnAction(event ->{if(event.getSource()== close_window)stage.close();});
+//        //Optische Anpassungen
+//        stage.setHeight(100);
+//        stage.setWidth(250);
+//        close_window.setMinWidth(230);
+//        close_window.setCenterShape(true);
+//
+//        stage.setScene(scene);
+//        stage.show();
+//    }
 
-        VBox layout = new VBox();
-
-        Scene scene= new Scene(layout);
-
-        Button close_window = new Button("Close Window");
-        Text text= new Text("Es ist bereits ein Fenster dieser Art offen ");
-
-        layout.getChildren().addAll( text,close_window );
-
-        // Schliest das Fenster auf Knopfdruck
-        close_window.setOnAction(event ->{if(event.getSource()== close_window)stage.close();});
-        //Optische Anpassungen
-        stage.setHeight(100);
-        stage.setWidth(250);
-        close_window.setMinWidth(230);
-        close_window.setCenterShape(true);
-
-        stage.setScene(scene);
-        stage.show();
+    public void setBeginn_Zeit_Event(LocalTime x){
+        Beginn_Zeit_Event= x;
+    }
+    public void setEnd_Zeit_Event(LocalTime x){
+        End_Zeit_Event= x;
     }
 
     public static void main(String[] args) {
