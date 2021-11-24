@@ -17,8 +17,16 @@ public class Event {
     this.datum= datum;
     this.beschreibung= beschreibung;}
 
+public String getModulname(){
+       return modulname;
+}
+
     @Override
     public String toString() {
         return  modulname +"  "+ anfagszeit + "  "+ endzeit+ "  " +datum + "  "+beschreibung;
+    }
+
+    public String toString2() {
+        return  modulname;
     }
 }

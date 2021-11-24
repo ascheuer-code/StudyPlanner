@@ -5,10 +5,13 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.spi.CalendarDataProvider;
 
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Calendar.Style;
 import com.calendarfx.model.CalendarSource;
+import com.calendarfx.model.Entry;
+import com.calendarfx.model.Interval;
 import com.calendarfx.view.CalendarView;
 
 import impl.com.calendarfx.view.NumericTextField;
@@ -29,6 +32,7 @@ LocalTime End_Zeit_Event;
    List Module = new ArrayList();
    List Events = new ArrayList();
    ListView listbox= new ListView();
+    Calendar calendar = new Calendar("Test");
 
 
     @Override
@@ -39,11 +43,20 @@ LocalTime End_Zeit_Event;
         Calendar birthdays = new Calendar("Birthdays"); // <2>
         Calendar holidays = new Calendar("Holidays");
 
+
+
+
         birthdays.setStyle(Style.STYLE1); // <3>
         holidays.setStyle(Style.STYLE2);
+        calendar.setStyle(Style.STYLE1);
+
+
+
+
+
 
         CalendarSource myCalendarSource = new CalendarSource("My Calendars"); // <4>
-        myCalendarSource.getCalendars().addAll(birthdays, holidays);
+        myCalendarSource.getCalendars().addAll(birthdays, holidays,calendar);
 
         calendarView.getCalendarSources().addAll(myCalendarSource); // <5>
 
@@ -53,12 +66,15 @@ LocalTime End_Zeit_Event;
             @Override
             public void run() {
                 while (true) {
+
                     Platform.runLater(() -> {
                         calendarView.setToday(LocalDate.now());
                         calendarView.setTime(LocalTime.now());
                     });
 
                     try {
+
+
                         // update every 10 seconds
                         sleep(10000);
                     } catch (InterruptedException e) {
@@ -149,15 +165,15 @@ LocalTime End_Zeit_Event;
                     Button button= new Button(""+modul);
                     listbox.getItems().add(button);
                     button.setOnAction( actionEvent -> { neuesEvent(button.getText());});
-                    stage.close();
+                    stage.close();}});
 
-                    }});
 
     }
 
         // anlegen eines neuen events im neuen fenster
         //@max
         public void neuesEvent(String string ){
+            Stage stage = new Stage();
 
 
             Text Modulname = new Text("Modulname");
@@ -220,7 +236,13 @@ LocalTime End_Zeit_Event;
                 public void handle(ActionEvent e)
                 {Event event1 = new Event(string,Beginn_Zeit_Event,End_Zeit_Event,datumpicker.getValue(),beschreibungtext.getText());
                     Events.add(event1);
-                    System.out.println(event1);}};
+                    Entry<String> eventtest = new Entry<>(string);
+                    calendar.addEntry(eventtest);
+
+                    eventtest.setInterval(datumpicker.getValue());
+                    eventtest.setInterval(Beginn_Zeit_Event,End_Zeit_Event);
+                    System.out.println(event1);
+                    stage.close();}};
                  Event_Speichern.setOnAction(event);
 
 
@@ -229,7 +251,7 @@ LocalTime End_Zeit_Event;
             borderPane.setCenter(splitpane);
             borderPane.setBottom(Event_Speichern);
             Scene scene= new Scene(borderPane);
-            Stage stage = new Stage();
+
             stage.setScene(scene);
             stage.setHeight(300);
             stage.setWidth(600);
