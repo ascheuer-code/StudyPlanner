@@ -13,7 +13,18 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The type Study planner.
+ */
 public class StudyPlanner extends Application {
+
+    /**
+     * The entry point of application.
+     * @param args the input arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -64,9 +75,5 @@ public class StudyPlanner extends Application {
         primaryStage.setHeight(1000);
         primaryStage.centerOnScreen();
         primaryStage.show();
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }
