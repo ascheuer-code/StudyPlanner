@@ -1,4 +1,4 @@
-package com.studyplanner.app;
+package com.studyplanner.code_ascheuer.github;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
