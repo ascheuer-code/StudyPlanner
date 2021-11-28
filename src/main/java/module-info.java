@@ -5,6 +5,7 @@ module com.calendarfx.app {
     requires com.calendarfx.view;
 
     exports com.studyplanner.code_ascheuer.github;
+    exports DataAccess;
     exports Model;
     exports View;
 }
