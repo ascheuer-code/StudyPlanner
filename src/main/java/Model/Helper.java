@@ -121,7 +121,7 @@ public class Helper {
      *
      * @return the string
      */
-    public static String AllWhitespaceToOne(String string) {
+    public static String allWhitespaceToOne(String string) {
         string = string.stripTrailing();
         string = string.stripLeading();
         string = string.replaceAll("\\s+", " ");
@@ -137,7 +137,7 @@ public class Helper {
      *
      * @return the string
      */
-    public static String RemoveAllWhitespaces(String string) {
+    public static String removeAllWhitespaces(String string) {
         string = string.replaceAll("\\s+", "");
         return string;
     }
