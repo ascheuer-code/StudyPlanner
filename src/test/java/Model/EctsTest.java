@@ -62,7 +62,7 @@ class EctsTest {
         String expectedMessage = "Ects need to be positive!";
         String actualMessage = exception.getMessage();
 
-        assertTrue(actualMessage.contains(expectedMessage));
+        assertFalse(actualMessage.contains(expectedMessage));
 
     }
 }
