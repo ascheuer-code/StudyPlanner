@@ -18,7 +18,6 @@ class EctsTest {
 
     /**
      * Sets up an Ects class with argument 5 to test.
-     *
      */
     @BeforeEach
     void setUp() {
@@ -51,10 +50,12 @@ class EctsTest {
 
     /**
      * Tests if EctsException is thrown if negative Integer is given.
-     *
      */
     @Test
     void testEctsNegative() {
+
+        // Here you are Testing a Exception thrown by Helper.checkMin what are already tested in the HelperTest :D
+
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             Ects ects2 = new Ects(-1);
         });
@@ -62,5 +63,6 @@ class EctsTest {
         String actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
+
     }
 }
