@@ -4,9 +4,5 @@ module com.calendarfx.app {
     requires javafx.controls;
     requires com.calendarfx.view;
 
-    exports com.studyplanner.code_ascheuer.github;
-    exports DataAccess;
-    exports Model;
-
-    opens Model;
+    exports com.studyplanner.app;
 }
