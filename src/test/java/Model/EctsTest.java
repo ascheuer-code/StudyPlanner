@@ -40,6 +40,21 @@ class EctsTest {
         assertEquals(ects.getMinutes(), 9000);
     }
 
+
+    /**
+     * Sets ects.
+     */
+    @Test
+    void setEcts() {
+        assertEquals(5, ects.getEcts());
+        ects.setEcts(4);
+        assertEquals(4, ects.getEcts());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            ects.setEcts(0);
+        });
+    }
+
     /**
      * Test if method toString returns correct String.
      */

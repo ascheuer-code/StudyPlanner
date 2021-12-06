@@ -49,6 +49,17 @@ public class Ects {
     }
 
     /**
+     * Sets ects.
+     *
+     * @param ects
+     *         the ects
+     */
+    public void setEcts(int ects) {
+        Helper.checkMin(1, ects, "ECTS");
+        this.ects = ects;
+    }
+
+    /**
      * Gets minutes.
      *
      * @return the minutes
