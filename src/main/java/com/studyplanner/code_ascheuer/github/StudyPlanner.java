@@ -28,6 +28,7 @@ import java.util.List;
 
 public class StudyPlanner extends Application {
     int FENSTER_SCHON_OFFEN_ZÄHLER = 0;
+
     LocalTime Beginn_Zeit_Event;
     LocalTime End_Zeit_Event;
     List Module = new ArrayList();
@@ -44,17 +45,13 @@ public class StudyPlanner extends Application {
 
         CalendarView calendarView = new CalendarView(); // <1>
 
-        Calendar birthdays = new Calendar("Birthdays"); // <2>
-        Calendar holidays = new Calendar("Holidays");
-
-
-        birthdays.setStyle(Style.STYLE1); // <3>
-        holidays.setStyle(Style.STYLE2);
         calendar.setStyle(Style.STYLE1);
 
 
         CalendarSource myCalendarSource = new CalendarSource("My Calendars"); // <4>
-        myCalendarSource.getCalendars().addAll(birthdays, holidays, calendar);
+
+        myCalendarSource.getCalendars().addAll(calendar);
+
 
         calendarView.getCalendarSources().addAll(myCalendarSource); // <5>
 
@@ -251,13 +248,18 @@ public class StudyPlanner extends Application {
             LocalTime zeitende = (LocalTime) zeitenende.getSelectionModel().getSelectedItem();
             setEnd_Zeit_Event(zeitende);
         });
+
+
         // DatumPicker für neues event
+
         Text datum = new Text("Datum");
         LocalDate Datumausen;
         DatePicker datumpicker = new DatePicker();
-        Button button = new Button("Datum wählen");
-        button.setOnAction(action -> {
+        Button button1 = new Button("Datum wählen");
+
+        button1.setOnAction(action -> {
             LocalDate Datum = datumpicker.getValue();
+
         });
 
 
@@ -267,8 +269,8 @@ public class StudyPlanner extends Application {
         Text platzhalter2 = new Text();
         Text platzhalter3 = new Text();
         Text platzhalter4 = new Text();
-        links.getChildren().addAll(Modulname, platzhalter1, anfangszeit, platzhalter2, endzeit, platzhalter3, datum, platzhalter4, beschreibung);
-        rechts.getChildren().addAll(modulname, platzhalter1, zeitenanfang, platzhalter2, zeitenende, platzhalter3, datumpicker, platzhalter4, beschreibungtext);
+        links.getChildren().addAll(Modulname, modulname, anfangszeit, zeitenanfang, endzeit, zeitenende, datum, datumpicker, beschreibung, beschreibungtext);
+
 
         Button Event_Speichern = new Button("Event sichern :");
         // kein lamda weil hat mit lamda nicht funktioniert
@@ -288,8 +290,9 @@ public class StudyPlanner extends Application {
         Event_Speichern.setOnAction(event);
 
 
-        SplitPane splitpane = new SplitPane(links, rechts);
+        SplitPane splitpane = new SplitPane(links);
         BorderPane borderPane = new BorderPane();
+
         borderPane.setCenter(splitpane);
         borderPane.setBottom(Event_Speichern);
         Scene scene = new Scene(borderPane);
@@ -300,8 +303,10 @@ public class StudyPlanner extends Application {
         stage.show();
     }
 
+
     public void setBeginn_Zeit_Event(LocalTime x) {
         Beginn_Zeit_Event = x;
+
     }
 
     public void setEnd_Zeit_Event(LocalTime x) {
