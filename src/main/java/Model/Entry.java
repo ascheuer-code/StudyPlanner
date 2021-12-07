@@ -6,7 +6,7 @@ package Model;
      * **/
     public class Entry<E> {
         //Klassenattribute
-        private final E  model ;
+        private  E  model ;
 
         // hier wird der Eintrag von Modul erstellen und überprüft, ob er null oder nicht
         public Entry  ( E einmodel){

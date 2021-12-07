@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Entrylist {
     //Klassenattribute
 
-    private final ArrayList <Entry<Model>> entrylist;
+    private  ArrayList <Entry<Model>> entrylist;
     // hier wird die Einträgenliste angelegt
     public Entrylist(){
 
