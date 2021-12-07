@@ -36,10 +36,17 @@ public class StudyPlanner extends Application {
     ListView listbox = new ListView();
     Calendar calendar = new Calendar("Test");
 
+    /**
+     * @param args
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * @param stage
+     * @throws Exception
+     */
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -47,11 +54,9 @@ public class StudyPlanner extends Application {
 
         calendar.setStyle(Style.STYLE1);
 
-
         CalendarSource myCalendarSource = new CalendarSource("My Calendars"); // <4>
 
         myCalendarSource.getCalendars().addAll(calendar);
-
 
         calendarView.getCalendarSources().addAll(myCalendarSource); // <5>
 
@@ -68,7 +73,6 @@ public class StudyPlanner extends Application {
                     });
 
                     try {
-
 
                         // update every 10 seconds
                         sleep(10000);
@@ -110,7 +114,6 @@ public class StudyPlanner extends Application {
                     }
                 });
 
-
         BorderPane layout = new BorderPane();
         VBox buttonbox = new VBox();
         buttonbox.getChildren().addAll(Event_Eintragen, Modul_Anlegen);
@@ -125,8 +128,7 @@ public class StudyPlanner extends Application {
 
         }
 
-
-        //linke Hälfte
+        // linke Hälfte
         Pane bar = new Pane(layout);// ist die toolbar
         // rechte Hälfte
         GridPane calender = new GridPane();// ist der calender
@@ -165,7 +167,8 @@ public class StudyPlanner extends Application {
         Modul_Speichern.setOnAction(
                 event -> {
                     if (event.getSource() == Modul_Speichern) {
-                        Modul modul = new Modul(Modulname_Einlesen.getText(), Integer.parseInt(Ects_Einlesen.getText()));
+                        Modul modul = new Modul(Modulname_Einlesen.getText(),
+                                Integer.parseInt(Ects_Einlesen.getText()));
                         Module.add(modul);
                         Button button = new Button("" + modul);
                         listbox.getItems().add(button);
@@ -176,40 +179,38 @@ public class StudyPlanner extends Application {
                     }
                 });
 
-
     }
 
-
     // Offnet Fenster wen aufgerufen welches anzeigt , dass fenster bereits offen
-//    public void FensterSchonOffenExeptionWimdow(){
-//        Stage stage= new Stage();
-//
-//        VBox layout = new VBox();
-//
-//        Scene scene= new Scene(layout);
-//
-//        Button close_window = new Button("Close Window");
-//        Text text= new Text("Es ist bereits ein Fenster dieser Art offen ");
-//
-//        layout.getChildren().addAll( text,close_window );
-//
-//        // Schliest das Fenster auf Knopfdruck
-//        close_window.setOnAction(event ->{if(event.getSource()== close_window)stage.close();});
-//        //Optische Anpassungen
-//        stage.setHeight(100);
-//        stage.setWidth(250);
-//        close_window.setMinWidth(230);
-//        close_window.setCenterShape(true);
-//
-//        stage.setScene(scene);
-//        stage.show();
-//    }
+    // public void FensterSchonOffenExeptionWimdow(){
+    // Stage stage= new Stage();
+    //
+    // VBox layout = new VBox();
+    //
+    // Scene scene= new Scene(layout);
+    //
+    // Button close_window = new Button("Close Window");
+    // Text text= new Text("Es ist bereits ein Fenster dieser Art offen ");
+    //
+    // layout.getChildren().addAll( text,close_window );
+    //
+    // // Schliest das Fenster auf Knopfdruck
+    // close_window.setOnAction(event ->{if(event.getSource()==
+    // close_window)stage.close();});
+    // //Optische Anpassungen
+    // stage.setHeight(100);
+    // stage.setWidth(250);
+    // close_window.setMinWidth(230);
+    // close_window.setCenterShape(true);
+    //
+    // stage.setScene(scene);
+    // stage.show();
+    // }
 
     // anlegen eines neuen events im neuen fenster
-    //@max
+    // @max
     public void neuesEvent(String string) {
         Stage stage = new Stage();
-
 
         Text Modulname = new Text("Modulname");
         Text modulname = new Text(string);
@@ -249,7 +250,6 @@ public class StudyPlanner extends Application {
             setEnd_Zeit_Event(zeitende);
         });
 
-
         // DatumPicker für neues event
 
         Text datum = new Text("Datum");
@@ -262,21 +262,21 @@ public class StudyPlanner extends Application {
 
         });
 
-
         VBox links = new VBox();
         VBox rechts = new VBox();
         Text platzhalter1 = new Text();
         Text platzhalter2 = new Text();
         Text platzhalter3 = new Text();
         Text platzhalter4 = new Text();
-        links.getChildren().addAll(Modulname, modulname, anfangszeit, zeitenanfang, endzeit, zeitenende, datum, datumpicker, beschreibung, beschreibungtext);
-
+        links.getChildren().addAll(Modulname, modulname, anfangszeit, zeitenanfang, endzeit, zeitenende, datum,
+                datumpicker, beschreibung, beschreibungtext);
 
         Button Event_Speichern = new Button("Event sichern :");
         // kein lamda weil hat mit lamda nicht funktioniert
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                Event event1 = new Event(string, Beginn_Zeit_Event, End_Zeit_Event, datumpicker.getValue(), beschreibungtext.getText());
+                Event event1 = new Event(string, Beginn_Zeit_Event, End_Zeit_Event, datumpicker.getValue(),
+                        beschreibungtext.getText());
                 Events.add(event1);
                 Entry<String> eventtest = new Entry<>(string);
                 calendar.addEntry(eventtest);
@@ -288,7 +288,6 @@ public class StudyPlanner extends Application {
             }
         };
         Event_Speichern.setOnAction(event);
-
 
         SplitPane splitpane = new SplitPane(links);
         BorderPane borderPane = new BorderPane();
@@ -303,12 +302,17 @@ public class StudyPlanner extends Application {
         stage.show();
     }
 
-
+    /**
+     * @param x
+     */
     public void setBeginn_Zeit_Event(LocalTime x) {
         Beginn_Zeit_Event = x;
 
     }
 
+    /**
+     * @param x
+     */
     public void setEnd_Zeit_Event(LocalTime x) {
         End_Zeit_Event = x;
     }
