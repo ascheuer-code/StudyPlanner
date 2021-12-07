@@ -109,3 +109,24 @@ fabric.properties
 .idea/codestream.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij
+target/classes/module-info.class
+target/classes/com/studyplanner/code_ascheuer/github/StudyPlanner.class
+target/classes/com/studyplanner/code_ascheuer/github/StudyPlanner$1.class
+target/classes/com/studyplanner/code_ascheuer/github/StudyPlanner$2.class
+target/classes/com/studyplanner/code_ascheuer/github/StudyPlannerLauncher.class
+target/classes/DataAccess/DataAccess.class
+target/classes/Helper/Helper.class
+target/classes/Model/Ects.class
+target/classes/Model/Entry.class
+target/classes/Model/Entrylist.class
+target/classes/Model/Event.class
+target/classes/Model/Message.class
+target/classes/Model/Modul.class
+target/classes/View/Event.class
+target/classes/View/Modul.class
+target/classes/View/View.class
+target/test-classes/DataAccess/DataAccessTest.class
+target/test-classes/Helper/HelperTest.class
+target/test-classes/Model/EctsTest.class
+target/test-classes/Model/ModulTest.class
+target/test-classes/View/ViewTest.class
