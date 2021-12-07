@@ -1,5 +1,7 @@
 package Model;
 
+import Helper.Helper;
+
 /**
  * This class converts ECTS to minutes.
  *
@@ -41,7 +43,7 @@ public class Ects {
      *
      * @return the ects
      */
-    public int getEcts() {
+    public int getEctsValue() {
         return ects;
     }
 
@@ -52,7 +54,7 @@ public class Ects {
      *         the ects
      */
     public void setEcts(int ects) {
-        Helper.checkMin(1, ects, "ECTS");
+        Helper.checkSpan(1, 20, ects, "ECTS");
         this.ects = ects;
     }
 
