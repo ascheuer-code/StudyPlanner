@@ -1,6 +1,8 @@
 package Model;
 
 
+import Helper.Helper;
+
 /**
  * die klasse entry nimmt alle Model
  * Autor Mahmoud Orabi
@@ -9,8 +11,8 @@ package Model;
  *         the type parameter
  */
 public class Entry<E> {
-        //Klassenattribute
-        private  E  model ;
+    //Klassenattribute
+    private final E model;
 
     /**
      * Instantiates a new Entry.
@@ -18,15 +20,16 @@ public class Entry<E> {
      * @param einmodel
      *         the einmodel
      */
-// hier wird der Eintrag von Modul erstellen und überprüft, ob er null oder nicht
-        public Entry  ( E einmodel){
-           Helper.checkObj(einmodel);
-           this.model = einmodel;
-        }
-        @Override
-        public String toString() {
-            return "Entry [model=" + model + "]";
-        }
-
+// hier wird der Eintrag von Modul.java erstellen und überprüft, ob er null oder nicht
+    public Entry(E einmodel) {
+        Helper.checkObj(einmodel);
+        this.model = einmodel;
     }
+
+    @Override
+    public String toString() {
+        return "Entry [model=" + model + "]";
+    }
+
+}
 
