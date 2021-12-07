@@ -2,21 +2,21 @@ package Model;
 
 
     /** die klasse entry nimmt alle Model
-     * autor mahmoud orabi
+     * Autor Mahmoud Orabi
      * **/
     public class Entry<E> {
-        //klassenattribute
-        private E  modul ;
+        //Klassenattribute
+        private final E  model ;
 
-        // hier wird das Eintrag von Modul erstellen und überprüft ob er null oder nicht
-        public Entry  ( E einmodul){
-            if (einmodul == null ) {throw new IllegalArgumentException();}
-            modul = einmodul;
+        // hier wird der Eintrag von Modul erstellen und überprüft, ob er null oder nicht
+        public Entry  ( E einmodel){
+           Helper.checkObj(einmodel);
+           this.model = einmodel;
         }
         @Override
         public String toString() {
-            return "Entry [modul=" + modul + "]";
-        };
+            return "Entry [model=" + model + "]";
+        }
 
     }
 
