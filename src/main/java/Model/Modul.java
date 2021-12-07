@@ -12,14 +12,13 @@ public class Modul {
     private Ects ects;
     private String modulname;
 
-
     /**
      * Instantiates a new Modul.
      *
      * @param modulname
-     *         the modulname
+     *                  the modulname
      * @param ects
-     *         the ects
+     *                  the ects
      */
     public Modul(String modulname, int ects) {
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
@@ -41,7 +40,7 @@ public class Modul {
      * Set modulname.
      *
      * @param modulname
-     *         the titel
+     *                  the titel
      */
     public void setModulname(String modulname) {
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
@@ -57,15 +56,18 @@ public class Modul {
         return ects;
     }
 
+    /**
+     * @param ects
+     */
     public void setEcts(int ects) {
         this.ects = new Ects(ects);
     }
 
-
+    /**
+     * @return String
+     */
     public String toString() {
         return (this.ects + "  " + "Modulname: " + this.modulname);
 
     }
 }
-
-

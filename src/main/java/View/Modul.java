@@ -9,7 +9,9 @@ public class Modul {
         this.ECTS = ECTS;
     }
 
-
+    /**
+     * @return String
+     */
     @Override
     public String toString() {
         return Modulname + "   ECTS=" + ECTS;

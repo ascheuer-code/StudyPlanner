@@ -1,6 +1,5 @@
 package Model;
 
-
 import Helper.Helper;
 
 /**
@@ -8,28 +7,31 @@ import Helper.Helper;
  * Autor Mahmoud Orabi
  *
  * @param <E>
- *         the type parameter
+ *            the type parameter
  */
 public class Entry<E> {
-    //Klassenattribute
+    // Klassenattribute
     private final E model;
 
     /**
      * Instantiates a new Entry.
      *
      * @param einmodel
-     *         the einmodel
+     *                 the einmodel
      */
-// hier wird der Eintrag von Modul.java erstellen und überprüft, ob er null oder nicht
+    // hier wird der Eintrag von Modul.java erstellen und überprüft, ob er null oder
+    // nicht
     public Entry(E einmodel) {
         Helper.checkObj(einmodel);
         this.model = einmodel;
     }
 
+    /**
+     * @return String
+     */
     @Override
     public String toString() {
         return "Entry [model=" + model + "]";
     }
 
 }
-

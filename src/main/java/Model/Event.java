@@ -1,6 +1,5 @@
 package Model;
 
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -33,15 +32,15 @@ public class Event {
      * Instantiates a new Event.
      *
      * @param modulname
-     *         the modulname
+     *                     the modulname
      * @param anfangszeit
-     *         the anfangszeit
+     *                     the anfangszeit
      * @param endzeit
-     *         the endzeit
+     *                     the endzeit
      * @param datum
-     *         the datum
+     *                     the datum
      * @param beschreibung
-     *         the beschreibung
+     *                     the beschreibung
      */
     public Event(String modulname, LocalTime anfangszeit, LocalTime endzeit, LocalDate datum, String beschreibung) {
         this.modulname = modulname;
@@ -60,6 +59,9 @@ public class Event {
         return modulname;
     }
 
+    /**
+     * @return String
+     */
     @Override
     public String toString() {
         return modulname + "  " + anfagszeit + "  " + endzeit + "  " + datum + "  " + beschreibung;

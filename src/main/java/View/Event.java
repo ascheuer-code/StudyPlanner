@@ -18,17 +18,25 @@ public class Event {
         this.beschreibung = beschreibung;
     }
 
+    /**
+     * @return String
+     */
     public String getModulname() {
         return modulname;
     }
 
+    /**
+     * @return String
+     */
     @Override
     public String toString() {
         return modulname + "  " + anfagszeit + "  " + endzeit + "  " + datum + "  " + beschreibung;
     }
 
+    /**
+     * @return String
+     */
     public String toString2() {
         return modulname;
     }
 }
-

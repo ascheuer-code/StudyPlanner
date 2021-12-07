@@ -25,7 +25,6 @@ public class ModulTest {
         modul = new Modul("Test", 10);
     }
 
-
     /**
      * Gets ects test.
      */

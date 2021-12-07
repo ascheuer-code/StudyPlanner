@@ -1,4 +1,4 @@
-package Model;
+package Helper;
 
 /**
  * The type Message.
@@ -9,17 +9,17 @@ public class Message {
      * Fehlermeldung für Lib_Digits checkSpan()
      *
      * @param <T>
-     *         beliebige Zahl
+     *                  beliebige Zahl
      * @param <K>
-     *         beliebiger String
+     *                  beliebiger String
      * @param min
-     *         Minimalwert
+     *                  Minimalwert
      * @param max
-     *         Maximalwert
+     *                  Maximalwert
      * @param value
-     *         the value
+     *                  the value
      * @param fieldname
-     *         Feldname des Attributes
+     *                  Feldname des Attributes
      *
      * @return String Fehlermeldung
      */
@@ -32,15 +32,15 @@ public class Message {
      * Fehlermeldung für Lib_Digits checkMin()
      *
      * @param <T>
-     *         beliebige Zahl
+     *                  beliebige Zahl
      * @param <K>
-     *         beliebiger String
+     *                  beliebiger String
      * @param min
-     *         Minimalwert
+     *                  Minimalwert
      * @param value
-     *         the value
+     *                  the value
      * @param fieldname
-     *         Feldname des Attributes
+     *                  Feldname des Attributes
      *
      * @return String Fehlermeldung
      */
@@ -53,15 +53,15 @@ public class Message {
      * Fehlermeldung für Lib_Digits checkMax()
      *
      * @param <T>
-     *         beliebige Zahl
+     *                  beliebige Zahl
      * @param <K>
-     *         beliebiger String
+     *                  beliebiger String
      * @param max
-     *         Maximalwert
+     *                  Maximalwert
      * @param value
-     *         the value
+     *                  the value
      * @param fieldname
-     *         Feldname des Attributes
+     *                  Feldname des Attributes
      *
      * @return String Fehlermeldung
      */
@@ -74,9 +74,9 @@ public class Message {
      * Fehlermeldung für Lib_String checkIfNullOrEmpty()
      *
      * @param <K>
-     *         beliebiger String
+     *                  beliebiger String
      * @param fieldname
-     *         Feldname des Attributes
+     *                  Feldname des Attributes
      *
      * @return String Fehlermeldung
      */
@@ -84,6 +84,10 @@ public class Message {
         return String.format("Das Feld %s darf nicht leer sein", fieldname.toString());
     }
 
+    /**
+     * @param objectname
+     * @return String
+     */
     public static <K> String errorEmptyObject(K objectname) {
         return String.format("Das Object %s darf nicht leer sein", objectname.toString());
     }
@@ -92,9 +96,9 @@ public class Message {
      * Fehlermeldung für Lib_Arrays checkNullPointer()
      *
      * @param <T>
-     *         beliebige Zahl
+     *              beliebige Zahl
      * @param index
-     *         Index der überprüft wurde
+     *              Index der überprüft wurde
      *
      * @return String Fehlermeldung
      */
@@ -106,7 +110,7 @@ public class Message {
      * Fehlermeldung für Lib_File existent()
      *
      * @param fieldname
-     *         the fieldname
+     *                  the fieldname
      *
      * @return the string
      */

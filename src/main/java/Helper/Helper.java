@@ -1,7 +1,5 @@
 package Helper;
 
-import Model.Message;
-
 import java.text.DecimalFormat;
 
 /**
@@ -11,22 +9,21 @@ import java.text.DecimalFormat;
  */
 public class Helper {
 
-
     /**
      * Prüft ob, der Wert kleiner gleich min und größer gleich Max ist.
      *
      * @param <T>
-     *         beliebige Zahl
+     *                  beliebige Zahl
      * @param <K>
-     *         beliebiger String
+     *                  beliebiger String
      * @param min
-     *         Mindest Wert
+     *                  Mindest Wert
      * @param max
-     *         Maximal Wert
+     *                  Maximal Wert
      * @param value
-     *         Prüfwert
+     *                  Prüfwert
      * @param fieldname
-     *         the fieldname
+     *                  the fieldname
      */
     public static <T extends Number, K> void checkSpan(T min, T max, T value, K fieldname) {
         if (value.doubleValue() >= min.doubleValue() && value.doubleValue() <= max.doubleValue()) {
@@ -35,10 +32,15 @@ public class Helper {
         throw new IllegalArgumentException(Message.errorWrongValueSpan(min, max, value, fieldname));
     }
 
+    /**
+     * @param object
+     * 
+     */
     public static <T> void checkObj(T object) {
         if (object.equals(null)) {
             throw new IllegalArgumentException("der Eintrag darf nicht leer sein ");
         }
+        // TODO: muss noch an die Messages angepasst werden
 
     }
 
@@ -46,15 +48,15 @@ public class Helper {
      * Prüft ob der Wert größer gleich min ist
      *
      * @param <T>
-     *         beliebige Zahl
+     *                  beliebige Zahl
      * @param <K>
-     *         beliebiger String
+     *                  beliebiger String
      * @param min
-     *         Mindest Wert
+     *                  Mindest Wert
      * @param value
-     *         Prüfwert
+     *                  Prüfwert
      * @param fieldname
-     *         the fieldname
+     *                  the fieldname
      */
     public static <T extends Number, K> void checkMin(T min, T value, K fieldname) {
         if (value.doubleValue() >= min.doubleValue()) {
@@ -67,15 +69,15 @@ public class Helper {
      * Prüft ob der Wert kleiner gleich das max ist.
      *
      * @param <T>
-     *         beliebige Zahl
+     *                  beliebige Zahl
      * @param <K>
-     *         beliebiger String
+     *                  beliebiger String
      * @param max
-     *         the max
+     *                  the max
      * @param value
-     *         Prüfwert
+     *                  Prüfwert
      * @param fieldname
-     *         the fieldname
+     *                  the fieldname
      */
     public static <T extends Number, K> void checkMax(T max, T value, K fieldname) {
         if (value.doubleValue() <= max.doubleValue()) {
@@ -89,13 +91,13 @@ public class Helper {
      * String
      *
      * @param <T>
-     *         beliebige Zahl
+     *               beliebige Zahl
      * @param <K>
-     *         beliebiger String
+     *               beliebiger String
      * @param value
-     *         Integer-Wert
+     *               Integer-Wert
      * @param format
-     *         Die Stringformatierung
+     *               Die Stringformatierung
      *
      * @return Formatierter String
      */
@@ -111,9 +113,9 @@ public class Helper {
      * Überprüft ob der übergebene String leer oder NULL ist
      *
      * @param string
-     *         Der zu prüfende String
+     *                  Der zu prüfende String
      * @param fieldname
-     *         the fieldname
+     *                  the fieldname
      */
     public static void checkIfNullOrEmpty(String string, String fieldname) {
         if (!string.isEmpty() && !string.isBlank()) {
@@ -126,7 +128,7 @@ public class Helper {
      * Methode zum entfernen nicht benötigter Leerstellen
      *
      * @param string
-     *         the string
+     *               the string
      *
      * @return the string
      */
@@ -137,12 +139,11 @@ public class Helper {
         return string;
     }
 
-
     /**
      * Methode zum entfernen aller Leerstellen
      *
      * @param string
-     *         the string
+     *               the string
      *
      * @return the string
      */
@@ -156,7 +157,7 @@ public class Helper {
      * ausgabe eine ArrayList entstehen
      *
      * @param string
-     *         the string
+     *               the string
      *
      * @return the string
      */

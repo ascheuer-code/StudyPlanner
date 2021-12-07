@@ -1,0 +1,30 @@
+digraph "org.example:StudyPlanner:jar:1.0-SNAPSHOT" { 
+	"org.example:StudyPlanner:jar:1.0-SNAPSHOT" -> "com.calendarfx:calendar:pom:11.10.1:compile" ; 
+	"org.example:StudyPlanner:jar:1.0-SNAPSHOT" -> "com.calendarfx:view:jar:11.10.1:compile" ; 
+	"org.example:StudyPlanner:jar:1.0-SNAPSHOT" -> "org.controlsfx:controlsfx:jar:11.1.0:compile" ; 
+	"org.example:StudyPlanner:jar:1.0-SNAPSHOT" -> "org.openjfx:javafx-controls:jar:16:compile" ; 
+	"org.example:StudyPlanner:jar:1.0-SNAPSHOT" -> "org.hamcrest:hamcrest-all:jar:1.3:test" ; 
+	"org.example:StudyPlanner:jar:1.0-SNAPSHOT" -> "org.mockito:mockito-all:jar:2.0.2-beta:test" ; 
+	"org.example:StudyPlanner:jar:1.0-SNAPSHOT" -> "org.junit.jupiter:junit-jupiter:jar:5.8.2:test" ; 
+	"com.calendarfx:view:jar:11.10.1:compile" -> "org.kordamp.ikonli:ikonli-javafx:jar:12.2.0:compile" ; 
+	"com.calendarfx:view:jar:11.10.1:compile" -> "org.kordamp.ikonli:ikonli-fontawesome-pack:jar:12.2.0:compile" ; 
+	"com.calendarfx:view:jar:11.10.1:compile" -> "org.mnode.ical4j:ical4j:jar:4.0.0-alpha2:compile" ; 
+	"org.kordamp.ikonli:ikonli-javafx:jar:12.2.0:compile" -> "org.kordamp.ikonli:ikonli-core:jar:12.2.0:compile" ; 
+	"org.mnode.ical4j:ical4j:jar:4.0.0-alpha2:compile" -> "org.slf4j:slf4j-api:jar:1.7.25:compile" ; 
+	"org.mnode.ical4j:ical4j:jar:4.0.0-alpha2:compile" -> "commons-codec:commons-codec:jar:1.11:compile" ; 
+	"org.mnode.ical4j:ical4j:jar:4.0.0-alpha2:compile" -> "org.apache.commons:commons-lang3:jar:3.8.1:compile" ; 
+	"org.mnode.ical4j:ical4j:jar:4.0.0-alpha2:compile" -> "org.apache.commons:commons-collections4:jar:4.1:compile" ; 
+	"org.mnode.ical4j:ical4j:jar:4.0.0-alpha2:compile" -> "org.threeten:threeten-extra:jar:1.5.0:compile" ; 
+	"org.openjfx:javafx-controls:jar:16:compile" -> "org.openjfx:javafx-controls:jar:win:16:compile" ; 
+	"org.openjfx:javafx-controls:jar:16:compile" -> "org.openjfx:javafx-graphics:jar:16:compile" ; 
+	"org.openjfx:javafx-graphics:jar:16:compile" -> "org.openjfx:javafx-graphics:jar:win:16:compile" ; 
+	"org.openjfx:javafx-graphics:jar:16:compile" -> "org.openjfx:javafx-base:jar:16:compile" ; 
+	"org.openjfx:javafx-base:jar:16:compile" -> "org.openjfx:javafx-base:jar:win:16:compile" ; 
+	"org.junit.jupiter:junit-jupiter:jar:5.8.2:test" -> "org.junit.jupiter:junit-jupiter-api:jar:5.8.2:test" ; 
+	"org.junit.jupiter:junit-jupiter:jar:5.8.2:test" -> "org.junit.jupiter:junit-jupiter-params:jar:5.8.2:test" ; 
+	"org.junit.jupiter:junit-jupiter:jar:5.8.2:test" -> "org.junit.jupiter:junit-jupiter-engine:jar:5.8.2:test" ; 
+	"org.junit.jupiter:junit-jupiter-api:jar:5.8.2:test" -> "org.opentest4j:opentest4j:jar:1.2.0:test" ; 
+	"org.junit.jupiter:junit-jupiter-api:jar:5.8.2:test" -> "org.junit.platform:junit-platform-commons:jar:1.8.2:test" ; 
+	"org.junit.jupiter:junit-jupiter-api:jar:5.8.2:test" -> "org.apiguardian:apiguardian-api:jar:1.1.2:test" ; 
+	"org.junit.jupiter:junit-jupiter-engine:jar:5.8.2:test" -> "org.junit.platform:junit-platform-engine:jar:1.8.2:test" ; 
+ } 

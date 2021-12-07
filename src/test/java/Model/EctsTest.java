@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author leon weyand
  */
 class EctsTest {
+
     /**
      * The Ects.
      */
@@ -40,7 +41,6 @@ class EctsTest {
         assertEquals(ects.getMinutes(), 9000);
     }
 
-
     /**
      * Sets ects.
      */
@@ -60,24 +60,6 @@ class EctsTest {
      */
     @Test
     void testToString() {
-        assertEquals(ects.toString(), "ECTS: 5; Minutes: 9000");
-    }
-
-    /**
-     * Tests if EctsException is thrown if negative Integer is given.
-     */
-    @Test
-    void testEctsNegative() {
-
-        // Here you are Testing a Exception thrown by Helper.checkMin what are already tested in the HelperTest :D
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            Ects ects2 = new Ects(-1);
-        });
-        String expectedMessage = "Ects need to be positive!";
-        String actualMessage = exception.getMessage();
-
-        assertFalse(actualMessage.contains(expectedMessage));
-
+        assertEquals(ects.toString(), "Ects: 5; Minutes: 9000");
     }
 }
