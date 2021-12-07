@@ -68,4 +68,9 @@ public class ModulTest {
         assertEquals(1, modul.getEcts().getEctsValue());
         assertEquals(1800, modul.getEcts().getMinutes());
     }
+
+    @Test
+    void ModultoStringTest() {
+        assertEquals("Ects: 10; Minutes: 18000  Modulname: Test", modul.toString());
+    }
 }
