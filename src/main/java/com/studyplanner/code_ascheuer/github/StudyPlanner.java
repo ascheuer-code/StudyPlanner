@@ -23,7 +23,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class StudyPlanner extends Application {
+public  class StudyPlanner extends Application {
     int FENSTER_SCHON_OFFEN_ZÄHLER=0;
     LocalTime Beginn_Zeit_Event;
     LocalTime End_Zeit_Event;
@@ -38,14 +38,7 @@ public class StudyPlanner extends Application {
 
         CalendarView calendarView = new CalendarView(); // <1>
 
-        Calendar birthdays = new Calendar("Birthdays"); // <2>
-        Calendar holidays = new Calendar("Holidays");
 
-
-
-
-        birthdays.setStyle(Style.STYLE1); // <3>
-        holidays.setStyle(Style.STYLE2);
         calendar.setStyle(Style.STYLE1);
 
 
@@ -54,7 +47,7 @@ public class StudyPlanner extends Application {
 
 
         CalendarSource myCalendarSource = new CalendarSource("My Calendars"); // <4>
-        myCalendarSource.getCalendars().addAll(birthdays, holidays,calendar);
+        myCalendarSource.getCalendars().addAll(calendar);
 
         calendarView.getCalendarSources().addAll(myCalendarSource); // <5>
 
@@ -209,24 +202,26 @@ public class StudyPlanner extends Application {
             LocalTime zeitende= (LocalTime) zeitenende.getSelectionModel().getSelectedItem();
             setEnd_Zeit_Event(zeitende);
         });
+
+
+
         // DatumPicker für neues event
+
         Text datum = new Text("Datum");
         LocalDate Datumausen ;
         DatePicker datumpicker = new DatePicker();
-        Button button = new Button("Datum wählen");
-        button.setOnAction(action -> {
+        Button button1 = new Button("Datum wählen");
+
+        button1.setOnAction(action -> {
             LocalDate Datum = datumpicker.getValue();
+
         });
 
 
         VBox links = new VBox();
-        VBox rechts = new VBox();
-        Text platzhalter1 = new Text();
-        Text platzhalter2= new Text();
-        Text platzhalter3 = new Text();
-        Text platzhalter4= new Text();
-        links.getChildren().addAll(Modulname,platzhalter1,anfangszeit,platzhalter2,endzeit,platzhalter3,datum,platzhalter4,beschreibung);
-        rechts.getChildren().addAll(modulname,platzhalter1,zeitenanfang,platzhalter2,zeitenende,platzhalter3,datumpicker,platzhalter4,beschreibungtext);
+
+        links.getChildren().addAll(Modulname,modulname,anfangszeit,zeitenanfang,endzeit,zeitenende,datum,datumpicker,beschreibung, beschreibungtext);
+
 
         Button Event_Speichern = new Button("Event sichern :");
         // kein lamda weil hat mit lamda nicht funktioniert
@@ -245,7 +240,7 @@ public class StudyPlanner extends Application {
         Event_Speichern.setOnAction(event);
 
 
-        SplitPane splitpane = new SplitPane(links,rechts);
+        SplitPane splitpane = new SplitPane(links);
         BorderPane borderPane= new BorderPane();
         borderPane.setCenter(splitpane);
         borderPane.setBottom(Event_Speichern);
@@ -265,29 +260,29 @@ public class StudyPlanner extends Application {
 
 
     // Offnet Fenster wen aufgerufen welches anzeigt , dass fenster bereits offen
-//    public void FensterSchonOffenExeptionWimdow(){
-//        Stage stage= new Stage();
-//
-//        VBox layout = new VBox();
-//
-//        Scene scene= new Scene(layout);
-//
-//        Button close_window = new Button("Close Window");
-//        Text text= new Text("Es ist bereits ein Fenster dieser Art offen ");
-//
-//        layout.getChildren().addAll( text,close_window );
-//
-//        // Schliest das Fenster auf Knopfdruck
-//        close_window.setOnAction(event ->{if(event.getSource()== close_window)stage.close();});
-//        //Optische Anpassungen
-//        stage.setHeight(100);
-//        stage.setWidth(250);
-//        close_window.setMinWidth(230);
-//        close_window.setCenterShape(true);
-//
-//        stage.setScene(scene);
-//        stage.show();
-//    }
+    //    public void FensterSchonOffenExeptionWimdow(){
+    //        Stage stage= new Stage();
+    //
+    //        VBox layout = new VBox();
+    //
+    //        Scene scene= new Scene(layout);
+    //
+    //        Button close_window = new Button("Close Window");
+    //        Text text= new Text("Es ist bereits ein Fenster dieser Art offen ");
+    //
+    //        layout.getChildren().addAll( text,close_window );
+    //
+    //        // Schliest das Fenster auf Knopfdruck
+    //        close_window.setOnAction(event ->{if(event.getSource()== close_window)stage.close();});
+    //        //Optische Anpassungen
+    //        stage.setHeight(100);
+    //        stage.setWidth(250);
+    //        close_window.setMinWidth(230);
+    //        close_window.setCenterShape(true);
+    //
+    //        stage.setScene(scene);
+    //        stage.show();
+    //    }
 
     public void setBeginn_Zeit_Event(LocalTime x){
         Beginn_Zeit_Event= x;
