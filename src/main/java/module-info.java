@@ -7,6 +7,9 @@ module com.calendarfx.app {
     exports com.studyplanner.code_ascheuer.github;
     exports DataAccess;
     exports Model;
-
+    exports Helper;
+    exports View;
+    
     opens Model;
+    opens Helper;
 }
