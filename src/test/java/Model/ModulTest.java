@@ -49,4 +49,23 @@ public class ModulTest {
     void getModulnameTest() {
         assertEquals("Test", modul.getModulname());
     }
+
+    /**
+     * Sets modulname test.
+     */
+    @Test
+    void setModulnameTest() {
+        modul.setModulname("Affe");
+        assertEquals("Affe", modul.getModulname());
+    }
+
+    /**
+     * Sets ects test.
+     */
+    @Test
+    void setEctsTest() {
+        modul.setEcts(1);
+        assertEquals(1, modul.getEcts().getEctsValue());
+        assertEquals(1800, modul.getEcts().getMinutes());
+    }
 }

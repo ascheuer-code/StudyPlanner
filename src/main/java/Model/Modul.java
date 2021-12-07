@@ -9,7 +9,7 @@ import Helper.Helper;
  */
 public class Modul {
 
-    private final Ects ects;
+    private Ects ects;
     private String modulname;
 
 
@@ -44,7 +44,7 @@ public class Modul {
      *         the titel
      */
     public void setModulname(String modulname) {
-        Helper.checkIfNullOrEmpty(modulname, "Titel");
+        Helper.checkIfNullOrEmpty(modulname, "Modulname");
         this.modulname = modulname;
     }
 
@@ -57,15 +57,10 @@ public class Modul {
         return ects;
     }
 
-    /**
-     * Set ects.
-     *
-     * @param ects
-     *         the ects
-     */
     public void setEcts(int ects) {
-        this.setEcts(ects);
+        this.ects = new Ects(ects);
     }
+
 
     public String toString() {
         return ("Ects: " + this.ects + "  " + "Modulname: " + this.modulname);
