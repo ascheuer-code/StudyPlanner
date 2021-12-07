@@ -29,7 +29,7 @@ class EctsTest {
      */
     @Test
     void getEcts() {
-        assertEquals(ects.getEcts(), 5);
+        assertEquals(ects.getEctsValue(), 5);
     }
 
     /**
@@ -46,9 +46,9 @@ class EctsTest {
      */
     @Test
     void setEcts() {
-        assertEquals(5, ects.getEcts());
+        assertEquals(5, ects.getEctsValue());
         ects.setEcts(4);
-        assertEquals(4, ects.getEcts());
+        assertEquals(4, ects.getEctsValue());
 
         assertThrows(IllegalArgumentException.class, () -> {
             ects.setEcts(0);

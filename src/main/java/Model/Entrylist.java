@@ -1,42 +1,82 @@
 package Model;
 
-import java.lang.*;
+import Helper.Helper;
+
 import java.util.ArrayList;
 
+/**
+ * The type Entrylist.
+ */
 public class Entrylist {
     //Klassenattribute
 
-    private  ArrayList <Entry<Model>> entrylist;
-    // hier wird die Einträgenliste angelegt
-    public Entrylist(){
+    private final ArrayList<Entry<Modul>> entrylist;
 
-        entrylist = new ArrayList<Entry<Model>>();
+    /**
+     * Instantiates a new Entrylist.
+     */
+// hier wird die Einträgenliste angelegt
+    public Entrylist() {
+
+        entrylist = new ArrayList<Entry<Modul>>();
 
     }
-    // man fügt einen Eintrag hinzu
-    public void EntryAdd(Entry<Model>     ent ) {
+
+    /**
+     * Entry add.
+     *
+     * @param ent
+     *         the ent
+     */
+// man fügt einen Eintrag hinzu
+    public void EntryAdd(Entry<Modul> ent) {
         Helper.checkObj(ent);
         entrylist.add(ent);
     }
-    // man kann den Eintrag löeschen
-    public void EntryLoesch(Entry <Model>    ent ) {
+
+    /**
+     * Entry loesch.
+     *
+     * @param ent
+     *         the ent
+     */
+// man kann den Eintrag löeschen
+    public void EntryLoesch(Entry<Modul> ent) {
         Helper.checkObj(ent);
         entrylist.remove(ent);
     }
-    // man kann den Eintag ändern
-    public void EntryAendere(Entry<Model>     ent1 , Entry <Model> ent2 ) {
+
+    /**
+     * Entry aendere.
+     *
+     * @param ent1
+     *         the ent 1
+     * @param ent2
+     *         the ent 2
+     */
+// man kann den Eintag ändern
+    public void EntryAendere(Entry<Modul> ent1, Entry<Modul> ent2) {
         Helper.checkObj(ent1);
         Helper.checkObj(ent2);
 
 
-        entrylist.add(entrylist.indexOf(ent1),ent2);
+        entrylist.add(entrylist.indexOf(ent1), ent2);
 
     }
-    // den Eintrag wird gezeigt
-    public Entry<Model> EntryGET(int index){
 
-        Helper.checkMax(entrylist.size()+1,index,"INDEX");
-        Helper.checkMin(0,index,"INDEX");
+    /**
+     * Entry get entry.
+     *
+     * @param index
+     *         the index
+     *
+     * @return the entry
+     */
+// den Eintrag wird gezeigt
+    public Entry<Modul> EntryGET(int index) {
+
+        Helper.checkMax(entrylist.size() + 1, index, "INDEX");
+        Helper.checkMin(0, index, "INDEX");
 
         return entrylist.get(index);
     }
@@ -45,6 +85,7 @@ public class Entrylist {
 // dadurch kann alle Einträge gezeigt werden .
     public String toString() {
         return "EntryList [entrylist=" + entrylist + "]";
-    }  }
+    }
+}
 
 

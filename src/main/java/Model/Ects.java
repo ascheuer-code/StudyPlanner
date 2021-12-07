@@ -1,15 +1,17 @@
 package Model;
 
+import Helper.Helper;
+
 /**
  * This class converts ECTS to minutes.
  *
  * @author leon weyand
  */
 public class Ects {
-    private static final String ECTS_POSITIVE = "Ects need to be positive!"; // <- this is not needed because the Error Message will be generated in Message Class with the Helper Method
+
+    private final int minutes;
     private int ects;
-    private int minutes;
-    private Helper helper; // not needed see next comment below
+
 
     /**
      * Instantiates a new Ects.
@@ -18,10 +20,7 @@ public class Ects {
      *         the ECTS that need to be converted to minutes.
      */
     public Ects(int ects) {
-        // @Leon The Helper class is Static so no Object will be needed just use Helper.checkMin(min,Value,Fieldname) thats all :D
-        helper = new Helper(); // <- unused
-        //helper.checkMin(1, ects, ECTS_POSITIVE);
-        Helper.checkMin(1, ects, "ECTS"); // <- like this
+        Helper.checkMin(1, ects, "ECTS");
         this.ects = ects;
         this.minutes = ectsToMinutes(ects);
     }
@@ -44,7 +43,7 @@ public class Ects {
      *
      * @return the ects
      */
-    public int getEcts() {
+    public int getEctsValue() {
         return ects;
     }
 
@@ -55,7 +54,7 @@ public class Ects {
      *         the ects
      */
     public void setEcts(int ects) {
-        Helper.checkMin(1, ects, "ECTS");
+        Helper.checkSpan(1, 20, ects, "ECTS");
         this.ects = ects;
     }
 
