@@ -19,7 +19,7 @@ public class Event {
     /**
      * The Endzeit.
      */
-    public  LocalTime endzeit;
+    public LocalTime endzeit;
     /**
      * The Datum.
      */
@@ -27,7 +27,7 @@ public class Event {
     /**
      * The Beschreibung.
      */
-    public  String beschreibung;
+    public String beschreibung;
 
     /**
      * Instantiates a new Event.
@@ -43,25 +43,26 @@ public class Event {
      * @param beschreibung
      *         the beschreibung
      */
-    public Event( String modulname,LocalTime anfangszeit,LocalTime endzeit,LocalDate datum, String beschreibung){
-        this.modulname= modulname;
-        this.anfagszeit= anfangszeit;
-        this.endzeit= endzeit;
-        this.datum= datum;
-        this.beschreibung= beschreibung;}
+    public Event(String modulname, LocalTime anfangszeit, LocalTime endzeit, LocalDate datum, String beschreibung) {
+        this.modulname = modulname;
+        this.anfagszeit = anfangszeit;
+        this.endzeit = endzeit;
+        this.datum = datum;
+        this.beschreibung = beschreibung;
+    }
 
     /**
      * Get modulname string.
      *
      * @return the string
      */
-    public String getModulname(){
+    public String getModulname() {
         return modulname;
     }
 
     @Override
     public String toString() {
-        return  modulname +"  "+ anfagszeit + "  "+ endzeit+ "  " +datum + "  "+beschreibung;
+        return modulname + "  " + anfagszeit + "  " + endzeit + "  " + datum + "  " + beschreibung;
     }
 
     /**
@@ -70,6 +71,6 @@ public class Event {
      * @return the string
      */
     public String toString2() {
-        return  modulname;
+        return modulname;
     }
 }
