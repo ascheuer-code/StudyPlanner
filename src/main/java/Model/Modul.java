@@ -63,7 +63,7 @@ public class Modul {
 
 
     public String toString() {
-        return ("Ects: " + this.ects + "  " + "Modulname: " + this.modulname);
+        return (this.ects + "  " + "Modulname: " + this.modulname);
 
     }
 }

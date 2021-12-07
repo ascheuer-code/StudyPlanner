@@ -73,7 +73,7 @@ public class Ects {
      * @return the ECTS and minutes as a String.
      */
     public String toString() {
-        String s = "ECTS: " + ects + "; Minutes: " + minutes;
+        String s = "Ects: " + ects + "; Minutes: " + minutes;
         return s;
     }
 }
