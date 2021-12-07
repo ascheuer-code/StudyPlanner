@@ -130,3 +130,5 @@ target/test-classes/Helper/HelperTest.class
 target/test-classes/Model/EctsTest.class
 target/test-classes/Model/ModulTest.class
 target/test-classes/View/ViewTest.class
+target/classes/Helper/Message.class
+target/classes/Helper/Message.class
