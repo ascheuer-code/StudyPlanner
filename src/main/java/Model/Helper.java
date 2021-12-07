@@ -32,7 +32,12 @@ public class Helper {
         }
         throw new IllegalArgumentException(Message.errorWrongValueSpan(min, max, value, fieldname));
     }
+    public static <T> void checkObj ( T object ){
+        if (object.equals(null)) {
+            throw new IllegalArgumentException("der Eintrag darf nicht leer sein ");
+        }
 
+    }
     /**
      * Prüft ob der Wert größer gleich min ist
      *

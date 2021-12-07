@@ -83,6 +83,9 @@ public class Message {
     public static <K> String errorEmptyString(K fieldname) {
         return String.format("Das Feld %s darf nicht leer sein", fieldname.toString());
     }
+    public static <K> String errorEmptyObject(K objectname) {
+        return String.format("Das Object %s darf nicht leer sein", objectname.toString());
+    }
 
     /**
      * Fehlermeldung für Lib_Arrays checkNullPointer()
