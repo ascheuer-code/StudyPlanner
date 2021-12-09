@@ -157,3 +157,4 @@ target/classes/Helper/Message.class
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode
 
+target/classes/Helper/Message.class
