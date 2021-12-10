@@ -15,7 +15,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -130,12 +129,8 @@ public class StudyPlanner extends Application {
 
         // linke Hälfte
         Pane bar = new Pane(layout);// ist die toolbar
-        // rechte Hälfte
-        GridPane calender = new GridPane();// ist der calender
-        calender.getChildren().add(calendarView);
 
-        calender.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        SplitPane split = new SplitPane(bar, calender);
+        SplitPane split = new SplitPane(bar, calendarView);
         split.setDividerPosition(0, 0.18);
         Scene sceneO = new Scene(split);
         stage.setScene(sceneO);
