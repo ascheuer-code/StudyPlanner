@@ -36,9 +36,9 @@ public class Helper {
      * @param object
      * 
      */
-    public static <T> void checkObj(T object) {
+    public static <T> void checkObj(T object, String objectname) {
         if (object.equals(null)) {
-            throw new IllegalArgumentException("der Eintrag darf nicht leer sein ");
+            throw new IllegalArgumentException(Message.errorEmptyObject(objectname));
         }
         // TODO: muss noch an die Messages angepasst werden
 

@@ -22,7 +22,7 @@ public class Entry<E> {
     // hier wird der Eintrag von Modul.java erstellen und überprüft, ob er null oder
     // nicht
     public Entry(E einmodel) {
-        Helper.checkObj(einmodel);
+        Helper.checkObj(einmodel, "Entry");
         this.model = einmodel;
     }
 

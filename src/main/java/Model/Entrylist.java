@@ -30,7 +30,7 @@ public class Entrylist {
      */
     // man fügt einen Eintrag hinzu
     public void EntryAdd(Entry<Modul> ent) {
-        Helper.checkObj(ent);
+        Helper.checkObj(ent, "Entry");
         entrylist.add(ent);
     }
 
@@ -42,7 +42,7 @@ public class Entrylist {
      */
     // man kann den Eintrag löeschen
     public void EntryLoesch(Entry<Modul> ent) {
-        Helper.checkObj(ent);
+        Helper.checkObj(ent, "Entry");
         entrylist.remove(ent);
     }
 
@@ -56,8 +56,8 @@ public class Entrylist {
      */
     // man kann den Eintag ändern
     public void EntryAendere(Entry<Modul> ent1, Entry<Modul> ent2) {
-        Helper.checkObj(ent1);
-        Helper.checkObj(ent2);
+        Helper.checkObj(ent1, "Entry");
+        Helper.checkObj(ent2, "Entry");
 
         entrylist.add(entrylist.indexOf(ent1), ent2);
 
