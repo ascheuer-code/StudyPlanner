@@ -33,7 +33,8 @@ public class StudyPlanner extends Application {
     List Module = new ArrayList();
     List Events = new ArrayList();
     ListView listbox = new ListView();
-    Calendar calendar = new Calendar("Test");
+    Calendar StundenPlan = new Calendar("Stundenplan");
+    Calendar LernPlan = new Calendar("Lernplan");
 
     /**
      * @param args
@@ -51,11 +52,15 @@ public class StudyPlanner extends Application {
 
         CalendarView calendarView = new CalendarView(); // <1>
 
-        calendar.setStyle(Style.STYLE1);
 
-        CalendarSource myCalendarSource = new CalendarSource("My Calendars"); // <4>
 
-        myCalendarSource.getCalendars().addAll(calendar);
+        StundenPlan.setStyle(Style.STYLE2);
+        LernPlan.setStyle(Style.STYLE3);
+
+
+        CalendarSource myCalendarSource = new CalendarSource("Planer"); // <4>
+
+        myCalendarSource.getCalendars().addAll(LernPlan, StundenPlan);
 
         calendarView.getCalendarSources().addAll(myCalendarSource); // <5>
 
@@ -88,10 +93,10 @@ public class StudyPlanner extends Application {
         updateTimeThread.start();
 
         List ladentest = new ArrayList();
-        Modul eins = new Modul("eins", 1);
-        Modul eins2 = new Modul("zwei", 2);
-        Modul eins3 = new Modul("drei", 3);
-        Modul eins4 = new Modul("vier", 4);
+        Modul eins = new Modul("Eins", 1);
+        Modul eins2 = new Modul("Zwei", 2);
+        Modul eins3 = new Modul("Drei", 3);
+        Modul eins4 = new Modul("Vier", 4);
         ladentest.add(eins);
         ladentest.add(eins2);
         ladentest.add(eins3);
@@ -103,15 +108,20 @@ public class StudyPlanner extends Application {
                     if (event.getSource() == Event_Eintragen) {
                         neuesEvent("Platzhalter");
                     }
+                    else{
+                       // neuesEvent();
+                    }
                 });
 
-        Button Modul_Anlegen = new Button("Modul.java anlegen");
+        Button Modul_Anlegen = new Button("Modul anlegen");
         Modul_Anlegen.setOnAction(
                 event -> {
                     if (event.getSource() == Modul_Anlegen) {
                         neuesModul();
                     }
                 });
+
+
 
         BorderPane layout = new BorderPane();
         VBox buttonbox = new VBox();
@@ -168,7 +178,7 @@ public class StudyPlanner extends Application {
                         Button button = new Button("" + modul);
                         listbox.getItems().add(button);
                         button.setOnAction(actionEvent -> {
-                            neuesEvent(button.getText());
+                            neuesEvent(Modulname_Einlesen.getText());
                         });
                         stage.close();
                     }
@@ -209,6 +219,7 @@ public class StudyPlanner extends Application {
 
         Text Modulname = new Text("Modulname");
         Text modulname = new Text(string);
+        Text kalender = new Text("Kalender");
         Text anfangszeit = new Text("Anfangszeit");
         Text endzeit = new Text("Endzeit");
         Text beschreibung = new Text("Beschreibung");
@@ -230,6 +241,20 @@ public class StudyPlanner extends Application {
             LocalTime beginnzeit = (LocalTime) zeitenanfang.getSelectionModel().getSelectedItem();
             setBeginn_Zeit_Event(beginnzeit);
         });
+
+        // Kalender auswählen
+        //Marc
+        ChoiceBox kalenderAuswahl = new ChoiceBox();
+        kalenderAuswahl.getItems().addAll(LernPlan.getName());
+        kalenderAuswahl.getItems().addAll(StundenPlan.getName());
+
+        kalenderAuswahl.setOnAction((event) -> {
+            String eintrag = String.valueOf(kalenderAuswahl.getSelectionModel().getSelectedItem());
+
+
+        });
+
+
 
         ChoiceBox zeitenende = new ChoiceBox();
         int stundeende = 8;
@@ -257,13 +282,11 @@ public class StudyPlanner extends Application {
 
         });
 
+
+
         VBox links = new VBox();
-        VBox rechts = new VBox();
-        Text platzhalter1 = new Text();
-        Text platzhalter2 = new Text();
-        Text platzhalter3 = new Text();
-        Text platzhalter4 = new Text();
-        links.getChildren().addAll(Modulname, modulname, anfangszeit, zeitenanfang, endzeit, zeitenende, datum,
+
+        links.getChildren().addAll(Modulname, modulname,kalender, kalenderAuswahl, anfangszeit, zeitenanfang, endzeit, zeitenende, datum,
                 datumpicker, beschreibung, beschreibungtext);
 
         Button Event_Speichern = new Button("Event sichern :");
@@ -273,8 +296,18 @@ public class StudyPlanner extends Application {
                 Event event1 = new Event(string, Beginn_Zeit_Event, End_Zeit_Event, datumpicker.getValue(),
                         beschreibungtext.getText());
                 Events.add(event1);
-                Entry<String> eventtest = new Entry<>(string);
-                calendar.addEntry(eventtest);
+                Entry<String> eventtest = new Entry<>(modulname.getText());
+
+
+                // Wählen zwischen den Kalendern
+                //@Marc
+                if(kalenderAuswahl.getSelectionModel().getSelectedItem() == "Lernplan"){
+                    LernPlan.addEntry(eventtest);
+                }
+                else{
+                    StundenPlan.addEntry((eventtest));
+                }
+
 
                 eventtest.setInterval(datumpicker.getValue());
                 eventtest.setInterval(Beginn_Zeit_Event, End_Zeit_Event);
