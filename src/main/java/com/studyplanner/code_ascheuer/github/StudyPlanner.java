@@ -223,9 +223,8 @@ public class StudyPlanner extends Application {
             modulNamePicker.getItems().addAll(x);}
         modulNamePicker.setOnAction((event) -> {
             int selectedIndex = modulNamePicker.getSelectionModel().getSelectedIndex();
-            LocalTime beginnzeit = (LocalTime) modulNamePicker.getSelectionModel().getSelectedItem();
-            setBeginn_Zeit_Event(beginnzeit);
-            System.out.println(selectedIndex);
+            Object  x = modulNamePicker.getSelectionModel().getSelectedItem();
+            setModulNamefürÜbergabe((Modul) x);
         });
 
         // Max
@@ -351,6 +350,7 @@ public class StudyPlanner extends Application {
      */
     public void setModulNamefürÜbergabe(Modul x) {
          Mod_Name_Übergabe = x.getModulname();
+         System.out.println(Mod_Name_Übergabe);
     }
 
 }
