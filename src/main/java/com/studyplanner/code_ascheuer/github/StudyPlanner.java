@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -30,6 +31,7 @@ public class StudyPlanner extends Application {
 
     LocalTime Beginn_Zeit_Event;
     LocalTime End_Zeit_Event;
+    String Mod_Name_Übergabe;
     List Module = new ArrayList();
     List Events = new ArrayList();
     ListView listbox = new ListView();
@@ -92,16 +94,11 @@ public class StudyPlanner extends Application {
         updateTimeThread.setDaemon(true);
         updateTimeThread.start();
 
-        List ladentest = new ArrayList();
-        Modul eins = new Modul("Eins", 1);
-        Modul eins2 = new Modul("Zwei", 2);
-        Modul eins3 = new Modul("Drei", 3);
-        Modul eins4 = new Modul("Vier", 4);
-        ladentest.add(eins);
-        ladentest.add(eins2);
-        ladentest.add(eins3);
-        ladentest.add(eins4);
 
+        /**
+        *  Hier wird dem button  Event_Eintragen seine Funktion zugewiesen.
+         *  Das heißt er ruft die Methode neuesEvent(Sting string) auf
+        */
         Button Event_Eintragen = new Button("neuer Eintrag");
         Event_Eintragen.setOnAction(
                 event -> {
@@ -113,6 +110,10 @@ public class StudyPlanner extends Application {
                     }
                 });
 
+        /**
+         *  Hier wird dem button  Modul_Anlegen seine Funktion zugewiesen.
+         *  Das heißt er ruft die Methode neuesModul() auf
+         */
         Button Modul_Anlegen = new Button("Modul anlegen");
         Modul_Anlegen.setOnAction(
                 event -> {
@@ -122,24 +123,22 @@ public class StudyPlanner extends Application {
                 });
 
 
+        /**
+         *  Anelgen und design der linken Seite des Splitpane.
+         *  hir muss alles rein was in unsere seite vom Calender sein soll
+         */
 
-        BorderPane layout = new BorderPane();
+        BorderPane linkeSeiteLayout = new BorderPane();
         VBox buttonbox = new VBox();
         buttonbox.getChildren().addAll(Event_Eintragen, Modul_Anlegen);
-        layout.setTop(buttonbox);
-        layout.setBottom(listbox);
-        for (Object var : ladentest) {
-            Button button = new Button("" + var);
-            listbox.getItems().add(button);
-            button.setOnAction(actionEvent -> {
-                neuesEvent(button.getText());
-            });
+        linkeSeiteLayout.setTop(buttonbox);
+        linkeSeiteLayout.setBottom(listbox);
+        Pane bar = new Pane(linkeSeiteLayout);// ist die toolbar
 
-        }
-
-        // linke Hälfte
-        Pane bar = new Pane(layout);// ist die toolbar
-
+        /**
+         *  Anlegen und Design des Splitpane.
+         *  Erzeugt die beiden Hälften des Frontends.
+         */
         SplitPane split = new SplitPane(bar, calendarView);
         split.setDividerPosition(0, 0.18);
         Scene sceneO = new Scene(split);
@@ -151,24 +150,27 @@ public class StudyPlanner extends Application {
         stage.show();
     }
 
-    // neues Modul.java anlegen und in den listen speichern
-    // @max
+    /**
+     * @ max
+     * realisiert die Funktion des Buttons Modul_Anlegen
+     * Es wird ein neues Fenster erstellt in dem die Anlege Daten abgefragt werden
+     * @ param Modulname
+     * @ param EctsWert
+     */
     public void neuesModul() {
+        // Layout des aufgehenden Fensters
         Stage stage = new Stage();
-        Button Modul_Speichern = new Button("Speichern ");
         BorderPane layout = new BorderPane();
         VBox box = new VBox();
+        // Texte die zur Steuerung angezeigt werden
         Text modÜberschrift = new Text("Modulname :");
         Text ectsüberschrift = new Text("Ects Wert des Moduls:");
+        // Eingabe Felder
         TextField Modulname_Einlesen = new TextField();
         TextField Ects_Einlesen = new NumericTextField();
 
-        box.getChildren().addAll(modÜberschrift, Modulname_Einlesen, ectsüberschrift, Ects_Einlesen, Modul_Speichern);
-        layout.setCenter(box);
-
-        Scene scene = new Scene(layout);
-        stage.setScene(scene);
-        stage.show();
+        // Speichert die Eingabefleder in einem Modul Objekt und legt sie in der Liste Module ab.
+        Button Modul_Speichern = new Button("Speichern ");
         Modul_Speichern.setOnAction(
                 event -> {
                     if (event.getSource() == Modul_Speichern) {
@@ -184,49 +186,50 @@ public class StudyPlanner extends Application {
                     }
                 });
 
+        box.getChildren().addAll(modÜberschrift, Modulname_Einlesen, ectsüberschrift, Ects_Einlesen, Modul_Speichern);
+        layout.setCenter(box);
+
+        Scene scene = new Scene(layout);
+        stage.setScene(scene);
+        stage.show();
+
+
     }
 
-    // Offnet Fenster wen aufgerufen welches anzeigt , dass fenster bereits offen
-    // public void FensterSchonOffenExeptionWimdow(){
-    // Stage stage= new Stage();
-    //
-    // VBox layout = new VBox();
-    //
-    // Scene scene= new Scene(layout);
-    //
-    // Button close_window = new Button("Close Window");
-    // Text text= new Text("Es ist bereits ein Fenster dieser Art offen ");
-    //
-    // layout.getChildren().addAll( text,close_window );
-    //
-    // // Schliest das Fenster auf Knopfdruck
-    // close_window.setOnAction(event ->{if(event.getSource()==
-    // close_window)stage.close();});
-    // //Optische Anpassungen
-    // stage.setHeight(100);
-    // stage.setWidth(250);
-    // close_window.setMinWidth(230);
-    // close_window.setCenterShape(true);
-    //
-    // stage.setScene(scene);
-    // stage.show();
-    // }
-
-    // anlegen eines neuen events im neuen fenster
-    // @max
+    /**
+     * @ max/ marc
+     * realisiert die Funktion des Buttons Event_Eintragen
+     * Es wird ein neues Fenster erstellt, in dem die Eintragedaten abgefragt werden.
+     *
+     */
     public void neuesEvent(String string) {
         Stage stage = new Stage();
-
+        // Texte die zur Steuerung angezeigt werden
         Text Modulname = new Text("Modulname");
-        Text modulname = new Text(string);
+        Text modulname = new Text();
         Text kalender = new Text("Kalender");
         Text anfangszeit = new Text("Anfangszeit");
         Text endzeit = new Text("Endzeit");
         Text beschreibung = new Text("Beschreibung");
+
         String Beschreibung;
         TextField beschreibungtext = new TextField();
 
-        // uhrzeit Picker für neues Event
+        // Anfang der Variablen Picker
+
+        // Man kann auch
+        ChoiceBox modulNamePicker  = new ChoiceBox();
+        for(Object x :Module){
+            modulNamePicker.getItems().addAll(x);}
+        modulNamePicker.setOnAction((event) -> {
+            int selectedIndex = modulNamePicker.getSelectionModel().getSelectedIndex();
+            LocalTime beginnzeit = (LocalTime) modulNamePicker.getSelectionModel().getSelectedItem();
+            setBeginn_Zeit_Event(beginnzeit);
+            System.out.println(selectedIndex);
+        });
+
+        // Max
+        // Anfangsuhrzeit Picker für neues Event
         ChoiceBox zeitenanfang = new ChoiceBox();
         int stundeanfang = 8;
         int minuteanfang = 0;
@@ -235,27 +238,14 @@ public class StudyPlanner extends Application {
             zeitenanfang.getItems().addAll(x);
             x = x.plusMinutes(30);
         }
-
         zeitenanfang.setOnAction((event) -> {
             int selectedIndex = zeitenanfang.getSelectionModel().getSelectedIndex();
             LocalTime beginnzeit = (LocalTime) zeitenanfang.getSelectionModel().getSelectedItem();
             setBeginn_Zeit_Event(beginnzeit);
         });
 
-        // Kalender auswählen
-        //Marc
-        ChoiceBox kalenderAuswahl = new ChoiceBox();
-        kalenderAuswahl.getItems().addAll(LernPlan.getName());
-        kalenderAuswahl.getItems().addAll(StundenPlan.getName());
-
-        kalenderAuswahl.setOnAction((event) -> {
-            String eintrag = String.valueOf(kalenderAuswahl.getSelectionModel().getSelectedItem());
-
-
-        });
-
-
-
+        // Max
+        // Enduhrzeit Picker für neues Event
         ChoiceBox zeitenende = new ChoiceBox();
         int stundeende = 8;
         int minuteende = 30;
@@ -270,30 +260,39 @@ public class StudyPlanner extends Application {
             setEnd_Zeit_Event(zeitende);
         });
 
+        // max
         // DatumPicker für neues event
-
         Text datum = new Text("Datum");
         LocalDate Datumausen;
         DatePicker datumpicker = new DatePicker();
         Button button1 = new Button("Datum wählen");
-
         button1.setOnAction(action -> {
             LocalDate Datum = datumpicker.getValue();
 
         });
 
+        // Kalender auswählen
+        //Marc
+        ChoiceBox kalenderAuswahl = new ChoiceBox();
+        kalenderAuswahl.getItems().addAll(LernPlan.getName());
+        kalenderAuswahl.getItems().addAll(StundenPlan.getName());
+
+        kalenderAuswahl.setOnAction((event) -> {
+            String eintrag = String.valueOf(kalenderAuswahl.getSelectionModel().getSelectedItem());
+        });
+        // Ende der Variablen Picker
 
 
-        VBox links = new VBox();
+        VBox layout = new VBox();
 
-        links.getChildren().addAll(Modulname, modulname,kalender, kalenderAuswahl, anfangszeit, zeitenanfang, endzeit, zeitenende, datum,
+        layout.getChildren().addAll(Modulname, modulNamePicker,kalender, kalenderAuswahl, anfangszeit, zeitenanfang, endzeit, zeitenende, datum,
                 datumpicker, beschreibung, beschreibungtext);
 
         Button Event_Speichern = new Button("Event sichern :");
         // kein lamda weil hat mit lamda nicht funktioniert
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                Event event1 = new Event(string, Beginn_Zeit_Event, End_Zeit_Event, datumpicker.getValue(),
+                Event event1 = new Event(Mod_Name_Übergabe, Beginn_Zeit_Event, End_Zeit_Event, datumpicker.getValue(),
                         beschreibungtext.getText());
                 Events.add(event1);
                 Entry<String> eventtest = new Entry<>(modulname.getText());
@@ -315,17 +314,18 @@ public class StudyPlanner extends Application {
                 stage.close();
             }
         };
+        // Aufruf des Listener
         Event_Speichern.setOnAction(event);
 
-        SplitPane splitpane = new SplitPane(links);
+
         BorderPane borderPane = new BorderPane();
 
-        borderPane.setCenter(splitpane);
+        borderPane.setCenter(layout);
         borderPane.setBottom(Event_Speichern);
         Scene scene = new Scene(borderPane);
 
         stage.setScene(scene);
-        stage.setHeight(300);
+        stage.setHeight(310);
         stage.setWidth(600);
         stage.show();
     }
@@ -343,6 +343,14 @@ public class StudyPlanner extends Application {
      */
     public void setEnd_Zeit_Event(LocalTime x) {
         End_Zeit_Event = x;
+    }
+
+
+    /**
+     * @param x
+     */
+    public void setModulNamefürÜbergabe(Modul x) {
+         Mod_Name_Übergabe = x.getModulname();
     }
 
 }

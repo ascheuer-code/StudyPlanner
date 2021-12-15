@@ -32,7 +32,7 @@ public class Modul {
      *
      * @return the string
      */
-    public String getModulname() {
+    public  String getModulname() {
         return modulname;
     }
 
