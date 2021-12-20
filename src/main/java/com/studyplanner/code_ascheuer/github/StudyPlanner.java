@@ -2,6 +2,8 @@ package com.studyplanner.code_ascheuer.github;
 
 import Model.Event;
 import Model.Modul;
+import Helper.LocalDateTimeConverter;
+
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Calendar.Style;
 import com.calendarfx.model.CalendarSource;
@@ -15,7 +17,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -25,6 +26,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static Helper.LocalDateTimeConverter.*;
+
 
 public class StudyPlanner extends Application {
     int FENSTER_SCHON_OFFEN_ZÄHLER = 0;
@@ -291,25 +295,52 @@ public class StudyPlanner extends Application {
         // kein lamda weil hat mit lamda nicht funktioniert
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
-                Event event1 = new Event(Mod_Name_Übergabe, Beginn_Zeit_Event, End_Zeit_Event, datumpicker.getValue(),
-                        beschreibungtext.getText());
-                Events.add(event1);
-                Entry<String> eventtest = new Entry<>(modulname.getText());
 
+                // Entry wird erstellt hier
+                Entry eventtest = new Entry();
+
+                eventtest.setTitle(modulNamePicker.getSelectionModel().getSelectedItem().toString());
+                eventtest.setInterval(datumpicker.getValue());
+                eventtest.setInterval(Beginn_Zeit_Event, End_Zeit_Event);
+
+                /**
+                 * @Marc
+                 * Event wird aus dem Entry erstellt mittels converter
+                 */
+                Event event = new Event();
+                event = convertEntrytoEvent(eventtest);
+
+                System.out.println(event.toString());
+
+
+                /**
+                 * @Marc
+                 * Entry wird aus dem Event erstellt mittels converter
+                 */
+
+
+                Entry test = new Entry();
+                test = convertEventToEntry(event);
+
+                System.out.println(test.toString());
+
+                /**
+                 * @Marc
+                 * Convertierter Entry wird dem Kalender hinzugefügt
+                 *
+                 */
 
                 // Wählen zwischen den Kalendern
                 //@Marc
                 if(kalenderAuswahl.getSelectionModel().getSelectedItem() == "Lernplan"){
-                    LernPlan.addEntry(eventtest);
+                    LernPlan.addEntry(test);
                 }
                 else{
                     StundenPlan.addEntry((eventtest));
                 }
 
 
-                eventtest.setInterval(datumpicker.getValue());
-                eventtest.setInterval(Beginn_Zeit_Event, End_Zeit_Event);
-                System.out.println(event1);
+
                 stage.close();
             }
         };
