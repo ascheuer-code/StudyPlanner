@@ -9,7 +9,7 @@ import Helper.Helper;
  */
 public class Ects {
 
-    private final int minutes;
+    private int minutes;
     private int ects;
 
 
