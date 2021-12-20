@@ -7,18 +7,18 @@ import java.util.ArrayList;
 /**
  * The type Entrylist.
  */
-public class Entrylist {
+public class EventList {
     // Klassenattribute
 
-    private final ArrayList<Entry<Modul>> entrylist;
+    private ArrayList<Event> eventlist;
 
     /**
      * Instantiates a new Entrylist.
      */
     // hier wird die Einträgenliste angelegt
-    public Entrylist() {
+    public EventList() {
 
-        entrylist = new ArrayList<Entry<Modul>>();
+        eventlist = new ArrayList<Event>();
 
     }
 
@@ -29,9 +29,9 @@ public class Entrylist {
      *            the ent
      */
     // man fügt einen Eintrag hinzu
-    public void EntryAdd(Entry<Modul> ent) {
+    public void addEvent(Event ent) {
         Helper.checkObj(ent, "Entry");
-        entrylist.add(ent);
+        eventlist.add(ent);
     }
 
     /**
@@ -41,9 +41,9 @@ public class Entrylist {
      *            the ent
      */
     // man kann den Eintrag löeschen
-    public void EntryLoesch(Entry<Modul> ent) {
+    public void removeEvent(Event ent) {
         Helper.checkObj(ent, "Entry");
-        entrylist.remove(ent);
+        eventlist.remove(ent);
     }
 
     /**
@@ -55,11 +55,11 @@ public class Entrylist {
      *             the ent 2
      */
     // man kann den Eintag ändern
-    public void EntryAendere(Entry<Modul> ent1, Entry<Modul> ent2) {
+    public void replaceEvent(Event ent1, Event ent2) {
         Helper.checkObj(ent1, "Entry");
         Helper.checkObj(ent2, "Entry");
 
-        entrylist.add(entrylist.indexOf(ent1), ent2);
+        eventlist.add(eventlist.indexOf(ent1), ent2);
 
     }
 
@@ -72,12 +72,12 @@ public class Entrylist {
      * @return the entry
      */
     // den Eintrag wird gezeigt
-    public Entry<Modul> EntryGET(int index) {
+    public Event getEvent(int index) {
 
-        Helper.checkMax(entrylist.size() + 1, index, "INDEX");
+        Helper.checkMax(eventlist.size() + 1, index, "INDEX");
         Helper.checkMin(0, index, "INDEX");
 
-        return entrylist.get(index);
+        return eventlist.get(index);
     }
 
     /**
@@ -86,6 +86,6 @@ public class Entrylist {
     @Override
     // dadurch kann alle Einträge gezeigt werden .
     public String toString() {
-        return "EntryList [entrylist=" + entrylist + "]";
+        return "EntryList [entrylist=" + eventlist + "]";
     }
 }
