@@ -1,7 +1,9 @@
 package Model;
 
 
-
+/**
+ * The type Event.
+ */
 public class Event {
     private String id;
     private String title;
@@ -10,6 +12,16 @@ public class Event {
     private String endDate;
     private String endTime;
 
+    /**
+     * Instantiates a new Event.
+     *
+     * @param id        the id
+     * @param title     the title
+     * @param starDate  the star date
+     * @param startTime the start time
+     * @param endDate   the end date
+     * @param endTime   the end time
+     */
     public Event(String id, String title, String starDate, String startTime, String endDate, String endTime) {
         this.id = id;
         this.title = title;
@@ -19,55 +31,118 @@ public class Event {
         this.endTime = endTime;
     }
 
+    /**
+     * Instantiates a new Event.
+     */
     public Event(){
         
-        
+
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Gets title.
+     *
+     * @return the title
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Sets title.
+     *
+     * @param title the title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * Gets star date.
+     *
+     * @return the star date
+     */
     public String getStarDate() {
         return starDate;
     }
 
+    /**
+     * Sets star date.
+     *
+     * @param starDate the star date
+     */
     public void setStarDate(String starDate) {
         this.starDate = starDate;
     }
 
+    /**
+     * Gets start time.
+     *
+     * @return the start time
+     */
     public String getStartTime() {
         return startTime;
     }
 
+    /**
+     * Sets start time.
+     *
+     * @param startTime the start time
+     */
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
+    /**
+     * Gets end date.
+     *
+     * @return the end date
+     */
     public String getEndDate() {
         return endDate;
     }
 
+    /**
+     * Sets end date.
+     *
+     * @param endDate the end date
+     */
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
+    /**
+     * Gets end time.
+     *
+     * @return the end time
+     */
     public String getEndTime() {
         return endTime;
     }
 
+    /**
+     * Sets end time.
+     *
+     * @param endTime the end time
+     */
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
@@ -85,7 +160,9 @@ public class Event {
     }
 
     /**
-     * @return String
+     * To string 2 string.
+     *
+     * @return String string
      */
     public String toString2() {
         return title;
