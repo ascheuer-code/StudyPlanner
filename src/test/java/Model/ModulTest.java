@@ -34,14 +34,6 @@ public class ModulTest {
     }
 
     /**
-     * Gets ects minutes test.
-     */
-    @Test
-    void getEctsMinutesTest() {
-        assertEquals(18000, modul.getEcts().getMinutes());
-    }
-
-    /**
      * Gets modulname test.
      */
     @Test
@@ -65,11 +57,7 @@ public class ModulTest {
     void setEctsTest() {
         modul.setEcts(1);
         assertEquals(1, modul.getEcts().getEctsValue());
-        assertEquals(1800, modul.getEcts().getMinutes());
+        assertEquals(30, modul.getEcts().getDuration());
     }
 
-    @Test
-    void ModultoStringTest() {
-        assertEquals("Ects: 10; Minutes: 18000  Modulname: Test", modul.toString());
-    }
 }
