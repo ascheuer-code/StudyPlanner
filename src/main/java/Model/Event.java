@@ -20,6 +20,7 @@ public class Event {
      * Instantiates a new Event.
      */
     public Event(){
+        setId();
     }
 
     /**
@@ -33,10 +34,8 @@ public class Event {
 
     /**
      * Sets id.
-     *
-     * @param id the id
      */
-    public void setId(String id) {
+    public void setId() {
         this.id = UUID.randomUUID().toString();
     }
 
