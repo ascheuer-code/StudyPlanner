@@ -1,6 +1,8 @@
 package Model;
 
 
+import java.util.Objects;
+
 /**
  * The type Event.
  */
@@ -137,6 +139,14 @@ public class Event {
                 ", endDate='" + endDate + '\'' +
                 ", endTime='" + endTime + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(id, event.id) && Objects.equals(title, event.title) && Objects.equals(starDate, event.starDate) && Objects.equals(startTime, event.startTime) && Objects.equals(endDate, event.endDate) && Objects.equals(endTime, event.endTime);
     }
 
     /**
