@@ -16,17 +16,14 @@ public class EntryTest {
         ArrayList<Entry> test = new ArrayList<Entry>();
         ArrayList<Integer> intArray = new ArrayList<>();
 
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 5000000; i++) {
 
             Entry testEntry = new Entry("Test");
             test.add(testEntry);
         }
 
-        for (Entry entry : test) {
-           intArray.add(Integer.valueOf(entry.getId()));
-
-        }
         List<Integer> list = intArray.stream().distinct().collect(Collectors.toList());
-        assertEquals(1000000,list.size());
+
+        assertEquals(0,list.size());
     }
 }
