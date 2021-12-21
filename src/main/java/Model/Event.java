@@ -2,6 +2,7 @@ package Model;
 
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The type Event.
@@ -36,7 +37,7 @@ public class Event {
      * @param id the id
      */
     public void setId(String id) {
-        this.id = id;
+        this.id = UUID.randomUUID().toString();
     }
 
     /**
