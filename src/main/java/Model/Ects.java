@@ -2,6 +2,8 @@ package Model;
 
 import Helper.Helper;
 
+import java.time.Duration;
+
 /**
  * This class converts ECTS to minutes.
  *
@@ -9,8 +11,8 @@ import Helper.Helper;
  */
 public class Ects {
 
-    private int minutes;
     private int ects;
+    private Duration duration;
 
 
     /**
@@ -22,20 +24,7 @@ public class Ects {
     public Ects(int ects) {
         Helper.checkMin(1, ects, "ECTS");
         this.ects = ects;
-        this.minutes = ectsToMinutes(ects);
-    }
-
-    /**
-     * Calculates the amount of minutes to learn for the ECTS.
-     *
-     * @param ects
-     *         the ECTS that need to be converted to minutes.
-     *
-     * @return the minutes to learn.
-     */
-    private int ectsToMinutes(int ects) {
-        // please put in the Comments how they will be calculated with a Source
-        return ects * 60 * 30;
+        this.duration = duration.ofHours(ects * 30);
     }
 
     /**
@@ -56,24 +45,17 @@ public class Ects {
     public void setEcts(int ects) {
         Helper.checkSpan(1, 20, ects, "ECTS");
         this.ects = ects;
+        this.duration = duration.ofHours(ects * 30);
     }
 
-    /**
-     * Gets minutes.
-     *
-     * @return the minutes
-     */
-    public int getMinutes() {
-        return minutes;
+    public Duration getDuration() {
+        return duration;
     }
 
-    /**
-     * Gets a String.
-     *
-     * @return the ECTS and minutes as a String.
-     */
+    @Override
     public String toString() {
-        String s = "Ects: " + ects + ", Minutes: " + minutes;
-        return s;
+        return "Ects: " +
+                "ects: " + ects +
+                ", duration: " + duration.toHours();
     }
 }
