@@ -25,7 +25,6 @@ public class LocalDateTimeConverter {
 
         Event event = new Event();
 
-        event.setId(entry.getId());
         event.setTitle(entry.getTitle());
         event.setStarDate(entry.getInterval().getStartDate().toString());
         event.setStartTime(entry.getInterval().getStartTime().toString());
