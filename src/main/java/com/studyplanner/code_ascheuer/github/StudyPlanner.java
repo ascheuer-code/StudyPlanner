@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -297,6 +298,7 @@ public class StudyPlanner extends Application {
             public void handle(ActionEvent e) {
 
                 // Entry wird erstellt hier
+
                 Entry eventtest = new Entry();
 
                 eventtest.setTitle(modulNamePicker.getSelectionModel().getSelectedItem().toString());
@@ -312,6 +314,16 @@ public class StudyPlanner extends Application {
 
                 System.out.println(event.toString());
 
+                Duration duration = Duration.between(LocalTime.parse(event.getStartTime()),LocalTime.parse(event.getEndTime()));
+                Duration testduration = Duration.ofHours(30);
+
+                testduration = testduration.minus(duration);
+
+                System.out.println("Duration is:" + duration);
+                System.out.println("Testduration = " + testduration);
+
+
+
 
                 /**
                  * @Marc
@@ -323,6 +335,7 @@ public class StudyPlanner extends Application {
                 test = convertEventToEntry(event);
 
                 System.out.println(test.toString());
+
 
                 /**
                  * @Marc
