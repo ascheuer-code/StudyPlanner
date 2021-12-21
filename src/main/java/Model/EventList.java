@@ -18,7 +18,7 @@ public class EventList {
     // hier wird die Einträgenliste angelegt
     public EventList() {
 
-        eventlist = new ArrayList<Event>();
+        this.eventlist = new ArrayList<Event>();
 
     }
 
