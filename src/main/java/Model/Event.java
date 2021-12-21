@@ -12,31 +12,11 @@ public class Event {
     private String endDate;
     private String endTime;
 
-    /**
-     * Instantiates a new Event.
-     *
-     * @param id        the id
-     * @param title     the title
-     * @param starDate  the star date
-     * @param startTime the start time
-     * @param endDate   the end date
-     * @param endTime   the end time
-     */
-    public Event(String id, String title, String starDate, String startTime, String endDate, String endTime) {
-        this.id = id;
-        this.title = title;
-        this.starDate = starDate;
-        this.startTime = startTime;
-        this.endDate = endDate;
-        this.endTime = endTime;
-    }
 
     /**
      * Instantiates a new Event.
      */
     public Event(){
-        
-
     }
 
     /**
