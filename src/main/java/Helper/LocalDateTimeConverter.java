@@ -16,9 +16,10 @@ public class LocalDateTimeConverter {
     /**
      * Convert Entry to Event.
      *
-     * @param entry the entry
-     * @return the event
+     * @param entry
+     *         the entry
      *
+     * @return the event
      * @author Andreas Scheuer
      */
     public static Event convertEntrytoEvent(Entry entry) {
@@ -31,15 +32,20 @@ public class LocalDateTimeConverter {
         event.setEndDate((entry.getInterval().getEndDate().toString()));
         event.setEndTime((entry.getInterval().getEndTime().toString()));
 
+        if(!entry.getId().equals(event.getId())){
+            entry.setId(event.getId());
+        }
+
         return event;
    }
 
     /**
      * Convert Event to Entry.
      *
-     * @param event the event
-     * @return the entry
+     * @param event
+     *         the event
      *
+     * @return the entry
      * @author Andreas Scheuer
      */
     public static Entry convertEventToEntry(Event event){
@@ -56,9 +62,10 @@ public class LocalDateTimeConverter {
     /**
      * Convert Date and Time string to Interval .
      *
-     * @param event the event
-     * @return the interval
+     * @param event
+     *         the event
      *
+     * @return the interval
      * @autor Andreas Scheuer
      */
     public static Interval convertEventIntervalToEntryInterval(Event event) {
