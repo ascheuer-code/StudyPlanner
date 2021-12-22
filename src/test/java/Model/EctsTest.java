@@ -33,13 +33,6 @@ class EctsTest {
         assertEquals(ects.getEctsValue(), 5);
     }
 
-    /**
-     * Tests if method getMinutes returns correct value.
-     */
-    @Test
-    void getMinutes() {
-        assertEquals(ects.getMinutes(), 9000);
-    }
 
     /**
      * Sets ects.
@@ -55,11 +48,4 @@ class EctsTest {
         });
     }
 
-    /**
-     * Test if method toString returns correct String.
-     */
-    @Test
-    void testToString() {
-        assertEquals(ects.toString(), "Ects: 5; Minutes: 9000");
-    }
 }

@@ -2,6 +2,8 @@ package com.studyplanner.code_ascheuer.github;
 
 import Model.Event;
 import Model.Modul;
+import Helper.LocalDateTimeConverter;
+
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Calendar.Style;
 import com.calendarfx.model.CalendarSource;
@@ -22,10 +24,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static Helper.LocalDateTimeConverter.*;
+
 
 public class StudyPlanner extends Application {
     int FENSTER_SCHON_OFFEN_ZÄHLER = 0;
@@ -432,6 +438,51 @@ public class StudyPlanner extends Application {
                 Events.add(event1);
                 Entry<String> eventtest = new Entry<>(NameModul + "  " + TxtFDescription.getText());
 
+                // Entry wird erstellt hier
+
+                Entry eventtest = new Entry();
+
+                eventtest.setTitle(modulNamePicker.getSelectionModel().getSelectedItem().toString());
+                eventtest.setInterval(datumpicker.getValue());
+                eventtest.setInterval(Beginn_Zeit_Event, End_Zeit_Event);
+
+                /**
+                 * @Marc
+                 * Event wird aus dem Entry erstellt mittels converter
+                 */
+                Event event = new Event();
+                event = convertEntrytoEvent(eventtest);
+
+                System.out.println(event.toString());
+
+                Duration duration = Duration.between(LocalTime.parse(event.getStartTime()),LocalTime.parse(event.getEndTime()));
+                Duration testduration = Duration.ofHours(30);
+
+                testduration = testduration.minus(duration);
+
+                System.out.println("Duration is:" + duration);
+                System.out.println("Testduration = " + testduration);
+
+
+
+
+                /**
+                 * @Marc
+                 * Entry wird aus dem Event erstellt mittels converter
+                 */
+
+
+                Entry test = new Entry();
+                test = convertEventToEntry(event);
+
+                System.out.println(test.toString());
+
+
+                /**
+                 * @Marc
+                 * Convertierter Entry wird dem Kalender hinzugefügt
+                 *
+                 */
 
                 /**
                  * @Marc
