@@ -5,6 +5,7 @@ import Model.Modul;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Entry;
 import impl.com.calendarfx.view.NumericTextField;
+import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -25,4 +26,8 @@ import java.util.List;
  */
 public class View {
 
+
 }
+
+
+
