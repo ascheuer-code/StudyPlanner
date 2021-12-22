@@ -234,8 +234,9 @@ public class StudyPlanner extends Application {
 
                         Button BtModul = new Button("Test  " + modul);
                         listbox.getItems().add(BtModul);
+
                         BtModul.setOnAction(actionEvent -> {
-                            editModul(modul, TxtFModul.getText(), TxtFEcts.getText());
+                            editModul(modul, TxtFModul.getText(), TxtFEcts.getText(), BtModul);
                         });
                         stage.close();
                     }
@@ -255,7 +256,7 @@ public class StudyPlanner extends Application {
      * @Marc
      * Event bearbeiten
      */
-    public void editModul( Modul editModul, String modulName, String ects){
+    public void editModul( Modul editModul, String modulName, String ects, Button button){
 
         // Layout des aufgehenden Fensters
         Stage stage = new Stage();
@@ -277,20 +278,18 @@ public class StudyPlanner extends Application {
         Button BtEditModul = new Button("Ändern ");
         BtEditModul.setOnAction(
                 event -> {
-                    if (event.getSource() == editModul) {
-
+                    if (event.getSource() == BtEditModul) {
+                            int index = Module.indexOf(editModul);
                             editModul.setModulname(readModulName.getText());
                             editModul.setEcts(Integer.parseInt(readEcts.getText()));
-                            int index = Module.indexOf(editModul);
                             Module.set(index,editModul);
                             //erstellt einen anderen Button
-                            Button button = new Button(""+editModul);
+
+                            button.setText(editModul.toString());
+
                             listbox.getItems().set(index,button);
 
-                            button.setOnAction(actionEvent -> {
-                            editModul(editModul, readModulName.getText(), readEcts.getText());
 
-                        });
 
                     }
                     stage.close();
@@ -433,71 +432,35 @@ public class StudyPlanner extends Application {
         EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
 
-                Event event1 = new Event(String.valueOf(ChPickerModulName.getValue()), StartTimeEvent, EndTimeEvent, datePicker.getValue(),
-                                                        TxtFDescription.getText());
+                Event event1 = new Event();
+                //setModulNamefürÜbergabe((Modul)ChPickerModulName.getValue());
+                event1.setTitle(NameModul  +" "+ ChPickerCalendar.getValue().toString());
+                event1.setStartTime(StartTimeEvent.toString());
+                event1.setEndTime(EndTimeEvent.toString());
+                event1.setStarDate(datePicker.getValue().toString());
+                event1.setEndDate(datePicker.getValue().toString());
+
+
                 Events.add(event1);
-                Entry<String> eventtest = new Entry<>(NameModul + "  " + TxtFDescription.getText());
-
-                // Entry wird erstellt hier
-
-                Entry eventtest = new Entry();
-
-                eventtest.setTitle(modulNamePicker.getSelectionModel().getSelectedItem().toString());
-                eventtest.setInterval(datumpicker.getValue());
-                eventtest.setInterval(Beginn_Zeit_Event, End_Zeit_Event);
-
-                /**
-                 * @Marc
-                 * Event wird aus dem Entry erstellt mittels converter
-                 */
-                Event event = new Event();
-                event = convertEntrytoEvent(eventtest);
-
-                System.out.println(event.toString());
-
-                Duration duration = Duration.between(LocalTime.parse(event.getStartTime()),LocalTime.parse(event.getEndTime()));
-                Duration testduration = Duration.ofHours(30);
-
-                testduration = testduration.minus(duration);
-
-                System.out.println("Duration is:" + duration);
-                System.out.println("Testduration = " + testduration);
+                Entry entry = new Entry();
+                entry = convertEventToEntry(event1);
 
 
 
-
-                /**
-                 * @Marc
-                 * Entry wird aus dem Event erstellt mittels converter
-                 */
-
-
-                Entry test = new Entry();
-                test = convertEventToEntry(event);
-
-                System.out.println(test.toString());
-
-
-                /**
-                 * @Marc
-                 * Convertierter Entry wird dem Kalender hinzugefügt
-                 *
-                 */
 
                 /**
                  * @Marc
                  * Speichert das Event in dem davor gesehenen Kalender
                  */
                 if(ChPickerCalendar.getSelectionModel().getSelectedItem() == "Lernplan"){
-                    StudyPlan.addEntry(eventtest);
+                    StudyPlan.addEntry(entry);
                 }
                 else if (ChPickerCalendar.getSelectionModel().getSelectedItem() == "Stundenplan"){
-                    SchoolTimeTable.addEntry((eventtest));
+                    SchoolTimeTable.addEntry((entry));
                 }
 
-                eventtest.setInterval(datePicker.getValue());
-                eventtest.setInterval(StartTimeEvent, EndTimeEvent);
-                System.out.println(event1);
+
+                System.out.println(event1.toString() + "" + entry.toString());
                 stage.close();
             }
         };

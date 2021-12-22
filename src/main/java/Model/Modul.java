@@ -75,7 +75,7 @@ public class Modul {
      *
      * @return Modulname
      */
-    public  String toString2(){
+    public  String test(Object object){
         return (this.modulname);
     }
 }
