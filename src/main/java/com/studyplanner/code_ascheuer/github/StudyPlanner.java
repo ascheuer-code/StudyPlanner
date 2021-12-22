@@ -182,7 +182,7 @@ public class StudyPlanner extends Application {
                         listbox.getItems().add(BtModul);
 
                         BtModul.setOnAction(actionEvent -> {
-                            editModul(modul, TxtFModul.getText(), TxtFEcts.getText(), BtModul);
+                            editModul(modul, BtModul);
                         });
                         stage.close();
                     }
@@ -201,6 +201,11 @@ public class StudyPlanner extends Application {
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
                 if(newValue.trim().isEmpty()){
                     BtSafe.setDisable(true);
+                }
+                else if (!newValue.trim().equals("") && !TxtFEcts.getText().equals("")){
+                    BtSafe.setDisable(false);
+
+
                 }
                 else{
                     TxtFEcts.textProperty().addListener(new ChangeListener<String>() {
@@ -225,7 +230,7 @@ public class StudyPlanner extends Application {
      * @Marc
      * Event bearbeiten
      */
-    public void editModul( Modul editModul, String modulName, String ects, Button button){
+    public void editModul( Modul editModul, Button button){
 
         // Layout des aufgehenden Fensters
         Stage stage = new Stage();
@@ -237,8 +242,8 @@ public class StudyPlanner extends Application {
         Text modulText = new Text("Modulname :");
         Text etcText = new Text("Ects Wert des Moduls:");
         // Eingabe Felder + VorhandenDaten
-        TextField readModulName = new TextField(modulName);
-        TextField readEcts = new TextField(ects);
+        TextField readModulName = new TextField(editModul.getModulname());
+        TextField readEcts = new TextField(editModul.getEcts().toString2());
 
         /**
          * @Marc
