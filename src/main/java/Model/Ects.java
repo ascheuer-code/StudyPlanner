@@ -54,8 +54,10 @@ public class Ects {
 
     @Override
     public String toString() {
-        return "Ects: " +
-                "ects: " + ects +
-                ", duration: " + duration.toHours();
+        return "Ects: " + ects + "\n"+
+                "ToDO: " + duration.toHours() + " Stunden pro Woche";
+    }
+    public String toString2(){
+        return "" + ects;
     }
 }
