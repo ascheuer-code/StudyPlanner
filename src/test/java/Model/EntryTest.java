@@ -16,12 +16,12 @@ public class EntryTest {
     @RepeatedTest(value = 10, name= "testidUnique {currentRepetition}/{totalRepetitions}")
     @Disabled //Achtung dauert ne Zeit lang !!!!
     void testIdUnique() {
-        ArrayList<Entry> test = new ArrayList<Entry>();
+        ArrayList<Event> test = new ArrayList<Event>();
         ArrayList<Integer> intArray = new ArrayList<>();
 
         for (int i = 0; i < 5000000; i++) {
 
-            Entry testEntry = new Entry("Test");
+            Event testEntry = new Event();
             test.add(testEntry);
         }
 
