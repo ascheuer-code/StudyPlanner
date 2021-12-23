@@ -2,6 +2,8 @@ package Model;
 
 import Helper.Helper;
 
+import java.util.Objects;
+
 /**
  * The type Model.
  *
@@ -9,16 +11,16 @@ import Helper.Helper;
  */
 public class Modul {
 
-    private Ects ects;
+    private final Ects ects;
     private String modulname;
 
     /**
      * Instantiates a new Modul.
      *
      * @param modulname
-     *                  the modulname
+     *         the modulname
      * @param ects
-     *                  the ects
+     *         the ects
      */
     public Modul(String modulname, int ects) {
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
@@ -32,7 +34,7 @@ public class Modul {
      *
      * @return the string
      */
-    public  String getModulname() {
+    public String getModulname() {
         return modulname;
     }
 
@@ -40,7 +42,7 @@ public class Modul {
      * Set modulname.
      *
      * @param modulname
-     *                  the titel
+     *         the titel
      */
     public void setModulname(String modulname) {
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
@@ -60,22 +62,27 @@ public class Modul {
      * @param ects
      */
     public void setEcts(int ects) {
-        this.ects = new Ects(ects);
+        this.ects.setEcts(ects);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ects, modulname);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Modul modul = (Modul) o;
+        return Objects.equals(ects, modul.ects) && Objects.equals(modulname, modul.modulname);
     }
 
     /**
      * @return String
      */
     public String toString() {
-        return ( this.modulname + " : " +  this.ects + "  ");
+        return (this.modulname + " " + "\n" + this.ects + "  ");
 
-    }
-
-    /**
-     *
-     * @return Modulname
-     */
-    public  String test(Object object){
-        return (this.modulname);
     }
 }
