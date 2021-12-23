@@ -1,8 +1,12 @@
 package Model;
 
+import javafx.beans.property.SimpleIntegerProperty;
 
+import java.time.LocalTime;
 import java.util.Objects;
 import java.util.UUID;
+
+import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
  * The type Event.
@@ -15,12 +19,21 @@ public class Event {
     private String endDate;
     private String endTime;
 
+    private final SimpleIntegerProperty duration = new SimpleIntegerProperty();
+
 
     /**
      * Instantiates a new Event.
      */
-    public Event(){
+    public Event() {
         setId();
+    }
+
+    /**
+     * Sets id.
+     */
+    public void setId() {
+        this.id = UUID.randomUUID().toString();
     }
 
     /**
@@ -30,15 +43,6 @@ public class Event {
      */
     public String getId() {
         return id;
-    }
-
-
-
-    /**
-     * Sets id.
-     */
-    public void setId() {
-        this.id = UUID.randomUUID().toString();
     }
 
     /**
@@ -53,7 +57,8 @@ public class Event {
     /**
      * Sets title.
      *
-     * @param title the title
+     * @param title
+     *         the title
      */
     public void setTitle(String title) {
         this.title = title;
@@ -71,7 +76,8 @@ public class Event {
     /**
      * Sets star date.
      *
-     * @param starDate the star date
+     * @param starDate
+     *         the star date
      */
     public void setStarDate(String starDate) {
         this.starDate = starDate;
@@ -89,7 +95,8 @@ public class Event {
     /**
      * Sets start time.
      *
-     * @param startTime the start time
+     * @param startTime
+     *         the start time
      */
     public void setStartTime(String startTime) {
         this.startTime = startTime;
@@ -107,7 +114,8 @@ public class Event {
     /**
      * Sets end date.
      *
-     * @param endDate the end date
+     * @param endDate
+     *         the end date
      */
     public void setEndDate(String endDate) {
         this.endDate = endDate;
@@ -125,10 +133,20 @@ public class Event {
     /**
      * Sets end time.
      *
-     * @param endTime the end time
+     * @param endTime
+     *         the end time
      */
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+        duration.set((int) LocalTime.parse(this.startTime).until(LocalTime.parse(this.endTime), MINUTES));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(id, event.id) && Objects.equals(title, event.title) && Objects.equals(starDate, event.starDate) && Objects.equals(startTime, event.startTime) && Objects.equals(endDate, event.endDate) && Objects.equals(endTime, event.endTime);
     }
 
     @Override
@@ -141,14 +159,6 @@ public class Event {
                 ", endDate='" + endDate + '\'' +
                 ", endTime='" + endTime + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return Objects.equals(id, event.id) && Objects.equals(title, event.title) && Objects.equals(starDate, event.starDate) && Objects.equals(startTime, event.startTime) && Objects.equals(endDate, event.endDate) && Objects.equals(endTime, event.endTime);
     }
 
     /**
