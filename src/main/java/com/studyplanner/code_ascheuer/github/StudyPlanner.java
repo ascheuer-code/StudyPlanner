@@ -13,7 +13,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -26,7 +25,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static Helper.LocalDateTimeConverter.convertEventToEntry;
@@ -94,10 +92,69 @@ public class StudyPlanner extends Application {
 
         CalendarView calendarView = new CalendarView();
 
-        EventHandler<CalendarEvent> handler = getCalendarEventEventHandler();
+        //Eventhandler für alle arten von Events
+        StudyPlan.addEventHandler(event -> {
 
-        SchoolTimeTable.addEventHandler(handler);
-        StudyPlan.addEventHandler(handler);
+            Boolean EVENTADDED = event.isEntryAdded();
+
+            //check added -> Works without description, need to be changed. Module gets the uuid
+            if (event.isEntryAdded()) {
+                for (Modul modul : Module) {
+                    if (modul.getUuid().contains(event.getEntry().getId())) {
+                        modul.getEcts().setDuration(modul.getEcts().getDuration().minus(event.getEntry().getDuration()));
+
+                        changeListBoxButtonText(event, modul);
+
+
+                    }
+                }
+            }
+            //check removed-> Works without description, need to be changed. Module gets the uuid
+            if (event.isEntryRemoved()) {
+                for (Modul modul : Module) {
+                    if (modul.getUuid().contains(event.getEntry().getId())) {
+                        modul.getEcts().setDuration(modul.getEcts().getDuration().plus(event.getEntry().getDuration()));
+
+                        changeListBoxButtonText(event, modul);
+
+                        /*
+                        removes the Events from the Eventlist
+                         */
+                        List events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).collect(Collectors.toList());
+                        Events.removeAll(events);
+                    }
+                }
+            }
+            // Title changed
+
+            //Startdate changed
+
+            //StartTime changed
+
+            //Enddate changed
+
+            //Endtime changed
+
+            else {
+                for (Event ownEvent : Events) {
+                    if (ownEvent.getId().equals(event.getEntry().getId())) {
+
+                        ownEvent.setStartTime(event.getEntry().getStartTime().toString());
+                        ownEvent.setStarDate(event.getEntry().getStartDate().toString());
+                        ownEvent.setEndTime(event.getEntry().getEndTime().toString());
+                        ownEvent.setEndTime(event.getEntry().getEndTime().toString());
+                    }
+                }
+                for (Event item : Events) {
+                    System.out.println(item);
+                }
+
+
+            }
+
+
+        });
+
 
         /**
          * Style der Kalender
@@ -127,6 +184,14 @@ public class StudyPlanner extends Application {
         stage.show();
     }
 
+
+    private void changeListBoxButtonText(CalendarEvent evt, Modul item) {
+        listbox.getItems()
+                .stream()
+                .filter(e -> replaceButtonName(e.getText().trim()).equals(evt.getEntry().getTitle().trim()))
+                .forEach(e -> e.setText(item.toString()));
+    }
+
     /**
      * Generates a new EventHandler for the Calender
      *
@@ -134,38 +199,6 @@ public class StudyPlanner extends Application {
      * @author Andreas Scheuer
      */
 
-    private EventHandler<CalendarEvent> getCalendarEventEventHandler() {
-        EventHandler<CalendarEvent> handler = evt -> {
-            if (evt.isEntryAdded()) {
-                for (Modul item : Module) {
-                    if (Objects.equals(item.getModulname().trim(), evt.getEntry().getTitle().trim())) {
-                        item.getEcts().setDuration(item.getEcts().getDuration().minus(evt.getEntry().getDuration()));
-
-                        changeListBoxButtonText(evt, item);
-
-
-                    }
-                }
-
-            }
-            if (evt.isEntryRemoved()) {
-                for (Modul item : Module) {
-                    if ((Objects.equals(item.getModulname().trim(), evt.getEntry().getTitle().trim()))) {
-                        item.getEcts().setDuration(item.getEcts().getDuration().plus(evt.getEntry().getDuration()));
-
-                        changeListBoxButtonText(evt, item);
-
-                        /*
-                        removes the Events from the Eventlist
-                         */
-                        List event = Events.stream().filter(e -> e.getId().equals(evt.getEntry().getId())).collect(Collectors.toList());
-                        Events.removeAll(event);
-                    }
-                }
-            }
-        };
-        return handler;
-    }
 
     private void initializingCalenderView(CalendarView calendarView) {
 
@@ -173,6 +206,7 @@ public class StudyPlanner extends Application {
         myCalendarSource.getCalendars().addAll(StudyPlan, SchoolTimeTable);
         calendarView.getCalendarSources().addAll(myCalendarSource);
         calendarView.setRequestedTime(LocalTime.now());
+
         Thread updateTimeThread = new Thread("Calendar: Update Time Thread") {
             @Override
             public void run() {
@@ -245,11 +279,18 @@ public class StudyPlanner extends Application {
         return PBar;
     }
 
-    private void changeListBoxButtonText(CalendarEvent evt, Modul item) {
-        listbox.getItems()
-                .stream()
-                .filter(e -> replaceButtonName(e.getText().trim()).equals(evt.getEntry().getTitle().trim()))
-                .forEach(e -> e.setText(item.toString()));
+    /**
+     * Replace button name string.
+     *
+     * @param string
+     *         the string
+     *
+     * @return the string
+     */
+    public String replaceButtonName(String string) {
+        string.replaceAll("\\s", "");
+        String result = string.replaceAll("(?<=\\w)\\s.*", "");
+        return result;
     }
 
     /**
@@ -326,20 +367,6 @@ public class StudyPlanner extends Application {
         stage.show();
 
 
-    }
-
-    /**
-     * Replace button name string.
-     *
-     * @param string
-     *         the string
-     *
-     * @return the string
-     */
-    public String replaceButtonName(String string) {
-        string.replaceAll("\\s", "");
-        String result = string.replaceAll("(?<=)\\s.*", "");
-        return result;
     }
 
     private ChoiceBox getChPickerModulName() {
@@ -448,6 +475,9 @@ public class StudyPlanner extends Application {
             ownEvent.setEndTime(EndTimeEvent.toString());
             ownEvent.setStarDate(datePicker.getValue().toString());
             ownEvent.setEndDate(datePicker.getValue().toString());
+
+            // here will be the UUID from the Event added to the Modul
+            Module.stream().filter(e -> e.getModulname().equals(NameModul)).forEach(e -> e.getUuid().add(ownEvent.getId()));
 
             Events.add(ownEvent);
             Entry entry = new Entry();
