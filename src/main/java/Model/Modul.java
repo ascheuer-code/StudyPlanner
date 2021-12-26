@@ -2,6 +2,7 @@ package Model;
 
 import Helper.Helper;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -12,6 +13,7 @@ import java.util.Objects;
 public class Modul {
 
     private final Ects ects;
+    private final ArrayList<String> uuid;
     private String modulname;
 
     /**
@@ -27,6 +29,11 @@ public class Modul {
 
         this.modulname = modulname;
         this.ects = new Ects(ects);
+        this.uuid = new ArrayList<>();
+    }
+
+    public ArrayList<String> getUuid() {
+        return uuid;
     }
 
     /**
@@ -82,7 +89,7 @@ public class Modul {
      * @return String
      */
     public String toString() {
-        return (this.modulname + " " + "\n" + this.ects + "  ");
+        return (this.modulname + " " + this.ects + "  ");
 
     }
 }
