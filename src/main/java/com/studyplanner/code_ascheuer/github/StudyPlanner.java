@@ -122,12 +122,12 @@ public class StudyPlanner extends Application {
                 }
             }
             // Title changed
-            if (!event.isEntryAdded() && event.getOldInterval() == null && !event.getOldText().equals(event.getEntry().getTitle())) {
+            if (!event.isEntryAdded() && !event.isEntryRemoved() && event.getOldInterval() == null && !event.getOldText().equals(event.getEntry().getTitle())) {
                 Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> e.setTitle(event.getEntry().getTitle()));
             }
 
             // Intervall changed, works fine
-            if (!event.isEntryAdded() && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
+            if (!event.isEntryAdded() && !event.isEntryRemoved() && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
                 Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
                     e.setStartTime(event.getEntry().getStartTime().toString());
                     e.setStarDate(event.getEntry().getStartDate().toString());
