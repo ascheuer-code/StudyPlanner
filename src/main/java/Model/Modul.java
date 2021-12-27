@@ -89,7 +89,7 @@ public class Modul {
      * @return String
      */
     public String toString() {
-        return (this.modulname + " " + this.ects + "  ");
+        return (this.modulname + "\n" + this.ects + "  ");
 
     }
 }

@@ -278,7 +278,7 @@ public class StudyPlanner extends Application {
      */
     public String replaceButtonName(String string) {
         string.replaceAll("\\s", "");
-        String result = string.replaceAll("(?<=\\w)\\s.*", "");
+        String result = string.replaceAll("(?<=\\w)\\n.*", "");
         return result;
     }
 
