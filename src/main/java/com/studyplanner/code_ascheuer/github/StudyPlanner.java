@@ -95,8 +95,6 @@ public class StudyPlanner extends Application {
         //Eventhandler für alle arten von Events
         StudyPlan.addEventHandler(event -> {
 
-            Boolean EVENTADDED = event.isEntryAdded();
-
             //check added -> Works without description, need to be changed. Module gets the uuid
             if (event.isEntryAdded()) {
                 for (Modul modul : Module) {
@@ -104,8 +102,6 @@ public class StudyPlanner extends Application {
                         modul.getEcts().setDuration(modul.getEcts().getDuration().minus(event.getEntry().getDuration()));
 
                         changeListBoxButtonText(event, modul);
-
-
                     }
                 }
             }
@@ -126,33 +122,26 @@ public class StudyPlanner extends Application {
                 }
             }
             // Title changed
-
-            //Startdate changed
-
-            //StartTime changed
-
-            //Enddate changed
-
-            //Endtime changed
-
-            else {
-                for (Event ownEvent : Events) {
-                    if (ownEvent.getId().equals(event.getEntry().getId())) {
-
-                        ownEvent.setStartTime(event.getEntry().getStartTime().toString());
-                        ownEvent.setStarDate(event.getEntry().getStartDate().toString());
-                        ownEvent.setEndTime(event.getEntry().getEndTime().toString());
-                        ownEvent.setEndTime(event.getEntry().getEndTime().toString());
-                    }
-                }
-                for (Event item : Events) {
-                    System.out.println(item);
-                }
-
-
+            if (!event.isEntryAdded() && event.getOldInterval() == null && !event.getOldText().equals(event.getEntry().getTitle())) {
+                Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> e.setTitle(event.getEntry().getTitle()));
             }
 
+            // Intervall changed, works fine
+            if (!event.isEntryAdded() && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
+                Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
+                    e.setStartTime(event.getEntry().getStartTime().toString());
+                    e.setStarDate(event.getEntry().getStartDate().toString());
+                    e.setEndTime(event.getEntry().getEndTime().toString());
+                    e.setEndDate(event.getEntry().getEndDate().toString());
+                });
 
+                Module.stream().filter(e -> e.getUuid().contains(event.getEntry().getId())).forEach(e -> {
+                            e.getEcts().setDuration(e.getEcts().getDuration().plus(event.getOldInterval().getDuration().minus(event.getEntry().getDuration())));
+
+                            changeListBoxButtonText(event, e);
+                        }
+                );
+            }
         });
 
 
@@ -188,7 +177,7 @@ public class StudyPlanner extends Application {
     private void changeListBoxButtonText(CalendarEvent evt, Modul item) {
         listbox.getItems()
                 .stream()
-                .filter(e -> replaceButtonName(e.getText().trim()).equals(evt.getEntry().getTitle().trim()))
+                .filter(e -> replaceButtonName(e.getText().trim()).equals(item.getModulname().trim()))
                 .forEach(e -> e.setText(item.toString()));
     }
 
@@ -464,7 +453,8 @@ public class StudyPlanner extends Application {
         return datePicker;
     }
 
-    private Button getBTSafeEventButton(TextField txtFDescription, DatePicker datePicker, ChoiceBox chPickerCalendar, Stage stage) {
+    private Button getBTSafeEventButton(TextField txtFDescription, DatePicker datePicker, ChoiceBox
+            chPickerCalendar, Stage stage) {
         Button button = new Button("Event sichern :");
         button.setOnAction(action -> {
 
