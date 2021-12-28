@@ -116,7 +116,7 @@ public class StudyPlanner extends Application {
     public void calendarEventHandler() {
         //Eventhandler für alle arten von Events
         StudyPlan.addEventHandler(event -> {
-
+            // ToDo: es ist kein check eingebaut falls der Eintrag den Kalender wechselt, muss noch eingebaut werden
             //check added -> Works without description, need to be changed. Module gets the uuid
             isEntryAdded(event);
             //check removed-> Works without description, need to be changed. Module gets the uuid
