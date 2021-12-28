@@ -11,8 +11,6 @@ import com.calendarfx.view.CalendarView;
 import impl.com.calendarfx.view.NumericTextField;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -34,13 +32,29 @@ import static Helper.LocalDateTimeConverter.convertEventToEntry;
  * The type Study planner.
  */
 public class StudyPlanner extends Application {
-    /**
-     * The Fenster schon offen zähler.
-     */
-    int FENSTER_SCHON_OFFEN_ZÄHLER = 0;
 
     /**
-     * Konstanten
+     * The Module.
+     */
+    final List<Modul> Module = new ArrayList<>();
+    /**
+     * The Events.
+     */
+    final List<Event> Events = new ArrayList<>();
+    /**
+     * The Listbox.
+     */
+    final ListView<Button> listbox = new ListView<>();
+    /**
+     * The School time table.
+     */
+    final Calendar SchoolTimeTable = new Calendar("Stundenplan");
+    /**
+     * The Study plan.
+     */
+    final Calendar StudyPlan = new Calendar("Lernplan");
+    /**
+     * The Start time event.
      */
     LocalTime StartTimeEvent;
     /**
@@ -51,103 +65,25 @@ public class StudyPlanner extends Application {
      * The Name modul.
      */
     String NameModul;
-    /**
-     * The Module.
-     */
-    List<Modul> Module = new ArrayList();
-    /**
-     * The Events.
-     */
-    List<Event> Events = new ArrayList();
-    /**
-     * The Listbox.
-     */
-    ListView<Button> listbox = new ListView();
-    /**
-     * The School time table.
-     */
-    Calendar SchoolTimeTable = new Calendar("Stundenplan");
-    /**
-     * The Study plan.
-     */
-    Calendar StudyPlan = new Calendar("Lernplan");
 
     /**
      * The entry point of application.
      *
-     * @param args
-     *         the input arguments
+     * @param args the input arguments
      */
     public static void main(String[] args) {
         launch(args);
     }
 
-    /**
-     * @param stage
-     *
-     * @throws Exception
-     */
+
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
 
         CalendarView calendarView = new CalendarView();
 
-        //Eventhandler für alle arten von Events
-        StudyPlan.addEventHandler(event -> {
-
-            //check added -> Works without description, need to be changed. Module gets the uuid
-            if (event.isEntryAdded()) {
-                for (Modul modul : Module) {
-                    if (modul.getUuid().contains(event.getEntry().getId())) {
-                        modul.getEcts().setDuration(modul.getEcts().getDuration().minus(event.getEntry().getDuration()));
-
-                        changeListBoxButtonText(event, modul);
-                    }
-                }
-            }
-            //check removed-> Works without description, need to be changed. Module gets the uuid
-            if (event.isEntryRemoved()) {
-                for (Modul modul : Module) {
-                    if (modul.getUuid().contains(event.getEntry().getId())) {
-                        modul.getEcts().setDuration(modul.getEcts().getDuration().plus(event.getEntry().getDuration()));
-
-                        changeListBoxButtonText(event, modul);
-
-                        /*
-                        removes the Events from the Eventlist
-                         */
-                        List events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).collect(Collectors.toList());
-                        Events.removeAll(events);
-                    }
-                }
-            }
-            // Title changed
-            if (!event.isEntryAdded() && !event.isEntryRemoved() && event.getOldInterval() == null && !event.getOldText().equals(event.getEntry().getTitle())) {
-                Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> e.setTitle(event.getEntry().getTitle()));
-            }
-
-            // Intervall changed, works fine
-            if (!event.isEntryAdded() && !event.isEntryRemoved() && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
-                Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
-                    e.setStartTime(event.getEntry().getStartTime().toString());
-                    e.setStarDate(event.getEntry().getStartDate().toString());
-                    e.setEndTime(event.getEntry().getEndTime().toString());
-                    e.setEndDate(event.getEntry().getEndDate().toString());
-                });
-
-                Module.stream().filter(e -> e.getUuid().contains(event.getEntry().getId())).forEach(e -> {
-                            e.getEcts().setDuration(e.getEcts().getDuration().plus(event.getOldInterval().getDuration().minus(event.getEntry().getDuration())));
-
-                            changeListBoxButtonText(event, e);
-                        }
-                );
-            }
-        });
+        calendarEventHandler();
 
 
-        /**
-         * Style der Kalender
-         */
         SchoolTimeTable.setStyle(Style.STYLE2);
         StudyPlan.setStyle(Style.STYLE3);
 
@@ -158,10 +94,7 @@ public class StudyPlanner extends Application {
 
         Pane leftSideSplitPane = getLeftSideSplitPane(BtCreateEvent, BtCreateModul);
 
-        /**
-         *  Anlegen und Design des Splitpane.
-         *  Erzeugt die beiden Hälften des Frontends.
-         */
+
         SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
         split.setDividerPosition(0, 0.18);
         Scene sceneO = new Scene(split);
@@ -173,8 +106,122 @@ public class StudyPlanner extends Application {
         stage.show();
     }
 
+    /**
+     * Calendar event handler.
+     * <p>
+     * Adding the EventHandler to the Calendar´s
+     *
+     * @author Andreas Scheuer
+     */
+    public void calendarEventHandler() {
+        //Eventhandler für alle arten von Events
+        StudyPlan.addEventHandler(event -> {
 
-    private void changeListBoxButtonText(CalendarEvent evt, Modul item) {
+            //check added -> Works without description, need to be changed. Module gets the uuid
+            isEntryAdded(event);
+            //check removed-> Works without description, need to be changed. Module gets the uuid
+            isEntryRemoved(event);
+            // Title changed
+            isEntryTitleChanged(event);
+
+            // Intervall changed, works fine
+            isEntryIntervallChanged(event);
+        });
+
+        SchoolTimeTable.addEventHandler(event -> {
+            //check added -> Works without description, need to be changed. Module gets the uuid
+            isEntryAdded(event);
+            //check removed-> Works without description, need to be changed. Module gets the uuid
+            isEntryRemoved(event);
+            // Title changed
+            isEntryTitleChanged(event);
+
+            // Intervall changed, works fine
+            isEntryIntervallChanged(event);
+        });
+    }
+
+    /**
+     * Check´s if the Entry Intervall is Changed and if so it Updates the Event with the same UUID
+     *
+     * @param event the event
+     */
+    public void isEntryIntervallChanged(CalendarEvent event) {
+        if (!event.isEntryAdded() && !event.isEntryRemoved() && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
+            Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
+                e.setStartTime(event.getEntry().getStartTime().toString());
+                e.setStarDate(event.getEntry().getStartDate().toString());
+                e.setEndTime(event.getEntry().getEndTime().toString());
+                e.setEndDate(event.getEntry().getEndDate().toString());
+            });
+
+            Module.stream().filter(e -> e.getUuid().contains(event.getEntry().getId())).forEach(e -> {
+                        e.getEcts().setDuration(e.getEcts().getDuration().plus(event.getOldInterval().getDuration().minus(event.getEntry().getDuration())));
+
+                        changeListBoxButtonText(e);
+                    }
+            );
+        }
+    }
+
+    /**
+     * Is entry title changed.
+     *
+     * @param event the event
+     */
+    public void isEntryTitleChanged(CalendarEvent event) {
+        if (!event.isEntryAdded() && !event.isEntryRemoved() && event.getOldInterval() == null && !event.getOldText().equals(event.getEntry().getTitle())) {
+            Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> e.setTitle(event.getEntry().getTitle()));
+        }
+    }
+
+    /**
+     * Is entry removed.
+     *
+     * @param event the event
+     */
+    public void isEntryRemoved(CalendarEvent event) {
+        if (event.isEntryRemoved()) {
+            for (Modul modul : Module) {
+                if (modul.getUuid().contains(event.getEntry().getId())) {
+                    modul.getEcts().setDuration(modul.getEcts().getDuration().plus(event.getEntry().getDuration()));
+
+                    changeListBoxButtonText(modul);
+
+                    /*
+                    removes the Events from the Eventlist
+                     */
+                    List<Event> events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).collect(Collectors.toList());
+                    Events.removeAll(events);
+                }
+            }
+        }
+    }
+
+    /**
+     * Is entry added.
+     *
+     * @param event the event
+     */
+    public void isEntryAdded(CalendarEvent event) {
+        if (event.isEntryAdded()) {
+            for (Modul modul : Module) {
+                if (modul.getUuid().contains(event.getEntry().getId())) {
+                    modul.getEcts().setDuration(modul.getEcts().getDuration().minus(event.getEntry().getDuration()));
+
+                    changeListBoxButtonText(modul);
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Change list box button text.
+     *
+     * @param item the item
+     */
+    public void changeListBoxButtonText(Modul item) {
         listbox.getItems()
                 .stream()
                 .filter(e -> replaceButtonName(e.getText().trim()).equals(item.getModulname().trim()))
@@ -182,14 +229,11 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     * Generates a new EventHandler for the Calender
+     * Initializing calender view.
      *
-     * @return EventHandler
-     * @author Andreas Scheuer
+     * @param calendarView the calendar view
      */
-
-
-    private void initializingCalenderView(CalendarView calendarView) {
+    public void initializingCalenderView(CalendarView calendarView) {
 
         CalendarSource myCalendarSource = new CalendarSource("Planer");
         myCalendarSource.getCalendars().addAll(StudyPlan, SchoolTimeTable);
@@ -197,6 +241,7 @@ public class StudyPlanner extends Application {
         calendarView.setRequestedTime(LocalTime.now());
 
         Thread updateTimeThread = new Thread("Calendar: Update Time Thread") {
+            @SuppressWarnings({"InfiniteLoopStatement", "BusyWait"})
             @Override
             public void run() {
                 while (true) {
@@ -222,11 +267,13 @@ public class StudyPlanner extends Application {
         updateTimeThread.start();
     }
 
-    private Button getBtCreateEvent() {
-        /**
-         *  Hier wird dem button  BtCreateEvent seine Funktion zugewiesen.
-         *  Das heißt er ruft die Methode neuesEvent(Sting string) auf
-         */
+    /**
+     * Gets bt create event.
+     *
+     * @return the bt create event
+     */
+    public Button getBtCreateEvent() {
+
         Button BtCreateEvent = new Button("Erstellen");
         BtCreateEvent.setOnAction(
                 event -> {
@@ -237,11 +284,13 @@ public class StudyPlanner extends Application {
         return BtCreateEvent;
     }
 
-    private Button getBtCreateModul() {
-        /**
-         *  Hier wird dem button  BtCreateModul seine Funktion zugewiesen.
-         *  Das heißt er ruft die Methode neuesModul() auf
-         */
+    /**
+     * Gets bt create modul.
+     *
+     * @return the bt create modul
+     */
+    public Button getBtCreateModul() {
+
         Button BtCreateModul = new Button("Modul anlegen");
         BtCreateModul.setOnAction(
                 event -> {
@@ -252,11 +301,14 @@ public class StudyPlanner extends Application {
         return BtCreateModul;
     }
 
-    private Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul) {
-        /**
-         *  Anelgen und design der linken Seite des Splitpane.
-         *  hir muss alles rein was in unsere seite vom Calender sein soll
-         */
+    /**
+     * Gets left side split pane.
+     *
+     * @param BtCreateEvent the bt create event
+     * @param BtCreateModul the bt create modul
+     * @return the left side split pane
+     */
+    public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul) {
 
         BorderPane BPLayoutLeft = new BorderPane();
         VBox VbButtonBox = new VBox();
@@ -271,37 +323,31 @@ public class StudyPlanner extends Application {
     /**
      * Replace button name string.
      *
-     * @param string
-     *         the string
-     *
+     * @param string the string
      * @return the string
      */
     public String replaceButtonName(String string) {
-        string.replaceAll("\\s", "");
-        String result = string.replaceAll("(?<=\\w)\\n.*", "");
-        return result;
+        return string.replaceAll("(?<=\\w)\\n.*", "");
     }
 
     /**
-     * @ max/ marc
-     * realisiert die Funktion des Buttons Event_Eintragen
-     * Es wird ein neues Fenster erstellt, in dem die Eintragedaten abgefragt werden.
+     * Neues event.
      */
     public void neuesEvent() {
         Stage stage = new Stage();
         VBox layout = new VBox();
 
         Text TxtModulName = new Text("Modulname");
-        ChoiceBox ChPickerModulName = getChPickerModulName();
+        ChoiceBox<?> ChPickerModulName = getChPickerModulName();
 
         Text TxtCalendar = new Text("Kalender");
-        ChoiceBox ChPickerCalendar = getChPickerCalendar();
+        ChoiceBox<?> ChPickerCalendar = getChPickerCalendar();
 
         Text TxtStartTime = new Text("Anfangszeit");
-        ChoiceBox ChPickerStartTime = getChPickerStartTime();
+        ChoiceBox<?> ChPickerStartTime = getChPickerStartTime();
 
         Text TxtEndTime = new Text("Endzeit");
-        ChoiceBox ChPickerEndTime = getChPickerEndTime();
+        ChoiceBox<?> ChPickerEndTime = getChPickerEndTime();
 
         Text TxtDate = new Text("Datum");
         DatePicker datePicker = getDatePicker();
@@ -326,11 +372,7 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     * @ max
-     * realisiert die Funktion des Buttons Modul_Anlegen
-     * Es wird ein neues Fenster erstellt in dem die Anlege Daten abgefragt werden
-     * @ param Modulname
-     * @ param EctsWert
+     * Neues modul.
      */
     public void neuesModul() {
         // Layout des aufgehenden Fensters
@@ -358,49 +400,50 @@ public class StudyPlanner extends Application {
 
     }
 
-    private ChoiceBox getChPickerModulName() {
+    /**
+     * Gets ch picker modul name.
+     *
+     * @return the ch picker modul name
+     */
+    public ChoiceBox<?> getChPickerModulName() {
         // Anfang der Feld anlegen Event
-        /**
-         * @Max @Marc
-         * ChoiceBox
-         * Bei jedem Event besteht die Möglichkeit jedes Modul auszuwählen
-         */
-        ChoiceBox ChPickerModulName = new ChoiceBox();
-        for (Object x : Module) {
+
+        ChoiceBox<Modul> ChPickerModulName = new ChoiceBox<>();
+        for (Modul x : Module) {
             ChPickerModulName.getItems().addAll(x);
         }
 
         ChPickerModulName.setOnAction((event) -> {
-            Modul x = (Modul) ChPickerModulName.getSelectionModel().getSelectedItem();
-            setModulNamefürÜbergabe(x);
+            Modul x = ChPickerModulName.getSelectionModel().getSelectedItem();
+            setModulNamefuerUebergabe(x);
 
         });
         return ChPickerModulName;
     }
 
-    private ChoiceBox getChPickerCalendar() {
-        /**
-         * @Marc
-         * ChoiceBox
-         * Auswählen der Kalender
-         */
-        ChoiceBox ChPickerCalendar = new ChoiceBox();
+    /**
+     * Gets ch picker calendar.
+     *
+     * @return the ch picker calendar
+     */
+    public ChoiceBox<?> getChPickerCalendar() {
+
+        ChoiceBox<String> ChPickerCalendar = new ChoiceBox<>();
         ChPickerCalendar.getItems().addAll(StudyPlan.getName());
         ChPickerCalendar.getItems().addAll(SchoolTimeTable.getName());
 
-        ChPickerCalendar.setOnAction((event) -> {
-            ChPickerCalendar.getSelectionModel().getSelectedItem();
-        });
+        ChPickerCalendar.setOnAction((event) -> ChPickerCalendar.getSelectionModel().getSelectedItem());
         return ChPickerCalendar;
     }
 
-    private ChoiceBox getChPickerStartTime() {
-        /**
-         * @Max
-         * ChoiceBox
-         * Anfangs Uhrzeit auswählen für Event
-         */
-        ChoiceBox ChPickerStartTime = new ChoiceBox();
+    /**
+     * Gets ch picker start time.
+     *
+     * @return the ch picker start time
+     */
+    public ChoiceBox<?> getChPickerStartTime() {
+
+        ChoiceBox<LocalTime> ChPickerStartTime = new ChoiceBox<>();
         int stundeanfang = 8;
         int minuteanfang = 0;
         LocalTime x = LocalTime.of(stundeanfang, minuteanfang);
@@ -409,20 +452,20 @@ public class StudyPlanner extends Application {
             x = x.plusMinutes(30);
         }
         ChPickerStartTime.setOnAction((event) -> {
-            int selectedIndex = ChPickerStartTime.getSelectionModel().getSelectedIndex();
-            LocalTime beginnzeit = (LocalTime) ChPickerStartTime.getSelectionModel().getSelectedItem();
+            LocalTime beginnzeit = ChPickerStartTime.getSelectionModel().getSelectedItem();
             setStartTimeEvent(beginnzeit);
         });
         return ChPickerStartTime;
     }
 
-    private ChoiceBox getChPickerEndTime() {
-        /**
-         * @Max
-         * ChoiceBox
-         * End Uhrzeit auswählen für Event
-         */
-        ChoiceBox ChPickerEndTime = new ChoiceBox();
+    /**
+     * Gets ch picker end time.
+     *
+     * @return the ch picker end time
+     */
+    public ChoiceBox<?> getChPickerEndTime() {
+
+        ChoiceBox<LocalTime> ChPickerEndTime = new ChoiceBox<>();
         int stundeende = 8;
         int minuteende = 30;
         LocalTime y = LocalTime.of(stundeende, minuteende);
@@ -431,29 +474,37 @@ public class StudyPlanner extends Application {
             y = y.plusMinutes(30);
         }
         ChPickerEndTime.setOnAction((event) -> {
-            int selectedIndex = ChPickerEndTime.getSelectionModel().getSelectedIndex();
-            LocalTime zeitende = (LocalTime) ChPickerEndTime.getSelectionModel().getSelectedItem();
+            LocalTime zeitende = ChPickerEndTime.getSelectionModel().getSelectedItem();
             setEndTimeEvent(zeitende);
         });
         return ChPickerEndTime;
     }
 
-    private DatePicker getDatePicker() {
-        /**
-         * @Max
-         * DatePicker
-         * Datum auswählen für Event
-         */
+    /**
+     * Gets date picker.
+     *
+     * @return the date picker
+     */
+    public DatePicker getDatePicker() {
+
         DatePicker datePicker = new DatePicker();
         Button button1 = new Button("Datum wählen");
         button1.setOnAction(action -> {
-            LocalDate Datum = datePicker.getValue();
 
         });
         return datePicker;
     }
 
-    private Button getBTSafeEventButton(TextField txtFDescription, DatePicker datePicker, ChoiceBox
+    /**
+     * Gets bt safe event button.
+     *
+     * @param txtFDescription  the txt f description
+     * @param datePicker       the date picker
+     * @param chPickerCalendar the ch picker calendar
+     * @param stage            the stage
+     * @return the bt safe event button
+     */
+    public Button getBTSafeEventButton(TextField txtFDescription, DatePicker datePicker, ChoiceBox<?>
             chPickerCalendar, Stage stage) {
         Button button = new Button("Event sichern :");
         button.setOnAction(action -> {
@@ -470,16 +521,11 @@ public class StudyPlanner extends Application {
             Module.stream().filter(e -> e.getModulname().equals(NameModul)).forEach(e -> e.getUuid().add(ownEvent.getId()));
 
             Events.add(ownEvent);
-            Entry entry = new Entry();
-            entry = convertEventToEntry(ownEvent);
+            Entry<?> entry = convertEventToEntry(ownEvent);
+
 
             System.out.println(ownEvent + " " + entry);
 
-
-            /**
-             * @Marc
-             * Speichert das Event in dem davor gesehenen Kalender
-             */
             if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Lernplan") {
                 StudyPlan.addEntry(entry);
             } else if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Stundenplan") {
@@ -492,12 +538,16 @@ public class StudyPlanner extends Application {
         return button;
     }
 
-    private Button getBtSafe(Stage stage, TextField TxtFModul, TextField TxtFEcts) {
-        /**
-         * @Max
-         * Speichert die Eingabefeder in einem Modul Objekt und legt sie in der Liste Module ab.
-         */
 
+    /**
+     * Gets bt safe.
+     *
+     * @param stage     the stage
+     * @param TxtFModul the txt f modul
+     * @param TxtFEcts  the txt f ects
+     * @return the bt safe
+     */
+    public Button getBtSafe(Stage stage, TextField TxtFModul, TextField TxtFEcts) {
 
         Button BtSafe = new Button("Speichern ");
         BtSafe.setDisable(true);
@@ -517,9 +567,7 @@ public class StudyPlanner extends Application {
                         Button BtModul = new Button(modul.toString());
                         listbox.getItems().add(BtModul);
 
-                        BtModul.setOnAction(actionEvent -> {
-                            editModul(modul, BtModul);
-                        });
+                        BtModul.setOnAction(actionEvent -> editModul(modul, BtModul));
                         stage.close();
                     }
                 });
@@ -527,12 +575,11 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     * Set modul namefür übergabe.
+     * Sets modul namefuer uebergabe.
      *
-     * @param x
-     *         the x
+     * @param x the x
      */
-    public void setModulNamefürÜbergabe(Modul x) {
+    public void setModulNamefuerUebergabe(Modul x) {
         NameModul = x.getModulname();
 
     }
@@ -540,48 +587,40 @@ public class StudyPlanner extends Application {
     /**
      * Sets start time event.
      *
-     * @param x
-     *         the x
+     * @param x the x
      */
     public void setStartTimeEvent(LocalTime x) {
         StartTimeEvent = x;
-
     }
 
     /**
      * Sets end time event.
      *
-     * @param x
-     *         the x
+     * @param x the x
      */
     public void setEndTimeEvent(LocalTime x) {
         EndTimeEvent = x;
     }
 
-    private void listener(TextField TxtFModul, TextField TxtFEcts, Button BtSafe) {
-        /**
-         * @Marc
-         * Prüft die Felder auf Inhalt, Button Speichern geht erst wenn Felder ausgefüllt sind.
-         * Fehlerhaft!! Trotzdem ok Marc
-         */
-        TxtFModul.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                if (newValue.trim().isEmpty()) {
-                    BtSafe.setDisable(true);
-                } else if (!newValue.trim().equals("") && !TxtFEcts.getText().equals("")) {
-                    BtSafe.setDisable(false);
+    /**
+     * Listener.
+     *
+     * @param TxtFModul the txt f modul
+     * @param TxtFEcts  the txt f ects
+     * @param BtSafe    the bt safe
+     */
+    public void listener(TextField TxtFModul, TextField TxtFEcts, Button BtSafe) {
+
+        TxtFModul.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (newValue.trim().isEmpty()) {
+                BtSafe.setDisable(true);
+            } else if (!TxtFEcts.getText().equals("")) {
+                BtSafe.setDisable(false);
 
 
-                } else {
-                    TxtFEcts.textProperty().addListener(new ChangeListener<String>() {
-                        @Override
-                        public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                            BtSafe.setDisable(newValue.trim().isEmpty());
-                        }
-                    });
+            } else {
+                TxtFEcts.textProperty().addListener((observableValue1, oldValue1, newValue1) -> BtSafe.setDisable(newValue1.trim().isEmpty()));
 
-                }
             }
         });
     }
@@ -589,12 +628,8 @@ public class StudyPlanner extends Application {
     /**
      * Edit modul.
      *
-     * @param editModul
-     *         the edit modul
-     * @param button
-     *         the button
-     *
-     * @Marc Event bearbeiten
+     * @param editModul the edit modul
+     * @param button    the button
      */
     public void editModul(Modul editModul, Button button) {
 
@@ -611,10 +646,6 @@ public class StudyPlanner extends Application {
         TextField readModulName = new TextField(editModul.getModulname());
         TextField readEcts = new TextField(editModul.getEcts().toString2());
 
-        /**
-         * @Marc
-         *Ändert das Modul und speichert es neu ab
-         */
         Button BtEditModul = new Button("Ändern ");
         BtEditModul.setOnAction(
                 event -> {

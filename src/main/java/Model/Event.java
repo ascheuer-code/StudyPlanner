@@ -161,12 +161,4 @@ public class Event {
                 '}';
     }
 
-    /**
-     * To string 2 string.
-     *
-     * @return String string
-     */
-    public String toString2() {
-        return title;
-    }
 }

@@ -66,13 +66,11 @@ public class LocalDateTimeConverter {
      *         the event
      *
      * @return the interval
-     * @autor Andreas Scheuer
+     * @author Andreas Scheuer
      */
     public static Interval convertEventIntervalToEntryInterval(Event event) {
 
-        Interval interval =  new Interval(LocalDate.parse(event.getStarDate()), LocalTime.parse(event.getStartTime()), LocalDate.parse(event.getEndDate()), LocalTime.parse(event.getEndTime()));
-
-        return interval;
+        return new Interval(LocalDate.parse(event.getStarDate()), LocalTime.parse(event.getStartTime()), LocalDate.parse(event.getEndDate()), LocalTime.parse(event.getEndTime()));
     }
 
 }

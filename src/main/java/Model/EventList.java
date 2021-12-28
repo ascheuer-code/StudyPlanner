@@ -10,25 +10,24 @@ import java.util.ArrayList;
 public class EventList {
     // Klassenattribute
 
-    private ArrayList<Event> eventlist;
+    private final ArrayList<Event> eventlist;
 
     /**
      * Instantiates a new Entrylist.
      */
-    // hier wird die Einträgenliste angelegt
+// hier wird die Einträgenliste angelegt
     public EventList() {
 
-        this.eventlist = new ArrayList<Event>();
+        this.eventlist = new ArrayList<>();
 
     }
 
     /**
      * Entry add.
      *
-     * @param ent
-     *            the ent
+     * @param ent the ent
      */
-    // man fügt einen Eintrag hinzu
+// man fügt einen Eintrag hinzu
     public void addEvent(Event ent) {
         Helper.checkObj(ent, "Entry");
         eventlist.add(ent);
@@ -37,10 +36,9 @@ public class EventList {
     /**
      * Entry loesch.
      *
-     * @param ent
-     *            the ent
+     * @param ent the ent
      */
-    // man kann den Eintrag löeschen
+// man kann den Eintrag löeschen
     public void removeEvent(Event ent) {
         Helper.checkObj(ent, "Entry");
         eventlist.remove(ent);
@@ -49,12 +47,10 @@ public class EventList {
     /**
      * Entry aendere.
      *
-     * @param ent1
-     *             the ent 1
-     * @param ent2
-     *             the ent 2
+     * @param ent1 the ent 1
+     * @param ent2 the ent 2
      */
-    // man kann den Eintag ändern
+// man kann den Eintag ändern
     public void replaceEvent(Event ent1, Event ent2) {
         Helper.checkObj(ent1, "Entry");
         Helper.checkObj(ent2, "Entry");
@@ -66,12 +62,9 @@ public class EventList {
     /**
      * Entry get entry.
      *
-     * @param index
-     *              the index
-     *
+     * @param index the index
      * @return the entry
      */
-    // den Eintrag wird gezeigt
     public Event getEvent(int index) {
 
         Helper.checkMax(eventlist.size() + 1, index, "INDEX");

@@ -8,19 +8,12 @@ public class Message {
     /**
      * Fehlermeldung für Lib_Digits checkSpan()
      *
-     * @param <T>
-     *                  beliebige Zahl
-     * @param <K>
-     *                  beliebiger String
-     * @param min
-     *                  Minimalwert
-     * @param max
-     *                  Maximalwert
-     * @param value
-     *                  the value
-     * @param fieldname
-     *                  Feldname des Attributes
-     *
+     * @param <T>       beliebige Zahl
+     * @param <K>       beliebiger String
+     * @param min       Minimalwert
+     * @param max       Maximalwert
+     * @param value     the value
+     * @param fieldname Feldname des Attributes
      * @return String Fehlermeldung
      */
     public static <T, K> String errorWrongValueSpan(T min, T max, T value, K fieldname) {
@@ -31,17 +24,11 @@ public class Message {
     /**
      * Fehlermeldung für Lib_Digits checkMin()
      *
-     * @param <T>
-     *                  beliebige Zahl
-     * @param <K>
-     *                  beliebiger String
-     * @param min
-     *                  Minimalwert
-     * @param value
-     *                  the value
-     * @param fieldname
-     *                  Feldname des Attributes
-     *
+     * @param <T>       beliebige Zahl
+     * @param <K>       beliebiger String
+     * @param min       Minimalwert
+     * @param value     the value
+     * @param fieldname Feldname des Attributes
      * @return String Fehlermeldung
      */
     public static <T, K> String errorWrongValueMin(T min, T value, K fieldname) {
@@ -52,17 +39,11 @@ public class Message {
     /**
      * Fehlermeldung für Lib_Digits checkMax()
      *
-     * @param <T>
-     *                  beliebige Zahl
-     * @param <K>
-     *                  beliebiger String
-     * @param max
-     *                  Maximalwert
-     * @param value
-     *                  the value
-     * @param fieldname
-     *                  Feldname des Attributes
-     *
+     * @param <T>       beliebige Zahl
+     * @param <K>       beliebiger String
+     * @param max       Maximalwert
+     * @param value     the value
+     * @param fieldname Feldname des Attributes
      * @return String Fehlermeldung
      */
     public static <T, K> String errorWrongValueMax(T max, T value, K fieldname) {
@@ -73,11 +54,8 @@ public class Message {
     /**
      * Fehlermeldung für Lib_String checkIfNullOrEmpty()
      *
-     * @param <K>
-     *                  beliebiger String
-     * @param fieldname
-     *                  Feldname des Attributes
-     *
+     * @param <K>       beliebiger String
+     * @param fieldname Feldname des Attributes
      * @return String Fehlermeldung
      */
     public static <K> String errorEmptyString(K fieldname) {
@@ -85,8 +63,11 @@ public class Message {
     }
 
     /**
-     * @param objectname
-     * @return String
+     * Error empty object string.
+     *
+     * @param <K>        the type parameter
+     * @param objectname the objectname
+     * @return String string
      */
     public static <K> String errorEmptyObject(K objectname) {
         return String.format("Das Object %s darf nicht leer sein", objectname.toString());
@@ -95,11 +76,8 @@ public class Message {
     /**
      * Fehlermeldung für Lib_Arrays checkNullPointer()
      *
-     * @param <T>
-     *              beliebige Zahl
-     * @param index
-     *              Index der überprüft wurde
-     *
+     * @param <T>   beliebige Zahl
+     * @param index Index der überprüft wurde
      * @return String Fehlermeldung
      */
     public static <T> String errorNullPointerArray(T index) {
@@ -109,9 +87,7 @@ public class Message {
     /**
      * Fehlermeldung für Lib_File existent()
      *
-     * @param fieldname
-     *                  the fieldname
-     *
+     * @param fieldname the fieldname
      * @return the string
      */
     public static String errorFileNotFound(String fieldname) {

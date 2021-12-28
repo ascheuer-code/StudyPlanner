@@ -57,7 +57,7 @@ public class ModulTest {
     void setEctsTest() {
         modul.setEcts(1);
         assertEquals(1, modul.getEcts().getEctsValue());
-        assertEquals(30, modul.getEcts().getDuration());
+        assertEquals("PT30H", modul.getEcts().getDuration().toString());
     }
 
 }

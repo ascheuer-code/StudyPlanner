@@ -1,9 +1,8 @@
 package Model;
 
-import com.calendarfx.model.Entry;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
-import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +15,7 @@ public class EntryTest {
     @RepeatedTest(value = 10, name= "testidUnique {currentRepetition}/{totalRepetitions}")
     @Disabled //Achtung dauert ne Zeit lang !!!!
     void testIdUnique() {
-        ArrayList<Event> test = new ArrayList<Event>();
+        ArrayList<Event> test = new ArrayList<>();
         ArrayList<Integer> intArray = new ArrayList<>();
 
         for (int i = 0; i < 5000000; i++) {

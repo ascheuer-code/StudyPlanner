@@ -53,15 +53,6 @@ class HelperTest {
     }
 
     /**
-     * Number formatter.
-     *
-     * @author Andreas Scheuer
-     */
-    @Test
-    void numberFormatter() {
-    }
-
-    /**
      * Check if null or empty.
      *
      * @author Andreas Scheuer
@@ -98,12 +89,4 @@ class HelperTest {
         assertEquals("AffehatdreiHaare", Helper.removeAllWhitespaces("Affe     hat     drei     Haare"));
     }
 
-    /**
-     * Trim array list.
-     *
-     * @author Andreas Scheuer
-     */
-    @Test
-    void trimArrayList() {
-    }
 }

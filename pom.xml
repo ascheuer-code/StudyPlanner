@@ -12,7 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>16</javafx.version>
         <javafx.maven.plugin.version>0.0.5</javafx.maven.plugin.version>
-        <controlsfx.version>11.1.0</controlsfx.version>
+        <controlsfx.version>11.1.1</controlsfx.version>
         <ical4j.version>4.0.0-alpha2</ical4j.version>
         <ikonli.version>12.2.0</ikonli.version>
         <maven.compiler.source>11</maven.compiler.source>
@@ -22,6 +22,11 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -101,7 +106,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>16</version>
+            <version>17.0.0.1</version>
         </dependency>
 
 
@@ -121,8 +126,14 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
+            <version>5.8.2</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>22.0.0</version>
+            <scope>compile</scope>
         </dependency>
 
 

@@ -19,10 +19,8 @@ public class Modul {
     /**
      * Instantiates a new Modul.
      *
-     * @param modulname
-     *         the modulname
-     * @param ects
-     *         the ects
+     * @param modulname the modulname
+     * @param ects      the ects
      */
     public Modul(String modulname, int ects) {
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
@@ -32,6 +30,11 @@ public class Modul {
         this.uuid = new ArrayList<>();
     }
 
+    /**
+     * Gets uuid.
+     *
+     * @return the uuid
+     */
     public ArrayList<String> getUuid() {
         return uuid;
     }
@@ -48,8 +51,7 @@ public class Modul {
     /**
      * Set modulname.
      *
-     * @param modulname
-     *         the titel
+     * @param modulname the titel
      */
     public void setModulname(String modulname) {
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
@@ -66,7 +68,9 @@ public class Modul {
     }
 
     /**
-     * @param ects
+     * Sets ects.
+     *
+     * @param ects the ects
      */
     public void setEcts(int ects) {
         this.ects.setEcts(ects);
