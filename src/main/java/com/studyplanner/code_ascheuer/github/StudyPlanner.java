@@ -19,6 +19,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -342,6 +343,9 @@ public class StudyPlanner extends Application {
 
         Text TxtCalendar = new Text("Kalender");
         ChoiceBox<?> ChPickerCalendar = getChPickerCalendar();
+        // Datum des erst Eintrages
+        Text TxtDate = new Text("Datum");
+        DatePicker datePicker = getDatePicker();
 
         Text TxtStartTime = new Text("Anfangszeit");
         ChoiceBox<?> ChPickerStartTime = getChPickerStartTime();
@@ -349,16 +353,21 @@ public class StudyPlanner extends Application {
         Text TxtEndTime = new Text("Endzeit");
         ChoiceBox<?> ChPickerEndTime = getChPickerEndTime();
 
-        Text TxtDate = new Text("Datum");
-        DatePicker datePicker = getDatePicker();
+        Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
+        ChoiceBox  ChRepetition = getChRepetition();
+        Text TxtRepetitionEnd =new Text(" Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
+        DatePicker datePickerRepetition = getDatePicker();
+
+
+
 
         Text TxtDescription = new Text("Beschreibung");
         TextField TxtFDescription = new TextField();
 
         Button BtSafeEvent = getBTSafeEventButton(TxtFDescription, datePicker, ChPickerCalendar, stage);
 
-        layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtDate,
-                datePicker, TxtDescription, TxtFDescription);
+        layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
+                datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime,TxtRepetition,ChRepetition, TxtRepetitionEnd,datePickerRepetition, TxtDescription, TxtFDescription);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(layout);
@@ -366,7 +375,7 @@ public class StudyPlanner extends Application {
         Scene scene = new Scene(borderPane);
 
         stage.setScene(scene);
-        stage.setHeight(310);
+        stage.setHeight(450);
         stage.setWidth(600);
         stage.show();
     }
@@ -406,7 +415,7 @@ public class StudyPlanner extends Application {
      * @return the ch picker modul name
      */
     public ChoiceBox<?> getChPickerModulName() {
-        // Anfang der Feld anlegen Event
+        // Anfang das Feld anlegen Event
 
         ChoiceBox<Modul> ChPickerModulName = new ChoiceBox<>();
         for (Modul x : Module) {
@@ -435,6 +444,18 @@ public class StudyPlanner extends Application {
         ChPickerCalendar.setOnAction((event) -> ChPickerCalendar.getSelectionModel().getSelectedItem());
         return ChPickerCalendar;
     }
+
+    public ChoiceBox<?> getChRepetition(){
+        ChoiceBox ChRepetition = new ChoiceBox();
+        int [] tage = {1,2,3,4,5,6,7,14,28};
+            for(int i =0;i <=tage.length-1 ;i++ )
+         ChRepetition.getItems().addAll(tage[i]);
+        return ChRepetition;
+    }
+
+
+
+
 
     /**
      * Gets ch picker start time.
