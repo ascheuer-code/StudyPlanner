@@ -92,8 +92,8 @@ public class StudyPlanner extends Application {
 
         Button BtCreateEvent = getBtCreateEvent();
         Button BtCreateModul = getBtCreateModul();
-
-        Pane leftSideSplitPane = getLeftSideSplitPane(BtCreateEvent, BtCreateModul);
+        Button BtDeleteModul = getBtDeleteModul();
+        Pane leftSideSplitPane = getLeftSideSplitPane(BtCreateEvent, BtCreateModul,BtDeleteModul);
 
 
         SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
@@ -301,6 +301,23 @@ public class StudyPlanner extends Application {
                 });
         return BtCreateModul;
     }
+    /**
+     * Gets bt create moduldelte.
+     *
+     * @return the bt create moduldelte
+     */
+    public Button getBtDeleteModul() {
+
+        Button BtDeleteModul = new Button("Modul löschen");
+        BtDeleteModul.setOnAction(
+                event -> {
+                    if (event.getSource() == BtDeleteModul) {
+                        modullöschen();
+                    }
+                });
+        return BtDeleteModul;
+    }
+
 
     /**
      * Gets left side split pane.
@@ -309,11 +326,12 @@ public class StudyPlanner extends Application {
      * @param BtCreateModul the bt create modul
      * @return the left side split pane
      */
-    public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul) {
+
+    public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul, Button BtDeleteModul) {
 
         BorderPane BPLayoutLeft = new BorderPane();
         VBox VbButtonBox = new VBox();
-        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul);
+        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul);
         BPLayoutLeft.setTop(VbButtonBox);
         BPLayoutLeft.setBottom(listbox);
         Pane PBar = new Pane(BPLayoutLeft);// ist die toolbar
@@ -404,9 +422,55 @@ public class StudyPlanner extends Application {
 
         Scene scene = new Scene(layout);
         stage.setScene(scene);
+        stage.setTitle("neues Modul anlegen");
         stage.show();
 
 
+    }
+
+    /**
+     *  Modul löschen .
+     * @max
+     */
+    public void modullöschen(){
+        // Layout des aufgehenden Fensters
+        Stage stage = new Stage();
+        VBox layout = new VBox();
+        Scene scene = new Scene(layout);
+
+        // Texte die zur Steuerung angezeigt werden
+        Text TxtModulLöschen = new Text("Bitte das zu löschende Modul auswählen ");
+        Text TxtModulLöschenQuestion = new Text("Möchten sie diese Modul wirklich löschen ? ");
+        // Button der zur Steuerung gebracuht wird
+        Button delete = new Button("löschen");
+
+        // CheckBox um sicher zugehen das es wir gelöscht werden soll
+        CheckBox CBModulLöschen = new CheckBox("JA");
+
+        getBtModulLöschenNachCheck(CBModulLöschen, delete);
+
+        layout.getChildren().addAll(TxtModulLöschen,getChPickerModulName(),TxtModulLöschenQuestion,CBModulLöschen,delete);
+
+        stage.setScene(scene);
+        stage.setTitle("Modul löschen");
+        stage.setWidth(250);
+        stage.setHeight(150);
+        stage.show();
+
+    }
+
+    private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete) {
+        delete.setOnAction(action -> {
+            boolean isCheck = CBModulLöschen.isSelected();
+
+            if(isCheck ==true){
+
+               // for (Modul modul : Module){
+                 //   if(modul.getModulname().equals(getChPickerModulName()));
+                      //  Module.remove(modul);
+                //}
+            }
+        });
     }
 
     /**
