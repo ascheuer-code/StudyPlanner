@@ -372,6 +372,7 @@ public class StudyPlanner extends Application {
 
         Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
         ChoiceBox ChRepetition = getChRepetition();
+
         Text TxtRepetitionEnd = new Text(" Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
         DatePicker datePickerRepetition = getDatePicker();
 
@@ -379,7 +380,7 @@ public class StudyPlanner extends Application {
         Text TxtDescription = new Text("Beschreibung");
         TextField TxtFDescription = new TextField();
 
-        Button BtSafeEvent = getBTSafeEventButton(TxtFDescription, datePicker, ChPickerCalendar, stage);
+        Button BtSafeEvent = getBTSafeEventButton(TxtFDescription, datePicker, ChPickerCalendar, stage, ChRepetition, datePickerRepetition);
 
         layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
                 datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition, TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescription);
@@ -465,17 +466,16 @@ public class StudyPlanner extends Application {
 
             if (isCheck == true) {
 
-                // UNFERTIG!
-                for (Modul modul : Module) {
-                    for (String uuid : modul.getUuid()) {
+                Module.stream().filter(e -> e.toString().equals(chPickerModulName.getItems().get(chPickerModulName.getSelectionModel().getSelectedIndex() + 1).toString())).forEach(e -> {
+                    for (String uuid : e.getUuid()) {
                         for (Event event : Events) {
                             if (event.getId().equals(uuid)) {
-                                SchoolTimeTable.removeEntries(SchoolTimeTable.findEntries(event.getTitle()));
-                                StudyPlan.removeEntries(SchoolTimeTable.findEntries(event.getTitle()));
+                                SchoolTimeTable.removeEntries(SchoolTimeTable.findEntries(event.getTitle().trim()));
+                                StudyPlan.removeEntries(StudyPlan.findEntries(event.getTitle().trim()));
                             }
                         }
                     }
-                }
+                });
 
                 listbox.getItems().remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
                 Module.remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
@@ -593,14 +593,16 @@ public class StudyPlanner extends Application {
     /**
      * Gets bt safe event button.
      *
-     * @param txtFDescription  the txt f description
-     * @param datePicker       the date picker
-     * @param chPickerCalendar the ch picker calendar
-     * @param stage            the stage
+     * @param txtFDescription      the txt f description
+     * @param datePicker           the date picker
+     * @param chPickerCalendar     the ch picker calendar
+     * @param stage                the stage
+     * @param chRepetition
+     * @param datePickerRepetition
      * @return the bt safe event button
      */
     public Button getBTSafeEventButton(TextField txtFDescription, DatePicker datePicker, ChoiceBox<?>
-            chPickerCalendar, Stage stage) {
+            chPickerCalendar, Stage stage, ChoiceBox chRepetition, DatePicker datePickerRepetition) {
         Button button = new Button("Event sichern :");
         button.setOnAction(action -> {
 
