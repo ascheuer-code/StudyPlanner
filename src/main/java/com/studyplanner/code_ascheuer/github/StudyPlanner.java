@@ -447,7 +447,7 @@ public class StudyPlanner extends Application {
 
         ChoiceBox<?> test = getChPickerModulName();
 
-        getBtModulLöschenNachCheck(CBModulLöschen, delete, getChPickerModulName());
+        getBtModulLöschenNachCheck(CBModulLöschen, delete, getChPickerModulName(), stage);
 
         layout.getChildren().addAll(TxtModulLöschen, test, TxtModulLöschenQuestion, CBModulLöschen, delete);
 
@@ -459,19 +459,18 @@ public class StudyPlanner extends Application {
 
     }
 
-    private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete, ChoiceBox<?> chPickerModulName) {
+    private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete, ChoiceBox<?> chPickerModulName, Stage stage) {
         delete.setOnAction(action -> {
             boolean isCheck = CBModulLöschen.isSelected();
 
             if (isCheck == true) {
 
-
+                // UNFERTIG!
                 List<?> test = chPickerModulName.getItems();
                 listbox.getItems().remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
                 Module.remove(test.get(chPickerModulName.getSelectionModel().getSelectedIndex() + 1));
-
-
                 listbox.refresh();
+                stage.close();
             }
 
         });
