@@ -477,8 +477,8 @@ public class StudyPlanner extends Application {
                     }
                 });
 
-                listbox.getItems().remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
                 Module.remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
+                listbox.getItems().remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
                 listbox.refresh();
                 stage.close();
             }
