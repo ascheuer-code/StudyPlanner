@@ -19,7 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -93,7 +92,7 @@ public class StudyPlanner extends Application {
         Button BtCreateEvent = getBtCreateEvent();
         Button BtCreateModul = getBtCreateModul();
         Button BtDeleteModul = getBtDeleteModul();
-        Pane leftSideSplitPane = getLeftSideSplitPane(BtCreateEvent, BtCreateModul,BtDeleteModul);
+        Pane leftSideSplitPane = getLeftSideSplitPane(BtCreateEvent, BtCreateModul, BtDeleteModul);
 
 
         SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
@@ -136,7 +135,6 @@ public class StudyPlanner extends Application {
             isEntryRemoved(event);
             // Title changed
             isEntryTitleChanged(event);
-
             // Intervall changed, works fine
             isEntryIntervallChanged(event);
         });
@@ -301,6 +299,7 @@ public class StudyPlanner extends Application {
                 });
         return BtCreateModul;
     }
+
     /**
      * Gets bt create moduldelte.
      *
@@ -372,11 +371,9 @@ public class StudyPlanner extends Application {
         ChoiceBox<?> ChPickerEndTime = getChPickerEndTime();
 
         Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
-        ChoiceBox  ChRepetition = getChRepetition();
-        Text TxtRepetitionEnd =new Text(" Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
+        ChoiceBox ChRepetition = getChRepetition();
+        Text TxtRepetitionEnd = new Text(" Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
         DatePicker datePickerRepetition = getDatePicker();
-
-
 
 
         Text TxtDescription = new Text("Beschreibung");
@@ -385,7 +382,7 @@ public class StudyPlanner extends Application {
         Button BtSafeEvent = getBTSafeEventButton(TxtFDescription, datePicker, ChPickerCalendar, stage);
 
         layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
-                datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime,TxtRepetition,ChRepetition, TxtRepetitionEnd,datePickerRepetition, TxtDescription, TxtFDescription);
+                datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition, TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescription);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(layout);
@@ -429,10 +426,11 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     *  Modul löschen .
+     * Modul löschen .
+     *
      * @max
      */
-    public void modullöschen(){
+    public void modullöschen() {
         // Layout des aufgehenden Fensters
         Stage stage = new Stage();
         VBox layout = new VBox();
@@ -447,29 +445,35 @@ public class StudyPlanner extends Application {
         // CheckBox um sicher zugehen das es wir gelöscht werden soll
         CheckBox CBModulLöschen = new CheckBox("JA");
 
-        getBtModulLöschenNachCheck(CBModulLöschen, delete);
+        ChoiceBox<?> test = getChPickerModulName();
 
-        layout.getChildren().addAll(TxtModulLöschen,getChPickerModulName(),TxtModulLöschenQuestion,CBModulLöschen,delete);
+        getBtModulLöschenNachCheck(CBModulLöschen, delete, getChPickerModulName());
+
+        layout.getChildren().addAll(TxtModulLöschen, test, TxtModulLöschenQuestion, CBModulLöschen, delete);
 
         stage.setScene(scene);
         stage.setTitle("Modul löschen");
-        stage.setWidth(250);
-        stage.setHeight(150);
+        stage.setWidth(300);
+        stage.setHeight(200);
         stage.show();
 
     }
 
-    private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete) {
+    private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete, ChoiceBox<?> chPickerModulName) {
         delete.setOnAction(action -> {
             boolean isCheck = CBModulLöschen.isSelected();
 
-            if(isCheck ==true){
+            if (isCheck == true) {
 
-               // for (Modul modul : Module){
-                 //   if(modul.getModulname().equals(getChPickerModulName()));
-                      //  Module.remove(modul);
-                //}
+
+                List<?> test = chPickerModulName.getItems();
+                listbox.getItems().remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
+                Module.remove(test.get(chPickerModulName.getSelectionModel().getSelectedIndex() + 1));
+
+
+                listbox.refresh();
             }
+
         });
     }
 
@@ -509,16 +513,13 @@ public class StudyPlanner extends Application {
         return ChPickerCalendar;
     }
 
-    public ChoiceBox<?> getChRepetition(){
+    public ChoiceBox<?> getChRepetition() {
         ChoiceBox ChRepetition = new ChoiceBox();
-        int [] tage = {1,2,3,4,5,6,7,14,28};
-            for(int i =0;i <=tage.length-1 ;i++ )
-         ChRepetition.getItems().addAll(tage[i]);
+        int[] tage = {1, 2, 3, 4, 5, 6, 7, 14, 28};
+        for (int i = 0; i <= tage.length - 1; i++)
+            ChRepetition.getItems().addAll(tage[i]);
         return ChRepetition;
     }
-
-
-
 
 
     /**
