@@ -466,9 +466,19 @@ public class StudyPlanner extends Application {
             if (isCheck == true) {
 
                 // UNFERTIG!
-                List<?> test = chPickerModulName.getItems();
+                for (Modul modul : Module) {
+                    for (String uuid : modul.getUuid()) {
+                        for (Event event : Events) {
+                            if (event.getId().equals(uuid)) {
+                                SchoolTimeTable.removeEntries(SchoolTimeTable.findEntries(event.getTitle()));
+                                StudyPlan.removeEntries(SchoolTimeTable.findEntries(event.getTitle()));
+                            }
+                        }
+                    }
+                }
+
                 listbox.getItems().remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
-                Module.remove(test.get(chPickerModulName.getSelectionModel().getSelectedIndex() + 1));
+                Module.remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
                 listbox.refresh();
                 stage.close();
             }
