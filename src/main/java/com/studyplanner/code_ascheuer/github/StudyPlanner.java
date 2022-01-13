@@ -69,7 +69,8 @@ public class StudyPlanner extends Application {
     /**
      * The entry point of application.
      *
-     * @param args the input arguments
+     * @param args
+     *         the input arguments
      */
     public static void main(String[] args) {
         launch(args);
@@ -143,7 +144,8 @@ public class StudyPlanner extends Application {
     /**
      * Check´s if the Entry Intervall is Changed and if so it Updates the Event with the same UUID
      *
-     * @param event the event
+     * @param event
+     *         the event
      */
     public void isEntryIntervallChanged(CalendarEvent event) {
         if (!event.isEntryAdded() && !event.isEntryRemoved() && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
@@ -166,7 +168,8 @@ public class StudyPlanner extends Application {
     /**
      * Is entry title changed.
      *
-     * @param event the event
+     * @param event
+     *         the event
      */
     public void isEntryTitleChanged(CalendarEvent event) {
         if (!event.isEntryAdded() && !event.isEntryRemoved() && event.getOldInterval() == null && !event.getOldText().equals(event.getEntry().getTitle())) {
@@ -177,7 +180,8 @@ public class StudyPlanner extends Application {
     /**
      * Is entry removed.
      *
-     * @param event the event
+     * @param event
+     *         the event
      */
     public void isEntryRemoved(CalendarEvent event) {
         if (event.isEntryRemoved()) {
@@ -200,7 +204,8 @@ public class StudyPlanner extends Application {
     /**
      * Is entry added.
      *
-     * @param event the event
+     * @param event
+     *         the event
      */
     public void isEntryAdded(CalendarEvent event) {
         if (event.isEntryAdded()) {
@@ -218,7 +223,8 @@ public class StudyPlanner extends Application {
     /**
      * Change list box button text.
      *
-     * @param item the item
+     * @param item
+     *         the item
      */
     public void changeListBoxButtonText(Modul item) {
         listbox.getItems()
@@ -230,7 +236,8 @@ public class StudyPlanner extends Application {
     /**
      * Initializing calender view.
      *
-     * @param calendarView the calendar view
+     * @param calendarView
+     *         the calendar view
      */
     public void initializingCalenderView(CalendarView calendarView) {
 
@@ -321,8 +328,11 @@ public class StudyPlanner extends Application {
     /**
      * Gets left side split pane.
      *
-     * @param BtCreateEvent the bt create event
-     * @param BtCreateModul the bt create modul
+     * @param BtCreateEvent
+     *         the bt create event
+     * @param BtCreateModul
+     *         the bt create modul
+     *
      * @return the left side split pane
      */
 
@@ -341,7 +351,9 @@ public class StudyPlanner extends Application {
     /**
      * Replace button name string.
      *
-     * @param string the string
+     * @param string
+     *         the string
+     *
      * @return the string
      */
     public String replaceButtonName(String string) {
@@ -466,16 +478,21 @@ public class StudyPlanner extends Application {
 
             if (isCheck == true) {
 
-                Module.stream().filter(e -> e.toString().equals(chPickerModulName.getItems().get(chPickerModulName.getSelectionModel().getSelectedIndex() + 1).toString())).forEach(e -> {
-                    for (String uuid : e.getUuid()) {
-                        for (Event event : Events) {
-                            if (event.getId().equals(uuid)) {
+                ArrayList<Event> temp = new ArrayList<>(Events);
+
+                for (Modul modul : Module) {
+                    for (String uuid : modul.getUuid()) {
+                        for (Event event : temp) {
+                            String string = chPickerModulName.getItems().get(chPickerModulName.getSelectionModel().getSelectedIndex() + 1).toString();
+                            if (uuid.equals(event.getId()) && string.equals(modul.toString())) {
                                 SchoolTimeTable.removeEntries(SchoolTimeTable.findEntries(event.getTitle().trim()));
                                 StudyPlan.removeEntries(StudyPlan.findEntries(event.getTitle().trim()));
+
                             }
                         }
                     }
-                });
+                }
+
 
                 Module.remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
                 listbox.getItems().remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
@@ -593,12 +610,17 @@ public class StudyPlanner extends Application {
     /**
      * Gets bt safe event button.
      *
-     * @param txtFDescription      the txt f description
-     * @param datePicker           the date picker
-     * @param chPickerCalendar     the ch picker calendar
-     * @param stage                the stage
+     * @param txtFDescription
+     *         the txt f description
+     * @param datePicker
+     *         the date picker
+     * @param chPickerCalendar
+     *         the ch picker calendar
+     * @param stage
+     *         the stage
      * @param chRepetition
      * @param datePickerRepetition
+     *
      * @return the bt safe event button
      */
     public Button getBTSafeEventButton(TextField txtFDescription, DatePicker datePicker, ChoiceBox<?>
@@ -639,9 +661,13 @@ public class StudyPlanner extends Application {
     /**
      * Gets bt safe.
      *
-     * @param stage     the stage
-     * @param TxtFModul the txt f modul
-     * @param TxtFEcts  the txt f ects
+     * @param stage
+     *         the stage
+     * @param TxtFModul
+     *         the txt f modul
+     * @param TxtFEcts
+     *         the txt f ects
+     *
      * @return the bt safe
      */
     public Button getBtSafe(Stage stage, TextField TxtFModul, TextField TxtFEcts) {
@@ -674,7 +700,8 @@ public class StudyPlanner extends Application {
     /**
      * Sets modul namefuer uebergabe.
      *
-     * @param x the x
+     * @param x
+     *         the x
      */
     public void setModulNamefuerUebergabe(Modul x) {
         NameModul = x.getModulname();
@@ -684,7 +711,8 @@ public class StudyPlanner extends Application {
     /**
      * Sets start time event.
      *
-     * @param x the x
+     * @param x
+     *         the x
      */
     public void setStartTimeEvent(LocalTime x) {
         StartTimeEvent = x;
@@ -693,7 +721,8 @@ public class StudyPlanner extends Application {
     /**
      * Sets end time event.
      *
-     * @param x the x
+     * @param x
+     *         the x
      */
     public void setEndTimeEvent(LocalTime x) {
         EndTimeEvent = x;
@@ -702,9 +731,12 @@ public class StudyPlanner extends Application {
     /**
      * Listener.
      *
-     * @param TxtFModul the txt f modul
-     * @param TxtFEcts  the txt f ects
-     * @param BtSafe    the bt safe
+     * @param TxtFModul
+     *         the txt f modul
+     * @param TxtFEcts
+     *         the txt f ects
+     * @param BtSafe
+     *         the bt safe
      */
     public void listener(TextField TxtFModul, TextField TxtFEcts, Button BtSafe) {
 
@@ -725,8 +757,10 @@ public class StudyPlanner extends Application {
     /**
      * Edit modul.
      *
-     * @param editModul the edit modul
-     * @param button    the button
+     * @param editModul
+     *         the edit modul
+     * @param button
+     *         the button
      */
     public void editModul(Modul editModul, Button button) {
 
