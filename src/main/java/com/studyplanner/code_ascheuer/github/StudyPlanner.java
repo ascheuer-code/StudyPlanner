@@ -42,10 +42,6 @@ public class StudyPlanner extends Application {
      */
     final List<Event> Events = new ArrayList<>();
     /**
-     * The Listbox.
-     */
-    final ListView<Button> listbox = new ListView<>();
-    /**
      * The School time table.
      */
     final Calendar SchoolTimeTable = new Calendar("Stundenplan");
@@ -53,6 +49,10 @@ public class StudyPlanner extends Application {
      * The Study plan.
      */
     final Calendar StudyPlan = new Calendar("Lernplan");
+    /**
+     * The Listbox.
+     */
+    ListView<Button> listbox = new ListView<>();
     /**
      * The Start time event.
      */
@@ -458,9 +458,10 @@ public class StudyPlanner extends Application {
         // CheckBox um sicher zugehen das es wir gelöscht werden soll
         CheckBox CBModulLöschen = new CheckBox("JA");
 
-        ChoiceBox<?> test = getChPickerModulName();
 
-        getBtModulLöschenNachCheck(CBModulLöschen, delete, getChPickerModulName(), stage);
+        ChoiceBox<Modul> test = new ChoiceBox<>();
+        test.getItems().addAll(Module);
+        getBtModulLöschenNachCheck(CBModulLöschen, delete, test, stage);
 
         layout.getChildren().addAll(TxtModulLöschen, test, TxtModulLöschenQuestion, CBModulLöschen, delete);
 
@@ -472,19 +473,20 @@ public class StudyPlanner extends Application {
 
     }
 
-    private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete, ChoiceBox<?> chPickerModulName, Stage stage) {
+    private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete, ChoiceBox<Modul> chPickerModulName, Stage stage) {
         delete.setOnAction(action -> {
             boolean isCheck = CBModulLöschen.isSelected();
 
             if (isCheck == true) {
 
+                System.out.println(chPickerModulName.getValue().toString());
+                Modul modultest = chPickerModulName.getValue();
                 ArrayList<Event> temp = new ArrayList<>(Events);
 
                 for (Modul modul : Module) {
                     for (String uuid : modul.getUuid()) {
                         for (Event event : temp) {
-                            String string = chPickerModulName.getItems().get(chPickerModulName.getSelectionModel().getSelectedIndex() + 1).toString();
-                            if (uuid.equals(event.getId()) && string.equals(modul.toString())) {
+                            if (uuid.equals(event.getId()) && modultest.equals(modul)) {
                                 SchoolTimeTable.removeEntries(SchoolTimeTable.findEntries(event.getTitle().trim()));
                                 StudyPlan.removeEntries(StudyPlan.findEntries(event.getTitle().trim()));
 
@@ -494,8 +496,12 @@ public class StudyPlanner extends Application {
                 }
 
 
-                Module.remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
-                listbox.getItems().remove(chPickerModulName.getSelectionModel().getSelectedIndex() + 1);
+                Module.remove(chPickerModulName.getValue());
+                List test = listbox.getItems().stream().dropWhile(button -> button.getText().equals(chPickerModulName.getValue().toString())).collect(Collectors.toList());
+
+                listbox.getItems().clear();
+                listbox.getItems().addAll(test);
+
                 listbox.refresh();
                 stage.close();
             }
@@ -508,7 +514,7 @@ public class StudyPlanner extends Application {
      *
      * @return the ch picker modul name
      */
-    public ChoiceBox<?> getChPickerModulName() {
+    public ChoiceBox<Modul> getChPickerModulName() {
         // Anfang das Feld anlegen Event
 
         ChoiceBox<Modul> ChPickerModulName = new ChoiceBox<>();
