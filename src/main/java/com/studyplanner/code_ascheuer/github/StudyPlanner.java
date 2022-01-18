@@ -2,11 +2,11 @@ package com.studyplanner.code_ascheuer.github;
 
 import Model.Event;
 import Model.Modul;
+import View.NewEvent;
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Calendar.Style;
 import com.calendarfx.model.CalendarEvent;
 import com.calendarfx.model.CalendarSource;
-import com.calendarfx.model.Entry;
 import com.calendarfx.view.CalendarView;
 import impl.com.calendarfx.view.NumericTextField;
 import javafx.application.Application;
@@ -24,8 +24,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static Helper.LocalDateTimeConverter.convertEventToEntry;
 
 
 /**
@@ -53,18 +51,6 @@ public class StudyPlanner extends Application {
      * The Listbox.
      */
     ListView<Button> listbox = new ListView<>();
-    /**
-     * The Start time event.
-     */
-    LocalTime StartTimeEvent;
-    /**
-     * The End time event.
-     */
-    LocalTime EndTimeEvent;
-    /**
-     * The Name modul.
-     */
-    String NameModul;
 
     /**
      * The entry point of application.
@@ -284,7 +270,7 @@ public class StudyPlanner extends Application {
         BtCreateEvent.setOnAction(
                 event -> {
                     if (event.getSource() == BtCreateEvent) {
-                        neuesEvent();
+                        NewEvent.createNewEvent(Module, Events, StudyPlan, SchoolTimeTable);
                     }
                 });
         return BtCreateEvent;
@@ -361,54 +347,6 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     * Neues event.
-     */
-    public void neuesEvent() {
-        Stage stage = new Stage();
-        VBox layout = new VBox();
-
-        Text TxtModulName = new Text("Modulname");
-        ChoiceBox<?> ChPickerModulName = getChPickerModulName();
-
-        Text TxtCalendar = new Text("Kalender");
-        ChoiceBox<?> ChPickerCalendar = getChPickerCalendar();
-        // Datum des erst Eintrages
-        Text TxtDate = new Text("Datum");
-        DatePicker datePicker = getDatePicker();
-
-        Text TxtStartTime = new Text("Anfangszeit");
-        ChoiceBox<?> ChPickerStartTime = getChPickerStartTime();
-
-        Text TxtEndTime = new Text("Endzeit");
-        ChoiceBox<?> ChPickerEndTime = getChPickerEndTime();
-
-        Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
-        ChoiceBox ChRepetition = getChRepetition();
-
-        Text TxtRepetitionEnd = new Text(" Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
-        DatePicker datePickerRepetition = getDatePicker();
-
-
-        Text TxtDescription = new Text("Beschreibung");
-        TextField TxtFDescription = new TextField();
-
-        Button BtSafeEvent = getBTSafeEventButton(TxtFDescription, datePicker, ChPickerCalendar, stage, ChRepetition, datePickerRepetition);
-
-        layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
-                datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition, TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescription);
-
-        BorderPane borderPane = new BorderPane();
-        borderPane.setCenter(layout);
-        borderPane.setBottom(BtSafeEvent);
-        Scene scene = new Scene(borderPane);
-
-        stage.setScene(scene);
-        stage.setHeight(450);
-        stage.setWidth(600);
-        stage.show();
-    }
-
-    /**
      * Neues modul.
      */
     public void neuesModul() {
@@ -437,232 +375,6 @@ public class StudyPlanner extends Application {
 
 
     }
-
-    /**
-     * Modul löschen .
-     *
-     * @max
-     */
-    public void modullöschen() {
-        // Layout des aufgehenden Fensters
-        Stage stage = new Stage();
-        VBox layout = new VBox();
-        Scene scene = new Scene(layout);
-
-        // Texte die zur Steuerung angezeigt werden
-        Text TxtModulLöschen = new Text("Bitte das zu löschende Modul auswählen ");
-        Text TxtModulLöschenQuestion = new Text("Möchten sie diese Modul wirklich löschen ? ");
-        // Button der zur Steuerung gebracuht wird
-        Button delete = new Button("löschen");
-
-        // CheckBox um sicher zugehen das es wir gelöscht werden soll
-        CheckBox CBModulLöschen = new CheckBox("JA");
-
-
-        ChoiceBox<Modul> test = new ChoiceBox<>();
-        test.getItems().addAll(Module);
-        getBtModulLöschenNachCheck(CBModulLöschen, delete, test, stage);
-
-        layout.getChildren().addAll(TxtModulLöschen, test, TxtModulLöschenQuestion, CBModulLöschen, delete);
-
-        stage.setScene(scene);
-        stage.setTitle("Modul löschen");
-        stage.setWidth(300);
-        stage.setHeight(200);
-        stage.show();
-
-    }
-
-    private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete, ChoiceBox<Modul> chPickerModulName, Stage stage) {
-        delete.setOnAction(action -> {
-            boolean isCheck = CBModulLöschen.isSelected();
-
-            if (isCheck == true) {
-
-                System.out.println(chPickerModulName.getValue().toString());
-                Modul modultest = chPickerModulName.getValue();
-                ArrayList<Event> temp = new ArrayList<>(Events);
-
-                for (Modul modul : Module) {
-                    for (String uuid : modul.getUuid()) {
-                        for (Event event : temp) {
-                            if (uuid.equals(event.getId()) && modultest.equals(modul)) {
-                                SchoolTimeTable.removeEntries(SchoolTimeTable.findEntries(event.getTitle().trim()));
-                                StudyPlan.removeEntries(StudyPlan.findEntries(event.getTitle().trim()));
-
-                            }
-                        }
-                    }
-                }
-
-
-                Module.remove(chPickerModulName.getValue());
-                List test = listbox.getItems().stream().dropWhile(button -> button.getText().equals(chPickerModulName.getValue().toString())).collect(Collectors.toList());
-
-                listbox.getItems().clear();
-                listbox.getItems().addAll(test);
-
-                listbox.refresh();
-                stage.close();
-            }
-
-        });
-    }
-
-    /**
-     * Gets ch picker modul name.
-     *
-     * @return the ch picker modul name
-     */
-    public ChoiceBox<Modul> getChPickerModulName() {
-        // Anfang das Feld anlegen Event
-
-        ChoiceBox<Modul> ChPickerModulName = new ChoiceBox<>();
-        for (Modul x : Module) {
-            ChPickerModulName.getItems().addAll(x);
-        }
-
-        ChPickerModulName.setOnAction((event) -> {
-            Modul x = ChPickerModulName.getSelectionModel().getSelectedItem();
-            setModulNamefuerUebergabe(x);
-
-        });
-        return ChPickerModulName;
-    }
-
-    /**
-     * Gets ch picker calendar.
-     *
-     * @return the ch picker calendar
-     */
-    public ChoiceBox<?> getChPickerCalendar() {
-
-        ChoiceBox<String> ChPickerCalendar = new ChoiceBox<>();
-        ChPickerCalendar.getItems().addAll(StudyPlan.getName());
-        ChPickerCalendar.getItems().addAll(SchoolTimeTable.getName());
-
-        ChPickerCalendar.setOnAction((event) -> ChPickerCalendar.getSelectionModel().getSelectedItem());
-        return ChPickerCalendar;
-    }
-
-    public ChoiceBox<?> getChRepetition() {
-        ChoiceBox ChRepetition = new ChoiceBox();
-        int[] tage = {1, 2, 3, 4, 5, 6, 7, 14, 28};
-        for (int i = 0; i <= tage.length - 1; i++)
-            ChRepetition.getItems().addAll(tage[i]);
-        return ChRepetition;
-    }
-
-
-    /**
-     * Gets ch picker start time.
-     *
-     * @return the ch picker start time
-     */
-    public ChoiceBox<?> getChPickerStartTime() {
-
-        ChoiceBox<LocalTime> ChPickerStartTime = new ChoiceBox<>();
-        int stundeanfang = 8;
-        int minuteanfang = 0;
-        LocalTime x = LocalTime.of(stundeanfang, minuteanfang);
-        for (int i = 0; i <= 24; i++) {
-            ChPickerStartTime.getItems().addAll(x);
-            x = x.plusMinutes(30);
-        }
-        ChPickerStartTime.setOnAction((event) -> {
-            LocalTime beginnzeit = ChPickerStartTime.getSelectionModel().getSelectedItem();
-            setStartTimeEvent(beginnzeit);
-        });
-        return ChPickerStartTime;
-    }
-
-    /**
-     * Gets ch picker end time.
-     *
-     * @return the ch picker end time
-     */
-    public ChoiceBox<?> getChPickerEndTime() {
-
-        ChoiceBox<LocalTime> ChPickerEndTime = new ChoiceBox<>();
-        int stundeende = 8;
-        int minuteende = 30;
-        LocalTime y = LocalTime.of(stundeende, minuteende);
-        for (int i = 0; i <= 24; i++) {
-            ChPickerEndTime.getItems().addAll(y);
-            y = y.plusMinutes(30);
-        }
-        ChPickerEndTime.setOnAction((event) -> {
-            LocalTime zeitende = ChPickerEndTime.getSelectionModel().getSelectedItem();
-            setEndTimeEvent(zeitende);
-        });
-        return ChPickerEndTime;
-    }
-
-    /**
-     * Gets date picker.
-     *
-     * @return the date picker
-     */
-    public DatePicker getDatePicker() {
-
-        DatePicker datePicker = new DatePicker();
-        Button button1 = new Button("Datum wählen");
-        button1.setOnAction(action -> {
-
-        });
-        return datePicker;
-    }
-
-    /**
-     * Gets bt safe event button.
-     *
-     * @param txtFDescription
-     *         the txt f description
-     * @param datePicker
-     *         the date picker
-     * @param chPickerCalendar
-     *         the ch picker calendar
-     * @param stage
-     *         the stage
-     * @param chRepetition
-     * @param datePickerRepetition
-     *
-     * @return the bt safe event button
-     */
-    public Button getBTSafeEventButton(TextField txtFDescription, DatePicker datePicker, ChoiceBox<?>
-            chPickerCalendar, Stage stage, ChoiceBox chRepetition, DatePicker datePickerRepetition) {
-        Button button = new Button("Event sichern :");
-        button.setOnAction(action -> {
-
-
-            Event ownEvent = new Event();
-            ownEvent.setTitle(NameModul + " " + txtFDescription.getText());
-            ownEvent.setStartTime(StartTimeEvent.toString());
-            ownEvent.setEndTime(EndTimeEvent.toString());
-            ownEvent.setStarDate(datePicker.getValue().toString());
-            ownEvent.setEndDate(datePicker.getValue().toString());
-
-            // here will be the UUID from the Event added to the Modul
-            Module.stream().filter(e -> e.getModulname().equals(NameModul)).forEach(e -> e.getUuid().add(ownEvent.getId()));
-
-            Events.add(ownEvent);
-            Entry<?> entry = convertEventToEntry(ownEvent);
-
-
-            System.out.println(ownEvent + " " + entry);
-
-            if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Lernplan") {
-                StudyPlan.addEntry(entry);
-            } else if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Stundenplan") {
-                SchoolTimeTable.addEntry((entry));
-            }
-
-            stage.close();
-
-        });
-        return button;
-    }
-
 
     /**
      * Gets bt safe.
@@ -701,37 +413,6 @@ public class StudyPlanner extends Application {
                     }
                 });
         return BtSafe;
-    }
-
-    /**
-     * Sets modul namefuer uebergabe.
-     *
-     * @param x
-     *         the x
-     */
-    public void setModulNamefuerUebergabe(Modul x) {
-        NameModul = x.getModulname();
-
-    }
-
-    /**
-     * Sets start time event.
-     *
-     * @param x
-     *         the x
-     */
-    public void setStartTimeEvent(LocalTime x) {
-        StartTimeEvent = x;
-    }
-
-    /**
-     * Sets end time event.
-     *
-     * @param x
-     *         the x
-     */
-    public void setEndTimeEvent(LocalTime x) {
-        EndTimeEvent = x;
     }
 
     /**
@@ -809,6 +490,77 @@ public class StudyPlanner extends Application {
         Scene scene = new Scene(layout);
         stage.setScene(scene);
         stage.show();
+    }
+
+    /**
+     * Modul löschen .
+     *
+     * @max
+     */
+    public void modullöschen() {
+        // Layout des aufgehenden Fensters
+        Stage stage = new Stage();
+        VBox layout = new VBox();
+        Scene scene = new Scene(layout);
+
+        // Texte die zur Steuerung angezeigt werden
+        Text TxtModulLöschen = new Text("Bitte das zu löschende Modul auswählen ");
+        Text TxtModulLöschenQuestion = new Text("Möchten sie diese Modul wirklich löschen ? ");
+        // Button der zur Steuerung gebracuht wird
+        Button delete = new Button("löschen");
+
+        // CheckBox um sicher zugehen das es wir gelöscht werden soll
+        CheckBox CBModulLöschen = new CheckBox("JA");
+
+
+        ChoiceBox<Modul> test = new ChoiceBox<>();
+        test.getItems().addAll(Module);
+        getBtModulLöschenNachCheck(CBModulLöschen, delete, test, stage);
+
+        layout.getChildren().addAll(TxtModulLöschen, test, TxtModulLöschenQuestion, CBModulLöschen, delete);
+
+        stage.setScene(scene);
+        stage.setTitle("Modul löschen");
+        stage.setWidth(300);
+        stage.setHeight(200);
+        stage.show();
+
+    }
+
+    private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete, ChoiceBox<Modul> chPickerModulName, Stage stage) {
+        delete.setOnAction(action -> {
+            boolean isCheck = CBModulLöschen.isSelected();
+
+            if (isCheck == true) {
+
+                System.out.println(chPickerModulName.getValue().toString());
+                Modul modultest = chPickerModulName.getValue();
+                ArrayList<Event> temp = new ArrayList<>(Events);
+
+                for (Modul modul : Module) {
+                    for (String uuid : modul.getUuid()) {
+                        for (Event event : temp) {
+                            if (uuid.equals(event.getId()) && modultest.equals(modul)) {
+                                SchoolTimeTable.removeEntries(SchoolTimeTable.findEntries(event.getTitle().trim()));
+                                StudyPlan.removeEntries(StudyPlan.findEntries(event.getTitle().trim()));
+
+                            }
+                        }
+                    }
+                }
+
+
+                Module.remove(chPickerModulName.getValue());
+                List test = listbox.getItems().stream().dropWhile(button -> button.getText().equals(chPickerModulName.getValue().toString())).collect(Collectors.toList());
+
+                listbox.getItems().clear();
+                listbox.getItems().addAll(test);
+
+                listbox.refresh();
+                stage.close();
+            }
+
+        });
     }
 
 }
