@@ -116,11 +116,11 @@ public class NewEvent {
 
         ChoiceBox<LocalTime> ChPickerStartTime = new ChoiceBox<>();
         int stundeanfang = 8;
-        int minuteanfang = 0;
+        int minuteanfang = 15;
         LocalTime x = LocalTime.of(stundeanfang, minuteanfang);
-        for (int i = 0; i <= 24; i++) {
+        for (int i = 0; i <= 48; i++) {
             ChPickerStartTime.getItems().addAll(x);
-            x = x.plusMinutes(30);
+            x = x.plusMinutes(15);
         }
 
         return ChPickerStartTime;
@@ -137,9 +137,9 @@ public class NewEvent {
         int stundeende = 8;
         int minuteende = 30;
         LocalTime y = LocalTime.of(stundeende, minuteende);
-        for (int i = 0; i <= 24; i++) {
+        for (int i = 0; i <= 48; i++) {
             ChPickerEndTime.getItems().addAll(y);
-            y = y.plusMinutes(30);
+            y = y.plusMinutes(15);
         }
 
         return ChPickerEndTime;
