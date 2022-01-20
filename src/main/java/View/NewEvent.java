@@ -48,14 +48,13 @@ public class NewEvent {
         Text TxtRepetitionEnd = new Text(" Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
         DatePicker datePickerRepetition = getDatePicker();
 
-
         Text TxtDescription = new Text("Beschreibung");
-        TextField TxtFDescription = new TextField();
+        TextField TxtFDescriptionField = new TextField();
 
-        Button BtSafeEvent = getBTSafeEventButton(eventlist, ChPickerModulName, ChPickerStartTime, ChPickerEndTime, datePicker, ChPickerCalendar, stage, modulelist, Studyplan, SchoolTimeTable, ChRepetition, datePickerRepetition, TxtDescription);
+        Button BtSafeEvent = getBTSafeEventButton(eventlist, ChPickerModulName, ChPickerStartTime, ChPickerEndTime, datePicker, ChPickerCalendar, stage, modulelist, Studyplan, SchoolTimeTable, ChRepetition, datePickerRepetition, TxtFDescriptionField);
 
         layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
-                datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition, TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescription);
+                datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition, TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescriptionField);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(layout);
@@ -155,7 +154,7 @@ public class NewEvent {
     }
 
     public static Button getBTSafeEventButton(List<Event> eventListe, ChoiceBox<?> chPickerModulName, ChoiceBox<?> chPickerStartTime, ChoiceBox chPickerEndTime, DatePicker datePicker, ChoiceBox<?>
-            chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable, ChoiceBox<Integer> chRepetition, DatePicker datePickerRepetition, Text txtDescription) {
+            chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable, ChoiceBox<Integer> chRepetition, DatePicker datePickerRepetition, TextField txtDescription) {
 
         Button button = new Button("Event sichern :");
         button.setOnAction(action -> {
