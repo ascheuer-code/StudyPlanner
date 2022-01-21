@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="StudyPlanner" transaction-type="RESOURCE_LOCAL">
+
+        <class>Model.Ects</class>
+        <class>Model.Modul</class>
+        <class>Model.Event</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>
+
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:C:/Users/scheu/IdeaProjects/StudyPlanner/myDATA.db"/>
+            <property name="hibernate.dialect" value="org.sqlite.hibernate.dialect.SQLiteDialect" />
+            <property name="javax.persistence.schema-generation.database.action" value="create"/>
+            <property name="hibernate.show_sql" value="true" />
+            <property name="format_sql" value="true" />
+            <property name="hibernate.hbm2ddl.auto" value="validate" />
+
+
+
+        </properties>
+    </persistence-unit>
+</persistence>
+
