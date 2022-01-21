@@ -1,5 +1,6 @@
 package View;
 
+import DataAccess.SaveEventDB;
 import Model.Event;
 import Model.Modul;
 import com.calendarfx.model.Calendar;
@@ -43,15 +44,16 @@ public class NewEvent {
         ChoiceBox<?> ChPickerEndTime = getChPickerEndTime();
 
         Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
-        ChoiceBox<Integer> ChRepetition = getChRepetition();
+        ChoiceBox ChRepetition = getChRepetition();
 
         Text TxtRepetitionEnd = new Text(" Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
         DatePicker datePickerRepetition = getDatePicker();
 
+
         Text TxtDescription = new Text("Beschreibung");
         TextField TxtFDescriptionField = new TextField();
 
-        Button BtSafeEvent = getBTSafeEventButton(eventlist, ChPickerModulName, ChPickerStartTime, ChPickerEndTime, datePicker, ChPickerCalendar, stage, modulelist, Studyplan, SchoolTimeTable, ChRepetition, datePickerRepetition, TxtFDescriptionField);
+        Button BtSafeEvent =  getBTSafeEventButton(eventlist, ChPickerModulName, ChPickerStartTime, ChPickerEndTime, datePicker, ChPickerCalendar, stage, modulelist, Studyplan, SchoolTimeTable, ChRepetition, datePickerRepetition, TxtFDescriptionField);
 
         layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
                 datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition, TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescriptionField);
@@ -116,11 +118,11 @@ public class NewEvent {
 
         ChoiceBox<LocalTime> ChPickerStartTime = new ChoiceBox<>();
         int stundeanfang = 8;
-        int minuteanfang = 15;
+        int minuteanfang = 0;
         LocalTime x = LocalTime.of(stundeanfang, minuteanfang);
-        for (int i = 0; i <= 48; i++) {
+        for (int i = 0; i <= 24; i++) {
             ChPickerStartTime.getItems().addAll(x);
-            x = x.plusMinutes(15);
+            x = x.plusMinutes(30);
         }
 
         return ChPickerStartTime;
@@ -137,21 +139,22 @@ public class NewEvent {
         int stundeende = 8;
         int minuteende = 30;
         LocalTime y = LocalTime.of(stundeende, minuteende);
-        for (int i = 0; i <= 48; i++) {
+        for (int i = 0; i <= 24; i++) {
             ChPickerEndTime.getItems().addAll(y);
-            y = y.plusMinutes(15);
+            y = y.plusMinutes(30);
         }
 
         return ChPickerEndTime;
     }
 
-    public static ChoiceBox<Integer> getChRepetition() {
-        ChoiceBox<Integer> ChRepetition = new ChoiceBox();
+    public static ChoiceBox<?> getChRepetition() {
+        ChoiceBox ChRepetition = new ChoiceBox();
         int[] tage = {1, 2, 3, 4, 5, 6, 7, 14, 28};
         for (int i = 0; i <= tage.length - 1; i++)
             ChRepetition.getItems().addAll(tage[i]);
         return ChRepetition;
     }
+
 
     public static Button getBTSafeEventButton(List<Event> eventListe, ChoiceBox<?> chPickerModulName, ChoiceBox<?> chPickerStartTime, ChoiceBox chPickerEndTime, DatePicker datePicker, ChoiceBox<?>
             chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable, ChoiceBox<Integer> chRepetition, DatePicker datePickerRepetition, TextField txtDescription) {
@@ -167,6 +170,10 @@ public class NewEvent {
                 ownEvent.setStarDate(datePicker.getValue().toString());
                 ownEvent.setEndDate(datePicker.getValue().toString());
                 // here will be the UUID from the Event added to the Modul
+
+                SaveEventDB saveEventDB = new SaveEventDB();
+                saveEventDB.insert(ownEvent);
+
 
                 Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e -> e.getUuid().add(ownEvent.getId()));
                 eventListe.add(ownEvent);
@@ -188,6 +195,9 @@ public class NewEvent {
                     ownEvent.setEndDate(date.toString());
                     // here will be the UUID from the Event added to the Modul
 
+                    SaveEventDB saveEventDB = new SaveEventDB();
+                    saveEventDB.insert(ownEvent);
+
                     Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e -> e.getUuid().add(ownEvent.getId()));
                     eventListe.add(ownEvent);
                     Entry<?> entry = convertEventToEntry(ownEvent);
@@ -204,6 +214,7 @@ public class NewEvent {
         });
         return button;
     }
+
 
     public static String replaceName(String string) {
         return string.replaceAll("(?<=\\w)\\n.*", "");

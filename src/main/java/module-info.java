@@ -3,6 +3,9 @@ module com.calendarfx.app {
 
     requires javafx.controls;
     requires com.calendarfx.view;
+    requires java.persistence;
+    requires java.sql;
+    requires org.hibernate.orm.core;
 
     exports com.studyplanner.code_ascheuer.github;
     exports DataAccess;

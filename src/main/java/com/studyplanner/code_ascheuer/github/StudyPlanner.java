@@ -1,5 +1,7 @@
 package com.studyplanner.code_ascheuer.github;
 
+import DataAccess.*;
+import Helper.LocalDateTimeConverter;
 import Model.Event;
 import Model.Modul;
 import View.NewEvent;
@@ -70,7 +72,6 @@ public class StudyPlanner extends Application {
 
         calendarEventHandler();
 
-
         SchoolTimeTable.setStyle(Style.STYLE2);
         StudyPlan.setStyle(Style.STYLE3);
 
@@ -100,7 +101,7 @@ public class StudyPlanner extends Application {
      *
      * @author Andreas Scheuer
      */
-    public void calendarEventHandler() {
+       public void calendarEventHandler() {
         //Eventhandler für alle arten von Events
         StudyPlan.addEventHandler(event -> {
             // ToDo: es ist kein check eingebaut falls der Eintrag den Kalender wechselt, muss noch eingebaut werden
@@ -134,12 +135,16 @@ public class StudyPlanner extends Application {
      *         the event
      */
     public void isEntryIntervallChanged(CalendarEvent event) {
+
+          // Update Event aus der Datenbank  1
+        EventUpdateDB eventUpdateDB = new EventUpdateDB();
         if (!event.isEntryAdded() && !event.isEntryRemoved() && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
             Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
                 e.setStartTime(event.getEntry().getStartTime().toString());
                 e.setStarDate(event.getEntry().getStartDate().toString());
                 e.setEndTime(event.getEntry().getEndTime().toString());
                 e.setEndDate(event.getEntry().getEndDate().toString());
+                eventUpdateDB.updateEvent(e);
             });
 
             Module.stream().filter(e -> e.getUuid().contains(event.getEntry().getId())).forEach(e -> {
@@ -159,6 +164,12 @@ public class StudyPlanner extends Application {
      */
     public void isEntryTitleChanged(CalendarEvent event) {
         if (!event.isEntryAdded() && !event.isEntryRemoved() && event.getOldInterval() == null && !event.getOldText().equals(event.getEntry().getTitle())) {
+
+            // ToDo: hier stimmt noch was nicht der Titel wird nicht geändert aber bei Intervall Changed klappt es warum auch immer
+            Event newEvent = LocalDateTimeConverter.convertEntrytoEvent(event.getEntry());
+            EventUpdateDB eventUpdateDB = new EventUpdateDB();
+            eventUpdateDB.updateEvent(newEvent);
+
             Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> e.setTitle(event.getEntry().getTitle()));
         }
     }
@@ -181,9 +192,15 @@ public class StudyPlanner extends Application {
                     removes the Events from the Eventlist
                      */
                     List<Event> events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).collect(Collectors.toList());
+                    EventsDeleteDB eventsDeleteDB= new EventsDeleteDB();
+                    events.stream().forEach(e -> eventsDeleteDB.EventDelete(e));
                     Events.removeAll(events);
+
+                    // löschen Liste von Events aus Datenbank 2
+
                 }
             }
+
         }
     }
 
@@ -401,7 +418,9 @@ public class StudyPlanner extends Application {
                     if (event.getSource() == BtSafe) {
                         Modul modul = new Modul(TxtFModul.getText(),
                                 Integer.parseInt(TxtFEcts.getText()));
-
+                       // Modul in datenbank speichern 3
+                        SaveModulDB saveModulDB = new SaveModulDB();
+                        saveModulDB.insert(modul);
 
                         Module.add(modul);
 
@@ -463,6 +482,9 @@ public class StudyPlanner extends Application {
         // Eingabe Felder + VorhandenDaten
         TextField readModulName = new TextField(editModul.getModulname());
         TextField readEcts = new TextField(editModul.getEcts().toString2());
+        // Modul in Datenbank ändern 4
+        ModulUpdateDB modulUpdateDB = new ModulUpdateDB();
+
 
         Button BtEditModul = new Button("Ändern ");
         BtEditModul.setOnAction(
@@ -477,6 +499,7 @@ public class StudyPlanner extends Application {
                         button.setText(editModul.toString());
 
                         listbox.getItems().set(index, button);
+                        modulUpdateDB.Update(editModul);
 
 
                     }
@@ -537,6 +560,10 @@ public class StudyPlanner extends Application {
                 Modul modultest = chPickerModulName.getValue();
                 ArrayList<Event> temp = new ArrayList<>(Events);
 
+                // Löschen Modul aus datenbank 5
+                ModulDeleteDB modulDeleteDB = new ModulDeleteDB();
+                modulDeleteDB.ModulDelete(modultest);
+
                 for (Modul modul : Module) {
                     for (String uuid : modul.getUuid()) {
                         for (Event event : temp) {
@@ -548,13 +575,14 @@ public class StudyPlanner extends Application {
                         }
                     }
                 }
-
+                ModulDeleteDB moduleDeleteDB = new ModulDeleteDB();
+                moduleDeleteDB.ModulDelete(chPickerModulName.getValue());
 
                 Module.remove(chPickerModulName.getValue());
-                List test = listbox.getItems().stream().dropWhile(button -> button.getText().equals(chPickerModulName.getValue().toString())).collect(Collectors.toList());
+                List newlist = listbox.getItems().stream().dropWhile(button -> button.getText().equals(chPickerModulName.getValue().toString())).collect(Collectors.toList());
 
                 listbox.getItems().clear();
-                listbox.getItems().addAll(test);
+                listbox.getItems().addAll(newlist);
 
                 listbox.refresh();
                 stage.close();

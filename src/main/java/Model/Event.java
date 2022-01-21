@@ -2,6 +2,7 @@ package Model;
 
 import javafx.beans.property.SimpleIntegerProperty;
 
+import javax.persistence.*;
 import java.time.LocalTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -11,15 +12,22 @@ import static java.time.temporal.ChronoUnit.MINUTES;
 /**
  * The type Event.
  */
+@Entity
 public class Event {
+    @Id
     private String id;
+    @Column
     private String title;
+    @Column
     private String starDate;
+    @Column
     private String startTime;
+    @Column
     private String endDate;
+    @Column
     private String endTime;
-
-    private final SimpleIntegerProperty duration = new SimpleIntegerProperty();
+    @Transient
+    private final  SimpleIntegerProperty duration = new SimpleIntegerProperty();
 
 
     /**
@@ -32,6 +40,7 @@ public class Event {
     /**
      * Sets id.
      */
+
     public void setId() {
         this.id = UUID.randomUUID().toString();
     }
@@ -161,4 +170,12 @@ public class Event {
                 '}';
     }
 
+    public Event( String title, String starDate, String startTime, String endDate, String endTime) {
+        this.id = getId();
+        this.title = title;
+        this.starDate = starDate;
+        this.startTime = startTime;
+        this.endDate = endDate;
+        this.endTime = endTime;
+    }
 }

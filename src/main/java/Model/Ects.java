@@ -2,6 +2,9 @@ package Model;
 
 import Helper.Helper;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import java.time.Duration;
 
 /**
@@ -9,9 +12,12 @@ import java.time.Duration;
  *
  * @author leon weyand
  */
+@Embeddable
 public class Ects {
 
+    @Column
     private int ects;
+    @Transient
     private Duration duration;
 
 
@@ -97,4 +103,5 @@ public class Ects {
     public String toString2() {
         return "" + ects;
     }
+    public Ects(){}
 }

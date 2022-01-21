@@ -2,19 +2,31 @@ package Model;
 
 import Helper.Helper;
 
+import javax.persistence.*;
+import java.io.StringBufferInputStream;
 import java.util.ArrayList;
 import java.util.Objects;
-
+import java.util.UUID;
+import java.util.List;
 /**
  * The type Model.
  *
  * @author Andreas Scheuer mahmoud orabi
  */
+@Entity
 public class Modul {
 
-    private final Ects ects;
-    private final ArrayList<String> uuid;
+    @Id
+    @GeneratedValue (strategy = GenerationType.TABLE)
+    private int  id;
+    @Column
     private String modulname;
+    @Embedded
+    private  Ects ects;
+    @ElementCollection
+    @Column
+    private  List<String> uuid;
+
 
     /**
      * Instantiates a new Modul.
@@ -22,20 +34,24 @@ public class Modul {
      * @param modulname the modulname
      * @param ects      the ects
      */
-    public Modul(String modulname, int ects) {
+    public Modul(String modulname , int ects ){
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
-
         this.modulname = modulname;
-        this.ects = new Ects(ects);
+        this.ects = new Ects(ects) ;
+        this.id = getId();
         this.uuid = new ArrayList<>();
+
+
+
     }
+
 
     /**
      * Gets uuid.
      *
      * @return the uuid
      */
-    public ArrayList<String> getUuid() {
+    public List<String> getUuid() {
         return uuid;
     }
 
@@ -67,6 +83,11 @@ public class Modul {
         return ects;
     }
 
+    public int gettEcts(){
+        return ects.getEctsValue();
+
+    }
+
     /**
      * Sets ects.
      *
@@ -96,4 +117,27 @@ public class Modul {
         return (this.modulname + "\n" + this.ects + "  ");
 
     }
+    /*
+    * get
+    * return String
+     */
+    public int getId(){
+        return id;
+    }
+    /**
+     * Sets id.
+     */
+    public void  setId(int id ) {
+        this.id = id ;
+    }
+
+    public void setUuid(List<String> uuid) {
+        this.uuid = uuid;
+    }
+
+    /**
+     * Sets id.
+     */
+ public Modul(){ }
+
 }
