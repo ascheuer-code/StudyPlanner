@@ -18,7 +18,7 @@ public class LoadModulDDB {
     EntityTransaction transaction;
     List modulList = new ArrayList<>();
 
-    public List<Modul> zeigemodul (){
+    public  List<Modul> zeigemodul (){
 
 
         entityManagerFactory = Persistence.createEntityManagerFactory("StudyPlanner");
@@ -29,26 +29,35 @@ public class LoadModulDDB {
         try {
             transaction.begin();
 
-            Query query = entityManager.createQuery("select id from Modul");
-            List<Integer> id = query.getResultList();
+            TypedQuery<Modul> q =
+                    entityManager.createQuery("select t from Modul t", Modul.class);
 
-            Query query1 = entityManager.createQuery("select modulname from Modul");
-            List<String> modulname = query1.getResultList();
-
-            Query query2 = entityManager.createQuery("select ects from Modul");
-            List<Integer> ects = query2.getResultList();
-
-            for(int i = 0; i< modulname.size(); i++){
-                Modul modul = new Modul();
-                modul.setId(id.get(i));
-                modul.setModulname(modulname.get(i));
-                modul.setEcts(ects.get(i));
+            List<Modul> listOfSimpleEntities = q.getResultList();
+            modulList.addAll(listOfSimpleEntities);
 
 
-                modulList.add(modul);
-            }
 
-            modulList.stream().forEach(e -> System.out.println(e));
+
+            //Query query = entityManager.createQuery("select id from Modul");
+           // List<Integer> id = query.getResultList();
+
+           // Query query1 = entityManager.createQuery("select modulname from Modul");
+           // List<String> modulname = query1.getResultList();
+
+           // Query query2 = entityManager.createQuery("select ects from Modul");
+           // List ects = query2.getResultList();
+
+            //for(int i = 0; i< modulname.size(); i++){
+                //Modul modul = new Modul();
+                //modul.setId(id.get(i));
+                //modul.setModulname(modulname.get(i));
+                //modul.setEcts((int) ects.get(i));
+
+
+            //    modulList.add(modul);
+           // }
+
+            modulList.forEach(e -> System.out.println(e));
 
             transaction.commit();
 

@@ -1,5 +1,7 @@
 package com.studyplanner.code_ascheuer.github;
 
+import DataAccess.LoadModulDDB;
+
 /**
  * The type Study planner launcher.
  */
@@ -11,6 +13,7 @@ public class StudyPlannerLauncher {
      */
     public static void main(String[] args) {
         System.setProperty("calendarfx.developer", "true");
+
         StudyPlanner.main(args);
     }
 }
