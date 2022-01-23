@@ -19,6 +19,8 @@ public class Event {
     @Column
     private String title;
     @Column
+    private String calendar;
+    @Column
     private String starDate;
     @Column
     private String startTime;
@@ -72,6 +74,10 @@ public class Event {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public String getCalendar(){return calendar;}
+    public void setCalendar(String calendar){this.calendar = calendar;}
+
 
     /**
      * Gets star date.
@@ -163,6 +169,7 @@ public class Event {
         return "Event{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", Kalender='" + calendar + '\'' +
                 ", starDate='" + starDate + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", endDate='" + endDate + '\'' +
@@ -170,9 +177,10 @@ public class Event {
                 '}';
     }
 
-    public Event( String title, String starDate, String startTime, String endDate, String endTime) {
+    public Event( String title,String calendar,  String starDate, String startTime, String endDate, String endTime) {
         this.id = getId();
         this.title = title;
+        this.calendar = calendar;
         this.starDate = starDate;
         this.startTime = startTime;
         this.endDate = endDate;

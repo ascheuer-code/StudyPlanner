@@ -47,7 +47,7 @@ public class Ects {
      * @param ects the ects
      */
     public void setEcts(int ects) {
-        Helper.checkSpan(1, 20, ects, "ECTS");
+        Helper.checkSpan(1, 100, ects, "ECTS");
         if (this.duration == null) {
             this.duration = Duration.ofHours(ects * 30);
         }
@@ -81,10 +81,12 @@ public class Ects {
 
     @Override
     public String toString() {
-        return "Ects: " + ects + "\n" +
-                "Soll: " + durationTrim(duration.toString());
+        return "Ects: " + ects  ;
     }
-
+    public String toStringEcts() {
+        return "Ects: " + ects + "\n" +
+        "Soll: " + durationTrim(duration.toString());
+    }
     /**
      * Duration trim string.
      *

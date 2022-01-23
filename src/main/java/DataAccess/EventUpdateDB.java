@@ -24,14 +24,15 @@ public class EventUpdateDB {
         try {
             entityTransaction.begin();
             Event event1 = entityManager.find(Event.class, event.getId());
-
-
-
-            event1.setTitle(event.getTitle());
-            event1.setStarDate(event.getStarDate());
-            event1.setStartTime(event.getStartTime());
+            event1.setCalendar(event.getCalendar());
             event1.setEndTime(event.getEndTime());
+            event1.setStartTime(event.getStartTime());
+            event1.setStarDate(event.getStarDate());
             event1.setEndDate(event.getEndDate());
+            event1.setTitle(event.getTitle());
+
+            entityManager.persist(event);
+
             entityTransaction.commit();
             entityManager.close();
             entityManagerFactory.close();

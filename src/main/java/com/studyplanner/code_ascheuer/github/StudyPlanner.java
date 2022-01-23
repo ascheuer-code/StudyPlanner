@@ -9,6 +9,8 @@ import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Calendar.Style;
 import com.calendarfx.model.CalendarEvent;
 import com.calendarfx.model.CalendarSource;
+import com.calendarfx.model.Entry;
+import com.calendarfx.view.ButtonBar;
 import com.calendarfx.view.CalendarView;
 import impl.com.calendarfx.view.NumericTextField;
 import javafx.application.Application;
@@ -21,11 +23,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static Helper.LocalDateTimeConverter.convertEventToEntry;
 
 
 /**
@@ -74,6 +80,33 @@ public class StudyPlanner extends Application {
 
         SchoolTimeTable.setStyle(Style.STYLE2);
         StudyPlan.setStyle(Style.STYLE3);
+
+
+        /*
+        @Marc Load Data from DB and add Module to listbox
+         */
+        LoadModulDDB loadModulDDB = new LoadModulDDB();
+        for (Modul modul: loadModulDDB.zeigemodul()) {
+            Module.add(modul);
+            modul.setEcts(modul.gettEcts());
+            Button bt = new Button(modul.toString2());
+            listbox.getItems().add(bt);
+            bt.setOnAction(actionEvent -> editModul(modul, bt));
+
+        };
+        LoadEventDB loadEventDB = new LoadEventDB();
+        for (Event event: loadEventDB.zeigeEvent()) {
+            Events.add(event);
+            Entry<?> entry = convertEventToEntry(event);
+            if(Objects.equals(event.getCalendar(), "Stundenplan")){
+                StudyPlan.addEntry(entry);
+            }
+            else if (Objects.equals(event.getCalendar(), "Lernplan")){
+                SchoolTimeTable.addEntry(entry);
+            }
+
+        }
+
 
         initializingCalenderView(calendarView);
 
@@ -138,7 +171,7 @@ public class StudyPlanner extends Application {
 
           // Update Event aus der Datenbank  1
         EventUpdateDB eventUpdateDB = new EventUpdateDB();
-        if (!event.isEntryAdded() && !event.isEntryRemoved() && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
+        if (!event.isEntryAdded() && !event.isEntryRemoved() && !(event.getOldInterval() == null) && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
             Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
                 e.setStartTime(event.getEntry().getStartTime().toString());
                 e.setStarDate(event.getEntry().getStartDate().toString());
@@ -167,6 +200,7 @@ public class StudyPlanner extends Application {
 
             // ToDo: hier stimmt noch was nicht der Titel wird nicht geändert aber bei Intervall Changed klappt es warum auch immer
             Event newEvent = LocalDateTimeConverter.convertEntrytoEvent(event.getEntry());
+
             EventUpdateDB eventUpdateDB = new EventUpdateDB();
             eventUpdateDB.updateEvent(newEvent);
 
@@ -233,8 +267,10 @@ public class StudyPlanner extends Application {
         listbox.getItems()
                 .stream()
                 .filter(e -> replaceButtonName(e.getText().trim()).equals(item.getModulname().trim()))
-                .forEach(e -> e.setText(item.toString()));
+                .forEach(e -> e.setText(item.toString2()));
     }
+
+
 
     /**
      * Initializing calender view.
@@ -363,6 +399,8 @@ public class StudyPlanner extends Application {
         return string.replaceAll("(?<=\\w)\\n.*", "");
     }
 
+    public String getEventDescription(String string){return  string.replaceAll("^.*\\n", "");}
+
     /**
      * Neues modul.
      */
@@ -418,14 +456,17 @@ public class StudyPlanner extends Application {
                     if (event.getSource() == BtSafe) {
                         Modul modul = new Modul(TxtFModul.getText(),
                                 Integer.parseInt(TxtFEcts.getText()));
+
                        // Modul in datenbank speichern 3
+                        modul.setId();
                         SaveModulDB saveModulDB = new SaveModulDB();
                         saveModulDB.insert(modul);
 
                         Module.add(modul);
 
-                        Button BtModul = new Button(modul.toString());
+                        Button BtModul = new Button(modul.toString2());
                         listbox.getItems().add(BtModul);
+
 
                         BtModul.setOnAction(actionEvent -> editModul(modul, BtModul));
                         stage.close();
@@ -486,6 +527,7 @@ public class StudyPlanner extends Application {
         ModulUpdateDB modulUpdateDB = new ModulUpdateDB();
 
 
+
         Button BtEditModul = new Button("Ändern ");
         BtEditModul.setOnAction(
                 event -> {
@@ -496,10 +538,24 @@ public class StudyPlanner extends Application {
                         Module.set(index, editModul);
                         //erstellt einen anderen Button
 
-                        button.setText(editModul.toString());
+                        button.setText(editModul.toString2());
 
                         listbox.getItems().set(index, button);
                         modulUpdateDB.Update(editModul);
+
+                        ArrayList<Event> temp = new ArrayList<>(Events);
+
+                        for (Modul modul : Module) {
+                            for (String uuid : modul.getUuid()) {
+                                for (Event eventa : temp) {
+                                    if (uuid.equals(eventa.getId()) && editModul.equals(modul)) {
+                                        SchoolTimeTable.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + " " + getEventDescription(eventa.getTitle())));
+                                        StudyPlan.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + " " + getEventDescription(eventa.getTitle())));
+
+                                    }
+                                }
+                            }
+                        }
 
 
                     }
@@ -550,19 +606,21 @@ public class StudyPlanner extends Application {
 
     }
 
+    /**
+     * @Marc Delte Modul in DB and ListBox
+     * @param CBModulLöschen
+     * @param delete
+     * @param chPickerModulName
+     * @param stage
+     */
     private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete, ChoiceBox<Modul> chPickerModulName, Stage stage) {
         delete.setOnAction(action -> {
             boolean isCheck = CBModulLöschen.isSelected();
 
             if (isCheck == true) {
-
-                System.out.println(chPickerModulName.getValue().toString());
-                Modul modultest = chPickerModulName.getValue();
                 ArrayList<Event> temp = new ArrayList<>(Events);
 
-                // Löschen Modul aus datenbank 5
-                ModulDeleteDB modulDeleteDB = new ModulDeleteDB();
-                modulDeleteDB.ModulDelete(modultest);
+                Modul modultest = chPickerModulName.getValue();
 
                 for (Modul modul : Module) {
                     for (String uuid : modul.getUuid()) {
@@ -575,17 +633,19 @@ public class StudyPlanner extends Application {
                         }
                     }
                 }
-                ModulDeleteDB moduleDeleteDB = new ModulDeleteDB();
-                moduleDeleteDB.ModulDelete(chPickerModulName.getValue());
 
-                Module.remove(chPickerModulName.getValue());
-                List newlist = listbox.getItems().stream().dropWhile(button -> button.getText().equals(chPickerModulName.getValue().toString())).collect(Collectors.toList());
+                ModulDeleteDB modulDeleteDB = new ModulDeleteDB();
+                modulDeleteDB.ModulDelete(modultest);
 
-                listbox.getItems().clear();
-                listbox.getItems().addAll(newlist);
 
+
+                int index= Module.indexOf(modultest);
+                listbox.getItems().remove(index);
                 listbox.refresh();
+                Module.remove(modultest);
+
                 stage.close();
+
             }
 
         });

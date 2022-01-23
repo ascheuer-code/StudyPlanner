@@ -24,7 +24,7 @@ public class VerwaltungBD {
           entityManager.persist(modul);
           entityTransaction.commit();
     }
-    public Modul find(int id ){ return  entityManager.find(Modul.class,id);}
+    public Modul find(String id ){ return  entityManager.find(Modul.class,id);}
     public Event find1(String id ){ return  entityManager.find(Event.class,id);}
     public void ModulUpdateDB(Modul modul){
          Modul modul1 = find(modul.getId());
@@ -53,7 +53,8 @@ public class VerwaltungBD {
          event1.setEndDate(event.getEndDate());
          event1.setStartTime(event.getStartTime());
          event1.setEndTime(event.getEndTime());
-         event1.setId();
+         event1.setCalendar(event.getCalendar());
+
          entityManager.persist(event1);
          entityTransaction.begin();
 

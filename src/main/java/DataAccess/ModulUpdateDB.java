@@ -22,11 +22,16 @@ public class ModulUpdateDB {
         entityTransaction = entityManager.getTransaction();
 
         try {
-            Modul  modul = entityManager.find(Modul.class, modul1.getId());
 
-            entityTransaction.begin();
-            modul.setEcts(modul1.gettEcts());
+
+           entityTransaction.begin();
+            Modul  modul = entityManager.find(Modul.class, modul1.getId());
+            modul.setUuid(modul1.getUuid());
             modul.setModulname(modul1.getModulname());
+            modul.setEcts(modul1.gettEcts());
+
+            entityManager.persist(modul);
+
             entityTransaction.commit();
             entityManager.close();
             entityManagerFactory.close();

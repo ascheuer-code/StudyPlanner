@@ -4,10 +4,8 @@ import Helper.Helper;
 
 import javax.persistence.*;
 import java.io.StringBufferInputStream;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.UUID;
-import java.util.List;
+import java.util.*;
+
 /**
  * The type Model.
  *
@@ -17,12 +15,12 @@ import java.util.List;
 public class Modul {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.TABLE)
-    private int  id;
+    private String id;
     @Column
     private String modulname;
     @Embedded
     private  Ects ects;
+
     @ElementCollection
     @Column
     private  List<String> uuid;
@@ -34,7 +32,7 @@ public class Modul {
      * @param modulname the modulname
      * @param ects      the ects
      */
-    public Modul(String modulname , int ects ){
+    public Modul(String modulname , int ects){
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
         this.modulname = modulname;
         this.ects = new Ects(ects) ;
@@ -114,21 +112,29 @@ public class Modul {
      * @return String
      */
     public String toString() {
-        return (this.modulname + "\n" + this.ects + "  ");
+        return (this.modulname );
 
+    }
+
+    public String toString2(){
+        return (this.modulname + "\n" + this.ects.toStringEcts() + "  ");
     }
     /*
     * get
     * return String
      */
-    public int getId(){
+    public String getId(){
         return id;
     }
     /**
      * Sets id.
      */
-    public void  setId(int id ) {
-        this.id = id ;
+
+
+
+
+    public void  setId() {
+        this.id = UUID.randomUUID().toString() ;
     }
 
     public void setUuid(List<String> uuid) {
@@ -138,6 +144,6 @@ public class Modul {
     /**
      * Sets id.
      */
- public Modul(){ }
+ public Modul(){}
 
 }
