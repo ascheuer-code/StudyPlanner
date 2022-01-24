@@ -16,6 +16,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -25,7 +27,7 @@ import static Helper.LocalDateTimeConverter.convertEventToEntry;
 public class NewEvent {
 
 
-    public static void createNewEvent(List<Modul> modulelist, List<Event> eventlist, com.calendarfx.model.Calendar Studyplan, Calendar SchoolTimeTable) {
+    public static void createNewEvent(List<Modul> modulelist, List<Event> eventlist, com.calendarfx.model.Calendar Studyplan, Calendar SchoolTimeTable, EntityManager entityManager, EntityTransaction entityTransaction) {
         Stage stage = new Stage();
         VBox layout = new VBox();
 
@@ -54,7 +56,7 @@ public class NewEvent {
         Text TxtDescription = new Text("Beschreibung");
         TextField TxtFDescriptionField = new TextField();
 
-        Button BtSafeEvent =  getBTSafeEventButton(eventlist, ChPickerModulName, ChPickerStartTime, ChPickerEndTime, datePicker, ChPickerCalendar, stage, modulelist, Studyplan, SchoolTimeTable, ChRepetition, datePickerRepetition, TxtFDescriptionField);
+        Button BtSafeEvent = getBTSafeEventButton(eventlist, ChPickerModulName, ChPickerStartTime, ChPickerEndTime, datePicker, ChPickerCalendar, stage, modulelist, Studyplan, SchoolTimeTable, ChRepetition, datePickerRepetition, TxtFDescriptionField, entityManager, entityTransaction);
 
         layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
                 datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition, TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescriptionField);
@@ -158,13 +160,13 @@ public class NewEvent {
 
 
     public static Button getBTSafeEventButton(List<Event> eventListe, ChoiceBox<?> chPickerModulName, ChoiceBox<?> chPickerStartTime, ChoiceBox chPickerEndTime, DatePicker datePicker, ChoiceBox<?>
-            chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable, ChoiceBox<Integer> chRepetition, DatePicker datePickerRepetition, TextField txtDescription) {
+            chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable, ChoiceBox<Integer> chRepetition, DatePicker datePickerRepetition, TextField txtDescription, EntityManager entityManager, EntityTransaction entityTransaction) {
 
         Button button = new Button("Event sichern :");
         button.setOnAction(action -> {
             SaveEventDB saveEventDB = new SaveEventDB();
 
-             if (chRepetition.getValue() == null || datePickerRepetition == null) {
+            if (chRepetition.getValue() == null || datePickerRepetition == null) {
                 Event ownEvent = new Event();
                 ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + " " + txtDescription.getText());
                 ownEvent.setStartTime(chPickerStartTime.getValue().toString());
@@ -173,21 +175,24 @@ public class NewEvent {
                 ownEvent.setEndDate(datePicker.getValue().toString());
 
 
-                 Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e ->{ e.getUuid().add(ownEvent.getId());
-                     ModulUpdateDB modulUpdateDB = new ModulUpdateDB();  modulUpdateDB.Update(e);                     });
+                Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e -> {
+                    e.getUuid().add(ownEvent.getId());
+                    ModulUpdateDB modulUpdateDB = new ModulUpdateDB();
+                    modulUpdateDB.Update(e, entityManager, entityTransaction);
+                });
 
 
                 if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Lernplan") {
                     ownEvent.setCalendar("Lernplan");
                     eventListe.add(ownEvent);
-                    saveEventDB.insert(ownEvent);
+                    saveEventDB.insert(ownEvent, entityManager, entityTransaction);
                     Entry<?> entry = convertEventToEntry(ownEvent);
                     StudyPlan.addEntry(entry);
 
                 } else if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Stundenplan") {
                     ownEvent.setCalendar("Stundenplan");
                     eventListe.add(ownEvent);
-                    saveEventDB.insert(ownEvent);
+                    saveEventDB.insert(ownEvent, entityManager, entityTransaction);
                     Entry<?> entry = convertEventToEntry(ownEvent);
                     SchoolTimeTable.addEntry((entry));
 
@@ -207,22 +212,25 @@ public class NewEvent {
                     ownEvent.setEndDate(date.toString());
                     // here will be the UUID from the Event added to the Modul
 
-                    Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e ->{ e.getUuid().add(ownEvent.getId());
-                        ModulUpdateDB modulUpdateDB = new ModulUpdateDB();  modulUpdateDB.Update(e);                     });
+                    Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e -> {
+                        e.getUuid().add(ownEvent.getId());
+                        ModulUpdateDB modulUpdateDB = new ModulUpdateDB();
+                        modulUpdateDB.Update(e, entityManager, entityTransaction);
+                    });
 
 
                     Entry<?> entry = convertEventToEntry(ownEvent);
                     if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Lernplan") {
                         ownEvent.setCalendar("Lernplan");
                         eventListe.add(ownEvent);
-                        saveEventDB.insert(ownEvent);
+                        saveEventDB.insert(ownEvent, entityManager, entityTransaction);
                         StudyPlan.addEntry(entry);
 
                     } else if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Stundenplan") {
-                        ownEvent.setCalendar("Lernplan");
+                        ownEvent.setCalendar("Stundenplan");
                         eventListe.add(ownEvent);
-                        saveEventDB.insert(ownEvent);
-                        StudyPlan.addEntry(entry);
+                        saveEventDB.insert(ownEvent, entityManager, entityTransaction);
+                        SchoolTimeTable.addEntry(entry);
 
                     }
 

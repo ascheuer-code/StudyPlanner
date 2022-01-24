@@ -7,20 +7,13 @@ package DataAccess;
 import Model.Modul;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 public class ModulDeleteDB {
 
-    EntityManagerFactory entityManagerFactory;
-    EntityManager entityManager ;
-    EntityTransaction entityTransaction;
 
-    public void  ModulDelete(Modul modul){
-        entityManagerFactory = Persistence.createEntityManagerFactory("StudyPlanner");
-        entityManager = entityManagerFactory.createEntityManager();
-        entityTransaction =entityManager.getTransaction();
+    public void ModulDelete(Modul modul, EntityManager entityManager, EntityTransaction entityTransaction) {
+
         try {
 
             entityTransaction.begin();
@@ -28,10 +21,8 @@ public class ModulDeleteDB {
             entityManager.remove(modul1);
 
             entityTransaction.commit();
-            entityManager.close();
-            entityManagerFactory.close();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             entityTransaction.rollback();
         }
     }

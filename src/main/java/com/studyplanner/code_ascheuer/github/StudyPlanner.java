@@ -1,7 +1,6 @@
 package com.studyplanner.code_ascheuer.github;
 
 import DataAccess.*;
-import Helper.LocalDateTimeConverter;
 import Model.Event;
 import Model.Modul;
 import View.NewEvent;
@@ -10,7 +9,6 @@ import com.calendarfx.model.Calendar.Style;
 import com.calendarfx.model.CalendarEvent;
 import com.calendarfx.model.CalendarSource;
 import com.calendarfx.model.Entry;
-import com.calendarfx.view.ButtonBar;
 import com.calendarfx.view.CalendarView;
 import impl.com.calendarfx.view.NumericTextField;
 import javafx.application.Application;
@@ -23,7 +21,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.time.Duration;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -38,6 +39,10 @@ import static Helper.LocalDateTimeConverter.convertEventToEntry;
  * The type Study planner.
  */
 public class StudyPlanner extends Application {
+
+    public final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("StudyPlanner");
+    public final EntityManager entityManager = entityManagerFactory.createEntityManager();
+    public final EntityTransaction entityTransaction = entityManager.getTransaction();
 
     /**
      * The Module.
@@ -86,23 +91,22 @@ public class StudyPlanner extends Application {
         @Marc Load Data from DB and add Module to listbox
          */
         LoadModulDDB loadModulDDB = new LoadModulDDB();
-        for (Modul modul: loadModulDDB.zeigemodul()) {
+        for (Modul modul : loadModulDDB.zeigemodul(entityManager, entityTransaction)) {
             Module.add(modul);
             modul.setEcts(modul.gettEcts());
             Button bt = new Button(modul.toString2());
             listbox.getItems().add(bt);
             bt.setOnAction(actionEvent -> editModul(modul, bt));
 
-        };
+        }
         LoadEventDB loadEventDB = new LoadEventDB();
-        for (Event event: loadEventDB.zeigeEvent()) {
+        for (Event event : loadEventDB.zeigeEvent(entityManager, entityTransaction)) {
             Events.add(event);
             Entry<?> entry = convertEventToEntry(event);
-            if(Objects.equals(event.getCalendar(), "Stundenplan")){
-                StudyPlan.addEntry(entry);
-            }
-            else if (Objects.equals(event.getCalendar(), "Lernplan")){
+            if (Objects.equals(event.getCalendar(), "Stundenplan")) {
                 SchoolTimeTable.addEntry(entry);
+            } else if (Objects.equals(event.getCalendar(), "Lernplan")) {
+                StudyPlan.addEntry(entry);
             }
 
         }
@@ -134,7 +138,7 @@ public class StudyPlanner extends Application {
      *
      * @author Andreas Scheuer
      */
-       public void calendarEventHandler() {
+    public void calendarEventHandler() {
         //Eventhandler für alle arten von Events
         StudyPlan.addEventHandler(event -> {
             // ToDo: es ist kein check eingebaut falls der Eintrag den Kalender wechselt, muss noch eingebaut werden
@@ -169,7 +173,7 @@ public class StudyPlanner extends Application {
      */
     public void isEntryIntervallChanged(CalendarEvent event) {
 
-          // Update Event aus der Datenbank  1
+        // Update Event aus der Datenbank  1
         EventUpdateDB eventUpdateDB = new EventUpdateDB();
         if (!event.isEntryAdded() && !event.isEntryRemoved() && !(event.getOldInterval() == null) && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
             Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
@@ -177,7 +181,7 @@ public class StudyPlanner extends Application {
                 e.setStarDate(event.getEntry().getStartDate().toString());
                 e.setEndTime(event.getEntry().getEndTime().toString());
                 e.setEndDate(event.getEntry().getEndDate().toString());
-                eventUpdateDB.updateEvent(e);
+                eventUpdateDB.updateEvent(e, entityManager, entityTransaction);
             });
 
             Module.stream().filter(e -> e.getUuid().contains(event.getEntry().getId())).forEach(e -> {
@@ -199,12 +203,14 @@ public class StudyPlanner extends Application {
         if (!event.isEntryAdded() && !event.isEntryRemoved() && event.getOldInterval() == null && !event.getOldText().equals(event.getEntry().getTitle())) {
 
             // ToDo: hier stimmt noch was nicht der Titel wird nicht geändert aber bei Intervall Changed klappt es warum auch immer
-            Event newEvent = LocalDateTimeConverter.convertEntrytoEvent(event.getEntry());
-
             EventUpdateDB eventUpdateDB = new EventUpdateDB();
-            eventUpdateDB.updateEvent(newEvent);
 
-            Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> e.setTitle(event.getEntry().getTitle()));
+            Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
+                e.setTitle(event.getEntry().getTitle());
+
+                eventUpdateDB.updateEvent(e, entityManager, entityTransaction);
+
+            });
         }
     }
 
@@ -226,8 +232,8 @@ public class StudyPlanner extends Application {
                     removes the Events from the Eventlist
                      */
                     List<Event> events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).collect(Collectors.toList());
-                    EventsDeleteDB eventsDeleteDB= new EventsDeleteDB();
-                    events.stream().forEach(e -> eventsDeleteDB.EventDelete(e));
+                    EventsDeleteDB eventsDeleteDB = new EventsDeleteDB();
+                    events.forEach(e -> eventsDeleteDB.EventDelete(e, entityManager, entityTransaction));
                     Events.removeAll(events);
 
                     // löschen Liste von Events aus Datenbank 2
@@ -269,7 +275,6 @@ public class StudyPlanner extends Application {
                 .filter(e -> replaceButtonName(e.getText().trim()).equals(item.getModulname().trim()))
                 .forEach(e -> e.setText(item.toString2()));
     }
-
 
 
     /**
@@ -323,7 +328,7 @@ public class StudyPlanner extends Application {
         BtCreateEvent.setOnAction(
                 event -> {
                     if (event.getSource() == BtCreateEvent) {
-                        NewEvent.createNewEvent(Module, Events, StudyPlan, SchoolTimeTable);
+                        NewEvent.createNewEvent(Module, Events, StudyPlan, SchoolTimeTable, entityManager, entityTransaction);
                     }
                 });
         return BtCreateEvent;
@@ -399,7 +404,9 @@ public class StudyPlanner extends Application {
         return string.replaceAll("(?<=\\w)\\n.*", "");
     }
 
-    public String getEventDescription(String string){return  string.replaceAll("^.*\\n", "");}
+    public String getEventDescription(String string) {
+        return string.replaceAll("^.*\\n", "");
+    }
 
     /**
      * Neues modul.
@@ -457,10 +464,10 @@ public class StudyPlanner extends Application {
                         Modul modul = new Modul(TxtFModul.getText(),
                                 Integer.parseInt(TxtFEcts.getText()));
 
-                       // Modul in datenbank speichern 3
+                        // Modul in datenbank speichern 3
                         modul.setId();
                         SaveModulDB saveModulDB = new SaveModulDB();
-                        saveModulDB.insert(modul);
+                        saveModulDB.insert(modul, entityManager, entityTransaction);
 
                         Module.add(modul);
 
@@ -527,7 +534,6 @@ public class StudyPlanner extends Application {
         ModulUpdateDB modulUpdateDB = new ModulUpdateDB();
 
 
-
         Button BtEditModul = new Button("Ändern ");
         BtEditModul.setOnAction(
                 event -> {
@@ -541,7 +547,7 @@ public class StudyPlanner extends Application {
                         button.setText(editModul.toString2());
 
                         listbox.getItems().set(index, button);
-                        modulUpdateDB.Update(editModul);
+                        modulUpdateDB.Update(editModul, entityManager, entityTransaction);
 
                         ArrayList<Event> temp = new ArrayList<>(Events);
 
@@ -549,8 +555,8 @@ public class StudyPlanner extends Application {
                             for (String uuid : modul.getUuid()) {
                                 for (Event eventa : temp) {
                                     if (uuid.equals(eventa.getId()) && editModul.equals(modul)) {
-                                        SchoolTimeTable.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + " " + getEventDescription(eventa.getTitle())));
-                                        StudyPlan.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + " " + getEventDescription(eventa.getTitle())));
+                                        SchoolTimeTable.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + "\n" + getEventDescription(eventa.getTitle())));
+                                        StudyPlan.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + "\n" + getEventDescription(eventa.getTitle())));
 
                                     }
                                 }
@@ -607,11 +613,12 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     * @Marc Delte Modul in DB and ListBox
      * @param CBModulLöschen
      * @param delete
      * @param chPickerModulName
      * @param stage
+     *
+     * @Marc Delte Modul in DB and ListBox
      */
     private void getBtModulLöschenNachCheck(CheckBox CBModulLöschen, Button delete, ChoiceBox<Modul> chPickerModulName, Stage stage) {
         delete.setOnAction(action -> {
@@ -635,11 +642,10 @@ public class StudyPlanner extends Application {
                 }
 
                 ModulDeleteDB modulDeleteDB = new ModulDeleteDB();
-                modulDeleteDB.ModulDelete(modultest);
+                modulDeleteDB.ModulDelete(modultest, entityManager, entityTransaction);
 
 
-
-                int index= Module.indexOf(modultest);
+                int index = Module.indexOf(modultest);
                 listbox.getItems().remove(index);
                 listbox.refresh();
                 Module.remove(modultest);

@@ -9,37 +9,25 @@ package DataAccess;
 import Model.Event;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 public class SaveEventDB {
 
-    EntityManagerFactory entityManagerFactory;
-    EntityManager entityManager;
-    EntityTransaction transaction;
 
+    public void insert(Event event, EntityManager entityManager, EntityTransaction entityTransaction) {
 
-
-    public void insert(Event event) {
-        entityManagerFactory = Persistence.createEntityManagerFactory("StudyPlanner");
-        entityManager = entityManagerFactory.createEntityManager();
-        transaction = entityManager.getTransaction();
         try {
+            entityTransaction.begin();
+            entityManager.persist(event);
+            entityTransaction.commit();
 
-
-            transaction.begin();
-            entityManager.persist(event) ;
-            transaction.commit();
-            entityManager.close();
-            entityManagerFactory.close();
-
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            transaction.rollback();
+            entityTransaction.rollback();
 
 
-        }}
+        }
+    }
 
 }
 

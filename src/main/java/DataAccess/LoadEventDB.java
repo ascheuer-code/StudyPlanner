@@ -1,32 +1,20 @@
 package DataAccess;
 
 import Model.Event;
-import Model.Modul;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
+import java.util.List;
 
 public class LoadEventDB {
 
+    public List<Event> zeigeEvent(EntityManager entityManager, EntityTransaction entityTransaction) {
 
-    EntityManagerFactory entityManagerFactory;
-    EntityManager entityManager;
-    EntityTransaction transaction;
-
-
-
-
-    public List<Event> zeigeEvent() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("StudyPlanner");
-        entityManager = entityManagerFactory.createEntityManager();
-        transaction = entityManager.getTransaction();
         List<Event> events = new ArrayList<>();
         try {
-            transaction.begin();
+            entityTransaction.begin();
 
 
             TypedQuery<Event> q =
@@ -36,20 +24,18 @@ public class LoadEventDB {
             events.addAll(listOfSimpleEntities);
 
 
-
-            transaction.commit();
-            entityManager.close();
-            entityManagerFactory.close();
+            entityTransaction.commit();
 
         } catch (Exception e) {
             e.printStackTrace();
 
-            transaction.rollback();
+            entityTransaction.rollback();
 
 
         }
 
 
         return events;
-    }}
+    }
+}
 
