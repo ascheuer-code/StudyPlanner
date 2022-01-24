@@ -168,7 +168,7 @@ public class NewEvent {
 
             if (chRepetition.getValue() == null || datePickerRepetition == null) {
                 Event ownEvent = new Event();
-                ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + " " + txtDescription.getText());
+                ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + "\n" + txtDescription.getText());
                 ownEvent.setStartTime(chPickerStartTime.getValue().toString());
                 ownEvent.setEndTime(chPickerEndTime.getValue().toString());
                 ownEvent.setStarDate(datePicker.getValue().toString());

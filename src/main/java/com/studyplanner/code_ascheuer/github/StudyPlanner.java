@@ -405,7 +405,7 @@ public class StudyPlanner extends Application {
     }
 
     public String getEventDescription(String string) {
-        return string.replaceAll("^.*\\n", "");
+        return string.replaceAll(".*\\R", "");
     }
 
     /**
