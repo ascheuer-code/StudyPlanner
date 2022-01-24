@@ -233,10 +233,9 @@ public class StudyPlanner extends Application {
                      */
                     List<Event> events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).collect(Collectors.toList());
                     EventsDeleteDB eventsDeleteDB = new EventsDeleteDB();
-                    events.forEach(e -> eventsDeleteDB.EventDelete(e, entityManager, entityTransaction));
+                    eventsDeleteDB.EventDelete(events, entityManager, entityTransaction);
                     Events.removeAll(events);
 
-                    // löschen Liste von Events aus Datenbank 2
 
                 }
             }

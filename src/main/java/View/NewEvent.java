@@ -20,6 +20,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static Helper.LocalDateTimeConverter.convertEventToEntry;
@@ -202,6 +203,7 @@ public class NewEvent {
 
             }
             if (chRepetition.getValue() != null && datePickerRepetition != null) {
+                List<Event> newEvents = new ArrayList<>();
 
                 for (LocalDate date = datePicker.getValue(); date.isBefore(datePickerRepetition.getValue().plusDays(1)); date = date.plusDays(chRepetition.getValue())) {
                     Event ownEvent = new Event();
@@ -223,19 +225,21 @@ public class NewEvent {
                     if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Lernplan") {
                         ownEvent.setCalendar("Lernplan");
                         eventListe.add(ownEvent);
-                        saveEventDB.insert(ownEvent, entityManager, entityTransaction);
+                        newEvents.add(ownEvent);
                         StudyPlan.addEntry(entry);
 
                     } else if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Stundenplan") {
                         ownEvent.setCalendar("Stundenplan");
                         eventListe.add(ownEvent);
-                        saveEventDB.insert(ownEvent, entityManager, entityTransaction);
+                        newEvents.add(ownEvent);
                         SchoolTimeTable.addEntry(entry);
 
                     }
 
 
                 }
+                saveEventDB.insert(newEvents, entityManager, entityTransaction);
+
             }
 
 
