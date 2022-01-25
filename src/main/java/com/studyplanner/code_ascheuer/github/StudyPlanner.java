@@ -326,7 +326,7 @@ public class StudyPlanner extends Application {
      */
     public Button getBtCreateEvent() {
 
-        Button BtCreateEvent = new Button("Erstellen");
+        Button BtCreateEvent = new Button("Erstellen eines Events");
         BtCreateEvent.setOnAction(
                 event -> {
                     if (event.getSource() == BtCreateEvent) {

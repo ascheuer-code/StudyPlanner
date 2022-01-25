@@ -114,13 +114,9 @@ public class EditandDeleteModul {
 
         ChoiceBox<Modul> chPickerModulName = getChPickerModulName(Module);
 
-        ChoiceBox<Modul> test = new ChoiceBox<>();
-        test.getItems().addAll(Module);
-        NewEvent newEvent= new NewEvent();
-
         getBtModulLöschenNachCheck(chPickerModulName,Module, CBModulLöschen,  delete,stage, Events, SchoolTimeTable,StudyPlan, entityManager,  entityTransaction, listbox);
 
-        layout.getChildren().addAll(TxtModulLöschen, test, TxtModulLöschenQuestion, CBModulLöschen, delete);
+        layout.getChildren().addAll(TxtModulLöschen, chPickerModulName, TxtModulLöschenQuestion, CBModulLöschen, delete);
 
         stage.setScene(scene);
         stage.setTitle("Modul löschen");
@@ -145,7 +141,7 @@ public class EditandDeleteModul {
      *
      * @Marc Delte Modul in DB and ListBox
      */
-    private void getBtModulLöschenNachCheck( ChoiceBox<Modul> chPickerModulName ,List<Modul> Module, CheckBox CBModulLöschen, Button delete, Stage stage,List<Event> Events,
+    private void getBtModulLöschenNachCheck(ChoiceBox<Modul> chPickerModulName ,List<Modul> Module, CheckBox CBModulLöschen, Button delete, Stage stage,List<Event> Events,
                                             Calendar SchoolTimeTable, Calendar StudyPlan,EntityManager entityManager, EntityTransaction entityTransaction,ListView<Button> listbox) {
         delete.setOnAction(action -> {
             boolean isCheck = CBModulLöschen.isSelected();
@@ -170,8 +166,8 @@ public class EditandDeleteModul {
                 ModulDeleteDB modulDeleteDB = new ModulDeleteDB();
                 modulDeleteDB.ModulDelete(modultest, entityManager, entityTransaction);
 
-
                 int index = Module.indexOf(modultest);
+
                 listbox.getItems().remove(index);
                 listbox.refresh();
                 Module.remove(modultest);
