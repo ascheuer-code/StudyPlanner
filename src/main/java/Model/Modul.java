@@ -3,8 +3,10 @@ package Model;
 import Helper.Helper;
 
 import javax.persistence.*;
-import java.io.StringBufferInputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * The type Model.
@@ -19,30 +21,44 @@ public class Modul {
     @Column
     private String modulname;
     @Embedded
-    private  Ects ects;
+    private Ects ects;
 
     @ElementCollection
     @Column
-    private  List<String> uuid;
+    private List<String> uuid;
 
 
     /**
      * Instantiates a new Modul.
      *
-     * @param modulname the modulname
-     * @param ects      the ects
+     * @param modulname
+     *         the modulname
+     * @param ects
+     *         the ects
      */
-    public Modul(String modulname , int ects){
+    public Modul(String modulname, int ects) {
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
         this.modulname = modulname;
-        this.ects = new Ects(ects) ;
+        this.ects = new Ects(ects);
         this.id = getId();
         this.uuid = new ArrayList<>();
 
 
-
     }
 
+    /*
+     * get
+     * return String
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets id.
+     */
+    public Modul() {
+    }
 
     /**
      * Gets uuid.
@@ -51,6 +67,10 @@ public class Modul {
      */
     public List<String> getUuid() {
         return uuid;
+    }
+
+    public void setUuid(List<String> uuid) {
+        this.uuid = uuid;
     }
 
     /**
@@ -65,7 +85,8 @@ public class Modul {
     /**
      * Set modulname.
      *
-     * @param modulname the titel
+     * @param modulname
+     *         the titel
      */
     public void setModulname(String modulname) {
         Helper.checkIfNullOrEmpty(modulname, "Modulname");
@@ -81,18 +102,19 @@ public class Modul {
         return ects;
     }
 
-    public int gettEcts(){
-        return ects.getEctsValue();
-
-    }
-
     /**
      * Sets ects.
      *
-     * @param ects the ects
+     * @param ects
+     *         the ects
      */
     public void setEcts(int ects) {
         this.ects.setEcts(ects);
+    }
+
+    public int gettEcts() {
+        return ects.getEctsValue();
+
     }
 
     @Override
@@ -112,38 +134,21 @@ public class Modul {
      * @return String
      */
     public String toString() {
-        return (this.modulname );
+        return (this.modulname);
 
     }
 
-    public String toString2(){
+    public String toString2() {
         return (this.modulname + "\n" + this.ects.toStringEcts() + "  ");
     }
-    /*
-    * get
-    * return String
-     */
-    public String getId(){
-        return id;
-    }
-    /**
-     * Sets id.
-     */
-
-
-
-
-    public void  setId() {
-        this.id = UUID.randomUUID().toString() ;
-    }
-
-    public void setUuid(List<String> uuid) {
-        this.uuid = uuid;
-    }
 
     /**
      * Sets id.
      */
- public Modul(){}
+
+
+    public void setId() {
+        this.id = UUID.randomUUID().toString();
+    }
 
 }

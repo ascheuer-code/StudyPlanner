@@ -37,7 +37,7 @@ public class NewEvent {
 
         Text TxtCalendar = new Text("Kalender");
         ChoiceBox<?> ChPickerCalendar = getChPickerCalendar(Studyplan, SchoolTimeTable);
-        // Datum des erst Eintrages
+
         Text TxtDate = new Text("Datum");
         DatePicker datePicker = getDatePicker();
 
@@ -45,10 +45,10 @@ public class NewEvent {
         ChoiceBox<?> ChPickerStartTime = getChPickerStartTime();
 
         Text TxtEndTime = new Text("Endzeit");
-        ChoiceBox<?> ChPickerEndTime = getChPickerEndTime();
+        ChoiceBox<LocalTime> ChPickerEndTime = getChPickerEndTime();
 
         Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
-        ChoiceBox ChRepetition = getChRepetition();
+        ChoiceBox<Integer> ChRepetition = getChRepetition();
 
         Text TxtRepetitionEnd = new Text(" Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
         DatePicker datePickerRepetition = getDatePicker();
@@ -118,13 +118,13 @@ public class NewEvent {
      *
      * @return the ch picker start time
      */
-    public static ChoiceBox<?> getChPickerStartTime() {
+    public static ChoiceBox<LocalTime> getChPickerStartTime() {
 
         ChoiceBox<LocalTime> ChPickerStartTime = new ChoiceBox<>();
         int stundeanfang = 8;
         int minuteanfang = 0;
         LocalTime x = LocalTime.of(stundeanfang, minuteanfang);
-        for (int i = 0; i <= 24; i++) {
+        for (int i = 0; i <= 48; i++) {
             ChPickerStartTime.getItems().addAll(x);
             x = x.plusMinutes(15);
         }
@@ -137,13 +137,13 @@ public class NewEvent {
      *
      * @return the ch picker end time
      */
-    public static ChoiceBox<?> getChPickerEndTime() {
+    public static ChoiceBox<LocalTime> getChPickerEndTime() {
 
         ChoiceBox<LocalTime> ChPickerEndTime = new ChoiceBox<>();
         int stundeende = 8;
         int minuteende = 30;
         LocalTime y = LocalTime.of(stundeende, minuteende);
-        for (int i = 0; i <= 24; i++) {
+        for (int i = 0; i <= 48; i++) {
             ChPickerEndTime.getItems().addAll(y);
             y = y.plusMinutes(15);
         }
@@ -151,8 +151,8 @@ public class NewEvent {
         return ChPickerEndTime;
     }
 
-    public static ChoiceBox<?> getChRepetition() {
-        ChoiceBox ChRepetition = new ChoiceBox();
+    public static ChoiceBox<Integer> getChRepetition() {
+        ChoiceBox<Integer> ChRepetition = new ChoiceBox<>();
         int[] tage = {1, 2, 3, 4, 5, 6, 7, 14};
         for (int i = 0; i <= tage.length - 1; i++)
             ChRepetition.getItems().addAll(tage[i]);
@@ -160,7 +160,7 @@ public class NewEvent {
     }
 
 
-    public static Button getBTSafeEventButton(List<Event> eventListe, ChoiceBox<?> chPickerModulName, ChoiceBox<?> chPickerStartTime, ChoiceBox chPickerEndTime, DatePicker datePicker, ChoiceBox<?>
+    public static Button getBTSafeEventButton(List<Event> eventListe, ChoiceBox<?> chPickerModulName, ChoiceBox<?> chPickerStartTime, ChoiceBox<LocalTime> chPickerEndTime, DatePicker datePicker, ChoiceBox<?>
             chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable, ChoiceBox<Integer> chRepetition, DatePicker datePickerRepetition, TextField txtDescription, EntityManager entityManager, EntityTransaction entityTransaction) {
 
         Button button = new Button("Event sichern :");

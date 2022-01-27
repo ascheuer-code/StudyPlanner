@@ -1,6 +1,7 @@
 package View;
 
 import DataAccess.SaveModulDB;
+import Model.Event;
 import Model.Modul;
 import com.calendarfx.model.Calendar;
 import impl.com.calendarfx.view.NumericTextField;
@@ -21,7 +22,7 @@ public class NewModul {
     /**
      * Neues modul.
      */
-    public void neuesModul(List Module,ListView listbox,EntityManager entityManager, EntityTransaction entityTransaction, List Events, Calendar SchoolTimeTable,Calendar StudyPlan) {
+    public void neuesModul(List<Modul> Module, ListView<Button> listbox, EntityManager entityManager, EntityTransaction entityTransaction, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan) {
         // Layout des aufgehenden Fensters
         Stage stage = new Stage();
         BorderPane layout = new BorderPane();
@@ -35,7 +36,7 @@ public class NewModul {
         TextField TxtFModul = new TextField();
         TextField TxtFEcts = new NumericTextField();
 
-        Button BtSafe = getBtSafe(stage, TxtFModul,  TxtFEcts, entityManager,entityTransaction,Module, listbox,Events, SchoolTimeTable, StudyPlan);
+        Button BtSafe = getBtSafe(stage, TxtFModul, TxtFEcts, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan);
 
         box.getChildren().addAll(TxtModul, TxtFModul, TxtEcts, TxtFEcts, BtSafe);
         layout.setCenter(box);
@@ -60,7 +61,7 @@ public class NewModul {
      *
      * @return the bt safe
      */
-    public Button getBtSafe(Stage stage, TextField TxtFModul, TextField TxtFEcts, EntityManager entityManager, EntityTransaction entityTransaction, List<Modul> Module, ListView listbox, List Events, Calendar SchoolTimeTable,Calendar StudyPlan) {
+    public Button getBtSafe(Stage stage, TextField TxtFModul, TextField TxtFEcts, EntityManager entityManager, EntityTransaction entityTransaction, List<Modul> Module, ListView<Button> listbox, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan) {
 
         Button BtSafe = new Button("Speichern ");
         BtSafe.setDisable(true);
@@ -84,13 +85,14 @@ public class NewModul {
                         Button BtModul = new Button(modul.toString2());
                         listbox.getItems().add(BtModul);
 
-                        EditandDeleteModul editandDeleteModul= new EditandDeleteModul();
-                        BtModul.setOnAction(actionEvent -> editandDeleteModul.editModul(modul,BtModul,entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable,StudyPlan));
+                        EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
+                        BtModul.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, BtModul, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
                         stage.close();
                     }
                 });
         return BtSafe;
     }
+
     /**
      * Listener.
      *
