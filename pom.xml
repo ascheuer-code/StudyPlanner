@@ -77,6 +77,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.mnode.ical4j</groupId>
+            <artifactId>ical4j</artifactId>
+            <version>4.0.0-alpha8</version>
+        </dependency>
+        <dependency>
             <groupId>com.calendarfx</groupId>
             <artifactId>calendar</artifactId>
             <version>11.10.1</version>
@@ -123,11 +128,13 @@
             <version>2.2</version>
             <type>jar</type>
         </dependency>
+
         <dependency>
             <groupId>com.github.gwenn</groupId>
             <artifactId>sqlite-dialect</artifactId>
             <version>0.1.2</version>
         </dependency>
+
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -138,7 +145,6 @@
             <artifactId>javafx-controls</artifactId>
             <version>17.0.0.1</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.hamcrest</groupId>
