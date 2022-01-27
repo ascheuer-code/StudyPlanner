@@ -8,7 +8,7 @@ import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Entry;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -33,22 +33,22 @@ public class NewEvent {
         VBox layout = new VBox();
 
         Text TxtModulName = new Text("Modulname");
-        ChoiceBox<?> ChPickerModulName = getChPickerModulName(modulelist);
+        ComboBox<?> ChPickerModulName = getChPickerModulName(modulelist);
 
         Text TxtCalendar = new Text("Kalender");
-        ChoiceBox<?> ChPickerCalendar = getChPickerCalendar(Studyplan, SchoolTimeTable);
+        ComboBox<?> ChPickerCalendar = getChPickerCalendar(Studyplan, SchoolTimeTable);
 
         Text TxtDate = new Text("Datum");
         DatePicker datePicker = getDatePicker();
 
         Text TxtStartTime = new Text("Anfangszeit");
-        ChoiceBox<?> ChPickerStartTime = getChPickerStartTime();
+        ComboBox<LocalTime> ChPickerStartTime = getChPickerStartTime();
 
         Text TxtEndTime = new Text("Endzeit");
-        ChoiceBox<LocalTime> ChPickerEndTime = getChPickerEndTime();
+        ComboBox<LocalTime> ChPickerEndTime = getChPickerEndTime();
 
         Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
-        ChoiceBox<Integer> ChRepetition = getChRepetition();
+        ComboBox<Integer> ChRepetition = getChRepetition();
 
         Text TxtRepetitionEnd = new Text(" Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
         DatePicker datePickerRepetition = getDatePicker();
@@ -74,10 +74,10 @@ public class NewEvent {
 
     }
 
-    public static ChoiceBox<Modul> getChPickerModulName(List<Modul> modulliste) {
+    public static ComboBox<Modul> getChPickerModulName(List<Modul> modulliste) {
         // Anfang das Feld anlegen Event
 
-        ChoiceBox<Modul> ChPickerModulName = new ChoiceBox<>();
+        ComboBox<Modul> ChPickerModulName = new ComboBox<>();
         ChPickerModulName.getItems().addAll(modulliste);
 
         return ChPickerModulName;
@@ -88,9 +88,9 @@ public class NewEvent {
      *
      * @return the ch picker calendar
      */
-    public static ChoiceBox<?> getChPickerCalendar(com.calendarfx.model.Calendar Studyplan, com.calendarfx.model.Calendar SchoolTimeTable) {
+    public static ComboBox<?> getChPickerCalendar(com.calendarfx.model.Calendar Studyplan, com.calendarfx.model.Calendar SchoolTimeTable) {
 
-        ChoiceBox<String> ChPickerCalendar = new ChoiceBox<>();
+        ComboBox<String> ChPickerCalendar = new ComboBox<>();
         ChPickerCalendar.getItems().addAll(Studyplan.getName());
         ChPickerCalendar.getItems().addAll(SchoolTimeTable.getName());
 
@@ -118,16 +118,18 @@ public class NewEvent {
      *
      * @return the ch picker start time
      */
-    public static ChoiceBox<LocalTime> getChPickerStartTime() {
+    public static ComboBox<LocalTime> getChPickerStartTime() {
 
-        ChoiceBox<LocalTime> ChPickerStartTime = new ChoiceBox<>();
-        int stundeanfang = 8;
+        ComboBox<LocalTime> ChPickerStartTime = new ComboBox<>();
+        int stundeanfang = 6;
         int minuteanfang = 0;
         LocalTime x = LocalTime.of(stundeanfang, minuteanfang);
-        for (int i = 0; i <= 48; i++) {
+        for (int i = 0; i <= 95; i++) {
             ChPickerStartTime.getItems().addAll(x);
             x = x.plusMinutes(15);
         }
+
+        ChPickerStartTime.setVisibleRowCount(10);
 
         return ChPickerStartTime;
     }
@@ -137,22 +139,23 @@ public class NewEvent {
      *
      * @return the ch picker end time
      */
-    public static ChoiceBox<LocalTime> getChPickerEndTime() {
+    public static ComboBox<LocalTime> getChPickerEndTime() {
 
-        ChoiceBox<LocalTime> ChPickerEndTime = new ChoiceBox<>();
-        int stundeende = 8;
-        int minuteende = 30;
+        ComboBox<LocalTime> ChPickerEndTime = new ComboBox<>();
+        int stundeende = 6;
+        int minuteende = 15;
         LocalTime y = LocalTime.of(stundeende, minuteende);
-        for (int i = 0; i <= 48; i++) {
+        for (int i = 0; i <= 95; i++) {
             ChPickerEndTime.getItems().addAll(y);
             y = y.plusMinutes(15);
         }
+        ChPickerEndTime.setVisibleRowCount(10);
 
         return ChPickerEndTime;
     }
 
-    public static ChoiceBox<Integer> getChRepetition() {
-        ChoiceBox<Integer> ChRepetition = new ChoiceBox<>();
+    public static ComboBox<Integer> getChRepetition() {
+        ComboBox<Integer> ChRepetition = new ComboBox<>();
         int[] tage = {1, 2, 3, 4, 5, 6, 7, 14};
         for (int i = 0; i <= tage.length - 1; i++)
             ChRepetition.getItems().addAll(tage[i]);
@@ -160,8 +163,8 @@ public class NewEvent {
     }
 
 
-    public static Button getBTSafeEventButton(List<Event> eventListe, ChoiceBox<?> chPickerModulName, ChoiceBox<?> chPickerStartTime, ChoiceBox<LocalTime> chPickerEndTime, DatePicker datePicker, ChoiceBox<?>
-            chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable, ChoiceBox<Integer> chRepetition, DatePicker datePickerRepetition, TextField txtDescription, EntityManager entityManager, EntityTransaction entityTransaction) {
+    public static Button getBTSafeEventButton(List<Event> eventListe, ComboBox<?> chPickerModulName, ComboBox<?> chPickerStartTime, ComboBox<LocalTime> chPickerEndTime, DatePicker datePicker, ComboBox<?>
+            chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable, ComboBox<Integer> chRepetition, DatePicker datePickerRepetition, TextField txtDescription, EntityManager entityManager, EntityTransaction entityTransaction) {
 
         Button button = new Button("Event sichern :");
         button.setOnAction(action -> {

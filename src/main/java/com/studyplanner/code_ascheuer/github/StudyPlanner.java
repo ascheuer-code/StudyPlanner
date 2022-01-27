@@ -126,9 +126,11 @@ public class StudyPlanner extends Application {
         BtDeleteModul.setMinWidth(200);
         BtShowQuote.setMinWidth(200);
 
+        listbox.setMaxWidth(200);
+
         SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
-        leftSideSplitPane.setMaxWidth(220);
-        leftSideSplitPane.setMinWidth(220);
+        leftSideSplitPane.setMaxWidth(200);
+        leftSideSplitPane.setMinWidth(200);
         Scene sceneO = new Scene(split);
         stage.setScene(sceneO);
         stage.setMinWidth(1000);

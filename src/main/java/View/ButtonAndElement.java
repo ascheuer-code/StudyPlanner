@@ -102,6 +102,7 @@ public class ButtonAndElement {
 
         BorderPane BPLayoutLeft = new BorderPane();
         VBox VbButtonBox = new VBox();
+        VbButtonBox.setSpacing(15);
         VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, btShowQuote);
         BPLayoutLeft.setTop(VbButtonBox);
         BPLayoutLeft.setBottom(listbox);
