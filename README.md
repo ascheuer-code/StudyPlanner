@@ -21,18 +21,17 @@ The user manual for the Study Planner
 ## 1. About the Study Planner
 
 This is how the calendar looks like:
-
-![](images/Screenshot2022-01-11at10.42.38.png)
+<img src="images/Screenshot 022-01-11at10.42.38.png" width="200" heigh="200">
 
 You see your Moduls on the left side and the calendar on the right side.
 
 You can choose if you want to see just the day. Then it looks like this:
 
-![](./images/Screenshot 2022-01-11 at 10.42.33.png)
+<img src="/images/Screenshot 2022-01-11 at 10.42.33.png">
 
 Or the week:
 
-![](./images/Screenshot 2022-01-11 at 10.43.35.png)
+![](./images/Screenshot 2022-01-11 at 10.43.3.png)
 
 The month:
 
