@@ -22,7 +22,7 @@ The user manual for the Study Planner
 
 This is how the calendar looks like:
 
-![](./images/Screenshot 2022-01-11 at 10.42.38.png)
+![](images/Screenshot2022-01-11at10.42.38.png)
 
 You see your Moduls on the left side and the calendar on the right side.
 
