@@ -17,34 +17,35 @@ The user manual for the Study Planner
     * How to delete a lecture / learning session
 
 ---
+https://github.com/ascheuer-code/StudyPlanner/blob/master/images
 
 ## 1. About the Study Planner
 
 This is how the calendar looks like:
 
-![](images/Screenshot 2022-01-11 at 10.42.38.png)
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 10.42.38.png)
 
 You see your Moduls on the left side and the calendar on the right side.
 
 You can choose if you want to see just the day. Then it looks like this:
 
-![](tree/master/images/Screenshot 2022-01-11 at 10.42.33.png)
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 10.42.33.png)
 
 Or the week:
 
-![](images/Screenshot 2022-01-11 at 10.43.35.png)
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 10.43.35.png)
 
 The month:
 
-![](images/Screenshot 2022-01-11 at 10.43.38.png)
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 10.43.38.png)
 
 Or if you want to see the whole year:
 
-![](images/Screenshot 2022-01-11 at 10.43.40.png)
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 10.43.40.png)
 
 You can also print your calendar. For that you only have to click on the print icon.
 
-![](images/Screenshot 2022-01-11 at 10.43.05.png)---
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 10.43.05.png)---
 
 ## 2. Modul
 
@@ -59,11 +60,12 @@ You click on the button **_add Modul_** to add a new Modul
 When you clicked on the **_add Modul_** button a window will open where you can set a ***Modul name*** and the Credit
 Points for this modul. Then you can click on the ***save*** button.
 
-![](images/Screenshot 2022-01-11 at 10.44.03.png)
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 10.44.03.png)
 
 This is how it looks like when you added a Modul:
 
-![](images/Screenshot 2022-01-11 at 10.44.11.png)### How to edit a Modul
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 10.44.11.png)### How to
+edit a Modul
 
 You have to click on the modul you want to change. Then you can set up your changes and click on the
 ***save*** button.
@@ -73,7 +75,7 @@ You have to click on the modul you want to change. Then you can set up your chan
 When you want to delete a modul you have to click on the ***delete modul*** button. Select the modul you want to delete
 and put a hack into the check box ***are you sure you want to delete this modul***.
 
-![](images/Screenshot 2022-01-11 at 12.40.47.png)---
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 12.40.47.png)---
 
 ## 3. How to build a timetable/ learning session
 
@@ -90,12 +92,12 @@ A window will open where you have to choose witch Modul you want to add to your 
 this event is a part of your ***learning session***
 or your ***timetable***. You also have to choose the ***start time*** and the ***end time*** and the ***date***.
 
-![](images/Screenshot 2022-01-11 at 10.43.55.png)- Third step:
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 10.43.55.png)- Third step:
 
 If you want, you can create a serie, so you don't have to apply the lecture for every week. Then you have to choose
 a ***begin date***, an ***end date*** and how often the lecture should be repeated.
 
-![](images/Screenshot 2022-01-11 at 12.40.40.png)
+![](https://github.com/ascheuer-code/StudyPlanner/blob/master/images/Screenshot 2022-01-11 at 12.40.40.png)
 
 Optionally you can add a description to the event.
 
