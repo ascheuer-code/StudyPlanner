@@ -21,7 +21,7 @@ The user manual for the Study Planner
 ## 1. About the Study Planner
 
 This is how the calendar looks like:
-<img src="images/Screenshot 022-01-11at10.42.38.png" width="200" heigh="200">
+<img src="images/Screenshot 022-01-11at10.42.38.png">
 
 You see your Moduls on the left side and the calendar on the right side.
 
