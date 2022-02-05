@@ -22,21 +22,21 @@ Study Project
 
 This is how the calendar looks like:
 
-![](../../../images/Screenshot 2022-01-11 at 10.42.33.png)
+![]../images/Screenshot 2022-01-11 at 10.42.33.png)
 
 You see your Moduls on the left side and the calendar on the right side.
 
 You can choose if you want to see just the day. Then it looks like this:
 
-![](../../../images/Screenshot 2022-01-11 at 10.42.33.png)
+![](/images/Screenshot 2022-01-11 at 10.42.33.png)
 
 Or the week:
 
-![](../../../images/Screenshot 2022-01-11 at 10.43.35.png)
+![](../images/Screenshot 2022-01-11 at 10.43.35.png)
 
 The month:
 
-![](../../../images/Screenshot 2022-01-11 at 10.43.38.png)
+![](../images/Screenshot 2022-01-11 at 10.43.38.png)
 
 Or if you want to see the whole year:
 
