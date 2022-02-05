@@ -28,7 +28,7 @@ You see your Moduls on the left side and the calendar on the right side.
 
 You can choose if you want to see just the day. Then it looks like this:
 
-![](tree/master/images/Screenshot 2022-01-11 at 10.42.33.png)
+![image 1](tree/master/images/Screenshot 2022-01-11 at 10.42.33.png)
 
 Or the week:
 
