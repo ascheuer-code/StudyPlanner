@@ -5,6 +5,7 @@ import Model.Event;
 import Model.Modul;
 import com.calendarfx.model.Calendar;
 import impl.com.calendarfx.view.NumericTextField;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -71,24 +72,28 @@ public class NewModul {
 
         BtSafe.setOnAction(
                 event -> {
-                    if (event.getSource() == BtSafe) {
-                        Modul modul = new Modul(TxtFModul.getText(),
-                                Integer.parseInt(TxtFEcts.getText()));
+                    Platform.runLater(() -> {
+                        if (event.getSource() == BtSafe) {
+                            Modul modul = new Modul(TxtFModul.getText(),
+                                    Integer.parseInt(TxtFEcts.getText()));
 
-                        // Modul in datenbank speichern 3
-                        modul.setId();
-                        SaveModulDB saveModulDB = new SaveModulDB();
-                        saveModulDB.insert(modul, entityManager, entityTransaction);
+                            // Modul in datenbank speichern 3
+                            modul.setId();
+                            SaveModulDB saveModulDB = new SaveModulDB();
+                            saveModulDB.insert(modul, entityManager, entityTransaction);
 
-                        Module.add(modul);
+                            Module.add(modul);
 
-                        Button BtModul = new Button(modul.toString2());
-                        listbox.getItems().add(BtModul);
+                            Button BtModul = new Button(modul.toString2());
+                            listbox.getItems().add(BtModul);
 
-                        EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
-                        BtModul.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, BtModul, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
-                        stage.close();
-                    }
+                            EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
+                            BtModul.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, BtModul, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
+
+                        }
+
+                    });
+                    stage.close();
                 });
         return BtSafe;
     }

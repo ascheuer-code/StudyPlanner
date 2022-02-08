@@ -15,6 +15,7 @@ import com.calendarfx.model.CalendarEvent;
 import com.calendarfx.model.Entry;
 import com.calendarfx.view.CalendarView;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -29,6 +30,7 @@ import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static Helper.LocalDateTimeConverter.convertEventToEntry;
@@ -58,12 +60,12 @@ public class StudyPlanner extends Application {
      * The Study plan.
      */
     final Calendar StudyPlan = new Calendar("Lernplan");
-    ButtonAndElement buttonAndElement = new ButtonAndElement();
-    Helper helper = new Helper();
+    final ButtonAndElement buttonAndElement = new ButtonAndElement();
+    final Helper helper = new Helper();
     /**
      * The Listbox.
      */
-    ListView<Button> listbox = new ListView<>();
+    final ListView<Button> listbox = new ListView<>();
 
     /**
      * The entry point of application.
@@ -79,6 +81,7 @@ public class StudyPlanner extends Application {
     @Override
     public void start(Stage stage) {
 
+
         CalendarView calendarView = new CalendarView();
 
         calendarEventHandler();
@@ -86,31 +89,34 @@ public class StudyPlanner extends Application {
         SchoolTimeTable.setStyle(Style.STYLE2);
         StudyPlan.setStyle(Style.STYLE3);
 
+        CompletableFuture.runAsync(() -> {
 
         /*
         @Marc Load Data from DB and add Module to listbox
          */
-        LoadModulDDB loadModulDDB = new LoadModulDDB();
-        for (Modul modul : loadModulDDB.zeigemodul(entityManager, entityTransaction)) {
-            Module.add(modul);
-            modul.setEcts(modul.gettEcts());
-            Button bt = new Button(modul.toString2());
-            listbox.getItems().add(bt);
-            EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
-            bt.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, bt, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
+            LoadModulDDB loadModulDDB = new LoadModulDDB();
+            for (Modul modul : loadModulDDB.zeigemodul(entityManager, entityTransaction)) {
+                Module.add(modul);
+                modul.setEcts(modul.gettEcts());
+                Button bt = new Button(modul.toString2());
+                listbox.getItems().add(bt);
+                EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
+                bt.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, bt, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
 
-        }
-        LoadEventDB loadEventDB = new LoadEventDB();
-        for (Event event : loadEventDB.zeigeEvent(entityManager, entityTransaction)) {
-            Events.add(event);
-            Entry<?> entry = convertEventToEntry(event);
-            if (Objects.equals(event.getCalendar(), "Stundenplan")) {
-                SchoolTimeTable.addEntry(entry);
-            } else if (Objects.equals(event.getCalendar(), "Lernplan")) {
-                StudyPlan.addEntry(entry);
+            }
+            LoadEventDB loadEventDB = new LoadEventDB();
+            for (Event event : loadEventDB.zeigeEvent(entityManager, entityTransaction)) {
+                Events.add(event);
+                Entry<?> entry = convertEventToEntry(event);
+                if (Objects.equals(event.getCalendar(), "Stundenplan")) {
+                    SchoolTimeTable.addEntry(entry);
+                } else if (Objects.equals(event.getCalendar(), "Lernplan")) {
+                    StudyPlan.addEntry(entry);
+                }
+
             }
 
-        }
+        });
 
 
         helper.initializingCalenderView(calendarView, StudyPlan, SchoolTimeTable);
@@ -138,6 +144,7 @@ public class StudyPlanner extends Application {
         stage.centerOnScreen();
         stage.setTitle("Study Planer");
         stage.show();
+
     }
 
     /**
@@ -148,29 +155,33 @@ public class StudyPlanner extends Application {
      * @author Andreas Scheuer
      */
     public void calendarEventHandler() {
-        //Eventhandler für alle arten von Events
-        StudyPlan.addEventHandler(event -> {
-            // ToDo: es ist kein check eingebaut falls der Eintrag den Kalender wechselt, muss noch eingebaut werden
-            //check added -> Works without description, need to be changed. Module gets the uuid
-            isEntryAdded(event);
-            //check removed-> Works without description, need to be changed. Module gets the uuid
-            isEntryRemoved(event);
-            // Title changed
-            isEntryTitleChanged(event);
+        Platform.runLater(() -> {
 
-            // Intervall changed, works fine
-            isEntryIntervallChanged(event);
+            //Eventhandler für alle arten von Events
+            StudyPlan.addEventHandler(event -> {
+                // ToDo: es ist kein check eingebaut falls der Eintrag den Kalender wechselt, muss noch eingebaut werden
+                //check added -> Works without description, need to be changed. Module gets the uuid
+                isEntryAdded(event);
+                //check removed-> Works without description, need to be changed. Module gets the uuid
+                isEntryRemoved(event);
+                // Title changed
+                isEntryTitleChanged(event);
+                // Intervall changed, works fine
+                isEntryIntervallChanged(event);
+            });
         });
 
         SchoolTimeTable.addEventHandler(event -> {
-            //check added -> Works without description, need to be changed. Module gets the uuid
-            isEntryAdded(event);
-            //check removed-> Works without description, need to be changed. Module gets the uuid
-            isEntryRemoved(event);
-            // Title changed
-            isEntryTitleChanged(event);
-            // Intervall changed, works fine
-            isEntryIntervallChanged(event);
+            Platform.runLater(() -> {
+                //check added -> Works without description, need to be changed. Module gets the uuid
+                isEntryAdded(event);
+                //check removed-> Works without description, need to be changed. Module gets the uuid
+                isEntryRemoved(event);
+                // Title changed
+                isEntryTitleChanged(event);
+                // Intervall changed, works fine
+                isEntryIntervallChanged(event);
+            });
         });
     }
 

@@ -5,6 +5,7 @@ import DataAccess.ModulUpdateDB;
 import Model.Event;
 import Model.Modul;
 import com.calendarfx.model.Calendar;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -47,34 +48,40 @@ public class EditandDeleteModul {
         Button BtEditModul = new Button("Ändern ");
         BtEditModul.setOnAction(
                 event -> {
-                    if (event.getSource() == BtEditModul) {
-                        int index = Module.indexOf(editModul);
-                        editModul.setModulname(readModulName.getText());
-                        editModul.setEcts(Integer.parseInt(readEcts.getText()));
-                        Module.set(index, editModul);
-                        //erstellt einen anderen Button
+                    Platform.runLater(() -> {
 
-                        button.setText(editModul.toString2());
+                        if (event.getSource() == BtEditModul) {
+                            int index = Module.indexOf(editModul);
+                            editModul.setModulname(readModulName.getText());
+                            editModul.setEcts(Integer.parseInt(readEcts.getText()));
+                            Module.set(index, editModul);
+                            //erstellt einen anderen Button
 
-                        listbox.getItems().set(index, button);
-                        modulUpdateDB.Update(editModul, entityManager, entityTransaction);
+                            button.setText(editModul.toString2());
 
-                        ArrayList<Event> temp = new ArrayList<>(Events);
 
-                        for (Modul modul : Module) {
-                            for (String uuid : modul.getUuid()) {
-                                for (Event eventa : temp) {
-                                    if (uuid.equals(eventa.getId()) && editModul.equals(modul)) {
-                                        SchoolTimeTable.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + "\n" + getEventDescription(eventa.getTitle())));
-                                        StudyPlan.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + "\n" + getEventDescription(eventa.getTitle())));
+                            listbox.getItems().set(index, button);
 
+
+                            modulUpdateDB.Update(editModul, entityManager, entityTransaction);
+
+                            ArrayList<Event> temp = new ArrayList<>(Events);
+
+                            for (Modul modul : Module) {
+                                for (String uuid : modul.getUuid()) {
+                                    for (Event eventa : temp) {
+                                        if (uuid.equals(eventa.getId()) && editModul.equals(modul)) {
+                                            SchoolTimeTable.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + "\n" + getEventDescription(eventa.getTitle())));
+                                            StudyPlan.findEntries(eventa.getTitle().trim()).forEach(e -> e.setTitle(editModul.getModulname() + "\n" + getEventDescription(eventa.getTitle())));
+
+                                        }
                                     }
                                 }
                             }
+
+
                         }
-
-
-                    }
+                    });
                     stage.close();
                 });
 
@@ -86,6 +93,7 @@ public class EditandDeleteModul {
         stage.setScene(scene);
         stage.show();
     }
+
     public String getEventDescription(String string) {
         return string.replaceAll(".*\\R", "");
     }
@@ -96,8 +104,8 @@ public class EditandDeleteModul {
      *
      * @max
      */
-    public void modullöschen(List<Modul> Module,List<Event> Events, Calendar SchoolTimeTable,
-                             Calendar StudyPlan,EntityManager entityManager, EntityTransaction entityTransaction,ListView<Button> listbox) {
+    public void modullöschen(List<Modul> Module, List<Event> Events, Calendar SchoolTimeTable,
+                             Calendar StudyPlan, EntityManager entityManager, EntityTransaction entityTransaction, ListView<Button> listbox) {
         // Layout des aufgehenden Fensters
         Stage stage = new Stage();
         VBox layout = new VBox();
@@ -114,7 +122,7 @@ public class EditandDeleteModul {
 
         ChoiceBox<Modul> chPickerModulName = getChPickerModulName(Module);
 
-        getBtModulLöschenNachCheck(chPickerModulName,Module, CBModulLöschen,  delete,stage, Events, SchoolTimeTable,StudyPlan, entityManager,  entityTransaction, listbox);
+        getBtModulLöschenNachCheck(chPickerModulName, Module, CBModulLöschen, delete, stage, Events, SchoolTimeTable, StudyPlan, entityManager, entityTransaction, listbox);
 
         layout.getChildren().addAll(TxtModulLöschen, chPickerModulName, TxtModulLöschenQuestion, CBModulLöschen, delete);
 
@@ -125,6 +133,7 @@ public class EditandDeleteModul {
         stage.show();
 
     }
+
     public static ChoiceBox<Modul> getChPickerModulName(List<Modul> modulliste) {
         // Anfang das Feld anlegen Event
 
@@ -133,6 +142,7 @@ public class EditandDeleteModul {
 
         return chPickerModulName;
     }
+
     /**
      * @param CBModulLöschen
      * @param delete
@@ -141,41 +151,44 @@ public class EditandDeleteModul {
      *
      * @Marc Delte Modul in DB and ListBox
      */
-    private void getBtModulLöschenNachCheck(ChoiceBox<Modul> chPickerModulName ,List<Modul> Module, CheckBox CBModulLöschen, Button delete, Stage stage,List<Event> Events,
-                                            Calendar SchoolTimeTable, Calendar StudyPlan,EntityManager entityManager, EntityTransaction entityTransaction,ListView<Button> listbox) {
+    private void getBtModulLöschenNachCheck(ChoiceBox<Modul> chPickerModulName, List<Modul> Module, CheckBox CBModulLöschen, Button delete, Stage stage, List<Event> Events,
+                                            Calendar SchoolTimeTable, Calendar StudyPlan, EntityManager entityManager, EntityTransaction entityTransaction, ListView<Button> listbox) {
         delete.setOnAction(action -> {
-            boolean isCheck = CBModulLöschen.isSelected();
+            Platform.runLater(() -> {
+                boolean isCheck = CBModulLöschen.isSelected();
 
-            if (isCheck == true) {
-                ArrayList<Event> temp = new ArrayList<>(Events);
+                if (isCheck == true) {
+                    ArrayList<Event> temp = new ArrayList<>(Events);
 
-                Modul modultest = chPickerModulName.getValue();
+                    Modul modultest = chPickerModulName.getValue();
 
-                for (Modul modul : Module) {
-                    for (String uuid : modul.getUuid()) {
-                        for (Event event : temp) {
-                            if (uuid.equals(event.getId()) && modultest.equals(modul)) {
-                                SchoolTimeTable.removeEntries(SchoolTimeTable.findEntries(event.getTitle().trim()));
-                                StudyPlan.removeEntries(StudyPlan.findEntries(event.getTitle().trim()));
+                    for (Modul modul : Module) {
+                        for (String uuid : modul.getUuid()) {
+                            for (Event event : temp) {
+                                if (uuid.equals(event.getId()) && modultest.equals(modul)) {
+                                    SchoolTimeTable.removeEntries(SchoolTimeTable.findEntries(event.getTitle().trim()));
+                                    StudyPlan.removeEntries(StudyPlan.findEntries(event.getTitle().trim()));
 
+                                }
                             }
                         }
                     }
+
+                    ModulDeleteDB modulDeleteDB = new ModulDeleteDB();
+                    modulDeleteDB.ModulDelete(modultest, entityManager, entityTransaction);
+
+                    int index = Module.indexOf(modultest);
+
+
+                    listbox.getItems().remove(index);
+                    listbox.refresh();
+                    Module.remove(modultest);
+
+
                 }
+            });
 
-                ModulDeleteDB modulDeleteDB = new ModulDeleteDB();
-                modulDeleteDB.ModulDelete(modultest, entityManager, entityTransaction);
-
-                int index = Module.indexOf(modultest);
-
-                listbox.getItems().remove(index);
-                listbox.refresh();
-                Module.remove(modultest);
-
-                stage.close();
-
-            }
-
+            stage.close();
         });
     }
 

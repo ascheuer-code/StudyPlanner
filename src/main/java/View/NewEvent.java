@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static Helper.LocalDateTimeConverter.convertEventToEntry;
 
@@ -168,84 +169,88 @@ public class NewEvent {
 
         Button button = new Button("Event sichern :");
         button.setOnAction(action -> {
-            SaveEventDB saveEventDB = new SaveEventDB();
-
-            if (chRepetition.getValue() == null || datePickerRepetition == null) {
-                Event ownEvent = new Event();
-                ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + "\n" + txtDescription.getText());
-                ownEvent.setStartTime(chPickerStartTime.getValue().toString());
-                ownEvent.setEndTime(chPickerEndTime.getValue().toString());
-                ownEvent.setStarDate(datePicker.getValue().toString());
-                ownEvent.setEndDate(datePicker.getValue().toString());
+            CompletableFuture.runAsync(() -> {
 
 
-                Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e -> {
-                    e.getUuid().add(ownEvent.getId());
-                    ModulUpdateDB modulUpdateDB = new ModulUpdateDB();
-                    modulUpdateDB.Update(e, entityManager, entityTransaction);
-                });
+                SaveEventDB saveEventDB = new SaveEventDB();
 
-
-                if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Lernplan") {
-                    ownEvent.setCalendar("Lernplan");
-                    eventListe.add(ownEvent);
-                    saveEventDB.insert(ownEvent, entityManager, entityTransaction);
-                    Entry<?> entry = convertEventToEntry(ownEvent);
-                    StudyPlan.addEntry(entry);
-
-                } else if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Stundenplan") {
-                    ownEvent.setCalendar("Stundenplan");
-                    eventListe.add(ownEvent);
-                    saveEventDB.insert(ownEvent, entityManager, entityTransaction);
-                    Entry<?> entry = convertEventToEntry(ownEvent);
-                    SchoolTimeTable.addEntry((entry));
-
-
-                }
-
-
-            }
-            if (chRepetition.getValue() != null && datePickerRepetition != null) {
-                List<Event> newEvents = new ArrayList<>();
-
-                for (LocalDate date = datePicker.getValue(); date.isBefore(datePickerRepetition.getValue().plusDays(1)); date = date.plusDays(chRepetition.getValue())) {
+                if (chRepetition.getValue() == null || datePickerRepetition == null) {
                     Event ownEvent = new Event();
                     ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + "\n" + txtDescription.getText());
                     ownEvent.setStartTime(chPickerStartTime.getValue().toString());
                     ownEvent.setEndTime(chPickerEndTime.getValue().toString());
-                    ownEvent.setStarDate(date.toString());
-                    ownEvent.setEndDate(date.toString());
-                    // here will be the UUID from the Event added to the Modul
+                    ownEvent.setStarDate(datePicker.getValue().toString());
+                    ownEvent.setEndDate(datePicker.getValue().toString());
+
 
                     Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e -> {
                         e.getUuid().add(ownEvent.getId());
                         ModulUpdateDB modulUpdateDB = new ModulUpdateDB();
                         modulUpdateDB.Update(e, entityManager, entityTransaction);
+
                     });
 
 
-                    Entry<?> entry = convertEventToEntry(ownEvent);
                     if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Lernplan") {
                         ownEvent.setCalendar("Lernplan");
                         eventListe.add(ownEvent);
-                        newEvents.add(ownEvent);
+                        saveEventDB.insert(ownEvent, entityManager, entityTransaction);
+                        Entry<?> entry = convertEventToEntry(ownEvent);
                         StudyPlan.addEntry(entry);
 
                     } else if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Stundenplan") {
                         ownEvent.setCalendar("Stundenplan");
                         eventListe.add(ownEvent);
-                        newEvents.add(ownEvent);
-                        SchoolTimeTable.addEntry(entry);
+                        saveEventDB.insert(ownEvent, entityManager, entityTransaction);
+                        Entry<?> entry = convertEventToEntry(ownEvent);
+                        SchoolTimeTable.addEntry((entry));
+
 
                     }
 
 
                 }
-                saveEventDB.insert(newEvents, entityManager, entityTransaction);
+                if (chRepetition.getValue() != null && datePickerRepetition != null) {
+                    List<Event> newEvents = new ArrayList<>();
 
-            }
+                    for (LocalDate date = datePicker.getValue(); date.isBefore(datePickerRepetition.getValue().plusDays(1)); date = date.plusDays(chRepetition.getValue())) {
+                        Event ownEvent = new Event();
+                        ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + "\n" + txtDescription.getText());
+                        ownEvent.setStartTime(chPickerStartTime.getValue().toString());
+                        ownEvent.setEndTime(chPickerEndTime.getValue().toString());
+                        ownEvent.setStarDate(date.toString());
+                        ownEvent.setEndDate(date.toString());
+                        // here will be the UUID from the Event added to the Modul
+
+                        Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e -> {
+                            e.getUuid().add(ownEvent.getId());
+                            ModulUpdateDB modulUpdateDB = new ModulUpdateDB();
+                            modulUpdateDB.Update(e, entityManager, entityTransaction);
+                        });
 
 
+                        Entry<?> entry = convertEventToEntry(ownEvent);
+                        if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Lernplan") {
+                            ownEvent.setCalendar("Lernplan");
+                            eventListe.add(ownEvent);
+                            newEvents.add(ownEvent);
+                            StudyPlan.addEntry(entry);
+
+                        } else if (chPickerCalendar.getSelectionModel().getSelectedItem() == "Stundenplan") {
+                            ownEvent.setCalendar("Stundenplan");
+                            eventListe.add(ownEvent);
+                            newEvents.add(ownEvent);
+                            SchoolTimeTable.addEntry(entry);
+
+                        }
+
+
+                    }
+
+                    saveEventDB.insert(newEvents, entityManager, entityTransaction);
+
+                }
+            });
             stage.close();
         });
         return button;

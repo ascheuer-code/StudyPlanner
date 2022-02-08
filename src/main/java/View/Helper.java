@@ -13,67 +13,72 @@ import java.time.LocalTime;
 
 public class Helper {
 
-        /**
-         * Change list box button text.
-         *
-         * @param item
-         *         the item
-         */
-        public void changeListBoxButtonText(Modul item, ListView<Button> listbox) {
-                listbox.getItems()
-                        .stream()
-                        .filter(e -> replaceButtonName(e.getText().trim()).equals(item.getModulname().trim()))
-                        .forEach(e -> e.setText(item.toString2()));
-        }
-        /**
-         * Replace button name string.
-         *
-         * @param string
-         *         the string
-         *
-         * @return the string
-         */
-        public String replaceButtonName(String string) {
-                return string.replaceAll("(?<=\\w)\\n.*", "");
-        }
+    /**
+     * Change list box button text.
+     *
+     * @param item
+     *         the item
+     */
+    public void changeListBoxButtonText(Modul item, ListView<Button> listbox) {
+        Platform.runLater(() -> {
 
-        /**
-         * Initializing calender view.
-         *
-         * @param calendarView
-         *         the calendar view
-         */
-        public void initializingCalenderView(CalendarView calendarView, Calendar StudyPlan, Calendar SchoolTimeTable) {
+            listbox.getItems()
+                    .stream()
+                    .filter(e -> replaceButtonName(e.getText().trim()).equals(item.getModulname().trim()))
+                    .forEach(e -> e.setText(item.toString2()));
 
-                CalendarSource myCalendarSource = new CalendarSource("Planer");
-                myCalendarSource.getCalendars().addAll(StudyPlan, SchoolTimeTable);
-                calendarView.getCalendarSources().addAll(myCalendarSource);
-                calendarView.setRequestedTime(LocalTime.now());
+        });
+    }
 
-                Thread updateTimeThread = new Thread("Calendar: Update Time Thread") {
-                        @SuppressWarnings({"InfiniteLoopStatement", "BusyWait"})
-                        @Override
-                        public void run() {
-                                while (true) {
+    /**
+     * Replace button name string.
+     *
+     * @param string
+     *         the string
+     *
+     * @return the string
+     */
+    public String replaceButtonName(String string) {
+        return string.replaceAll("(?<=\\w)\\n.*", "");
+    }
 
-                                        Platform.runLater(() -> {
-                                                calendarView.setToday(LocalDate.now());
-                                                calendarView.setTime(LocalTime.now());
-                                        });
+    /**
+     * Initializing calender view.
+     *
+     * @param calendarView
+     *         the calendar view
+     */
+    public void initializingCalenderView(CalendarView calendarView, Calendar StudyPlan, Calendar SchoolTimeTable) {
 
-                                        try {
+        CalendarSource myCalendarSource = new CalendarSource("Planer");
+        myCalendarSource.getCalendars().addAll(StudyPlan, SchoolTimeTable);
+        calendarView.getCalendarSources().addAll(myCalendarSource);
+        calendarView.setRequestedTime(LocalTime.now());
 
-                                                // update every 10 seconds
-                                                sleep(10000);
-                                        } catch (InterruptedException e) {
-                                                e.printStackTrace();
-                                        }
+        Thread updateTimeThread = new Thread("Calendar: Update Time Thread") {
+            @SuppressWarnings({"InfiniteLoopStatement", "BusyWait"})
+            @Override
+            public void run() {
+                while (true) {
 
-                                }
-                        }
-                };
-                updateTimeThread.setPriority(Thread.MIN_PRIORITY);
-                updateTimeThread.setDaemon(true);
-                updateTimeThread.start();
-        }
+                    Platform.runLater(() -> {
+                        calendarView.setToday(LocalDate.now());
+                        calendarView.setTime(LocalTime.now());
+                    });
+
+                    try {
+
+                        // update every 10 seconds
+                        sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        };
+        updateTimeThread.setPriority(Thread.MIN_PRIORITY);
+        updateTimeThread.setDaemon(true);
+        updateTimeThread.start();
+    }
 }
