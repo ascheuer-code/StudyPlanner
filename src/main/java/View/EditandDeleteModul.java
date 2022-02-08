@@ -50,7 +50,7 @@ public class EditandDeleteModul {
         BtEditModul.setOnAction(
                 event -> {
                     int index = Module.indexOf(editModul);
-                    Platform.runLater(() -> {
+                    CompletableFuture.runAsync(() -> {
 
                         if (event.getSource() == BtEditModul) {
 
@@ -78,11 +78,12 @@ public class EditandDeleteModul {
 
 
                         }
+                        Platform.runLater(() -> {
+                            button.setText(editModul.toString2());
+                            listbox.getItems().set(index, button);
+                        });
                     });
-                    Platform.runLater(() -> {
-                        button.setText(editModul.toString2());
-                        listbox.getItems().set(index, button);
-                    });
+
                     stage.close();
                 });
 
