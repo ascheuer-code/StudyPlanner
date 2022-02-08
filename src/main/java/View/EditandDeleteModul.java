@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class EditandDeleteModul {
     /**
@@ -48,19 +49,15 @@ public class EditandDeleteModul {
         Button BtEditModul = new Button("Ändern ");
         BtEditModul.setOnAction(
                 event -> {
+                    int index = Module.indexOf(editModul);
                     Platform.runLater(() -> {
 
                         if (event.getSource() == BtEditModul) {
-                            int index = Module.indexOf(editModul);
+
                             editModul.setModulname(readModulName.getText());
                             editModul.setEcts(Integer.parseInt(readEcts.getText()));
                             Module.set(index, editModul);
                             //erstellt einen anderen Button
-
-                            button.setText(editModul.toString2());
-
-
-                            listbox.getItems().set(index, button);
 
 
                             modulUpdateDB.Update(editModul, entityManager, entityTransaction);
@@ -81,6 +78,10 @@ public class EditandDeleteModul {
 
 
                         }
+                    });
+                    Platform.runLater(() -> {
+                        button.setText(editModul.toString2());
+                        listbox.getItems().set(index, button);
                     });
                     stage.close();
                 });
@@ -154,7 +155,7 @@ public class EditandDeleteModul {
     private void getBtModulLöschenNachCheck(ChoiceBox<Modul> chPickerModulName, List<Modul> Module, CheckBox CBModulLöschen, Button delete, Stage stage, List<Event> Events,
                                             Calendar SchoolTimeTable, Calendar StudyPlan, EntityManager entityManager, EntityTransaction entityTransaction, ListView<Button> listbox) {
         delete.setOnAction(action -> {
-            Platform.runLater(() -> {
+            CompletableFuture.runAsync(() -> {
                 boolean isCheck = CBModulLöschen.isSelected();
 
                 if (isCheck == true) {
@@ -177,16 +178,18 @@ public class EditandDeleteModul {
                     ModulDeleteDB modulDeleteDB = new ModulDeleteDB();
                     modulDeleteDB.ModulDelete(modultest, entityManager, entityTransaction);
 
-                    int index = Module.indexOf(modultest);
-
-
-                    listbox.getItems().remove(index);
-                    listbox.refresh();
-                    Module.remove(modultest);
-
+                    Platform.runLater(() -> {
+                        
+                        int index = Module.indexOf(modultest);
+                        listbox.getItems().remove(index);
+                        listbox.refresh();
+                        Module.remove(modultest);
+                    });
 
                 }
+
             });
+
 
             stage.close();
         });
