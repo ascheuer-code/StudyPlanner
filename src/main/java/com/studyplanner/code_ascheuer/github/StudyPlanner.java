@@ -89,7 +89,7 @@ public class StudyPlanner extends Application {
         SchoolTimeTable.setStyle(Style.STYLE2);
         StudyPlan.setStyle(Style.STYLE3);
 
-        CompletableFuture.runAsync(() -> {
+        Platform.runLater(() -> {
 
         /*
         @Marc Load Data from DB and add Module to listbox
