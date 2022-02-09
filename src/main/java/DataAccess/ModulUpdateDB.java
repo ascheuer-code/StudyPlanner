@@ -18,8 +18,6 @@ public class ModulUpdateDB {
 
 
         try {
-
-
             entityTransaction.begin();
             Modul modul = entityManager.find(Modul.class, modul1.getId());
             modul.setUuid(modul1.getUuid());

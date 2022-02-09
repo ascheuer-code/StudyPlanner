@@ -1,16 +1,24 @@
 package View;
 
 import Model.Event;
+import Model.ICalender;
 import Model.Modul;
 import com.calendarfx.model.Calendar;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.io.IOException;
 import java.util.List;
 
 public class ButtonAndElement {
@@ -95,15 +103,16 @@ public class ButtonAndElement {
      * @param BtCreateModul
      *         the bt create modul
      *
+     * @param btICalExport
      * @return the left side split pane
      */
 
-    public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul, Button BtDeleteModul, ListView<Button> listbox, Button btShowQuote) {
+    public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul, Button BtDeleteModul, ListView<Button> listbox, Button btShowQuote, Button btICalExport) {
 
         BorderPane BPLayoutLeft = new BorderPane();
         VBox VbButtonBox = new VBox();
         VbButtonBox.setSpacing(15);
-        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, btShowQuote);
+        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, btShowQuote, btICalExport);
         BPLayoutLeft.setTop(VbButtonBox);
         BPLayoutLeft.setBottom(listbox);
         Pane PBar = new Pane(BPLayoutLeft);// ist die toolbar
@@ -111,4 +120,26 @@ public class ButtonAndElement {
         return PBar;
     }
 
+    public Button getBtICalExport(List<Event> events) {
+        Button button = new Button("Kalender Exportieren");
+        button.setMinWidth(200);
+        button.setOnAction(
+                event -> {
+                    ICalender ical = new ICalender();
+                    try {
+                        ical.iCalenderExport(events, "./export/Studyplaner.ics");
+
+                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                       alert.setTitle("Export Success");
+                       alert.setHeaderText("Kalender Export erfolgreich");alert.setContentText("Dateiname: Studyplaner.ics");
+                       alert.show();
+
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+        );
+        return button;
+    }
 }

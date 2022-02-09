@@ -176,11 +176,13 @@ public class NewEvent {
 
                 if (chRepetition.getValue() == null || datePickerRepetition == null) {
                     Event ownEvent = new Event();
-                    ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + "\n" + txtDescription.getText());
+                    ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + " \n" + txtDescription.getText());
                     ownEvent.setStartTime(chPickerStartTime.getValue().toString());
                     ownEvent.setEndTime(chPickerEndTime.getValue().toString());
                     ownEvent.setStarDate(datePicker.getValue().toString());
                     ownEvent.setEndDate(datePicker.getValue().toString());
+
+                    System.out.println(ownEvent.getStarDate());
 
 
                     Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e -> {
@@ -215,7 +217,7 @@ public class NewEvent {
 
                     for (LocalDate date = datePicker.getValue(); date.isBefore(datePickerRepetition.getValue().plusDays(1)); date = date.plusDays(chRepetition.getValue())) {
                         Event ownEvent = new Event();
-                        ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + "\n" + txtDescription.getText());
+                        ownEvent.setTitle(replaceName(chPickerModulName.getValue().toString()) + " \n" + txtDescription.getText());
                         ownEvent.setStartTime(chPickerStartTime.getValue().toString());
                         ownEvent.setEndTime(chPickerEndTime.getValue().toString());
                         ownEvent.setStarDate(date.toString());

@@ -5,6 +5,7 @@ import DataAccess.EventsDeleteDB;
 import DataAccess.LoadEventDB;
 import DataAccess.LoadModulDDB;
 import Model.Event;
+import Model.ICalender;
 import Model.Modul;
 import View.ButtonAndElement;
 import View.EditandDeleteModul;
@@ -27,6 +28,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,9 +43,9 @@ import static Helper.LocalDateTimeConverter.convertEventToEntry;
  */
 public class StudyPlanner extends Application {
 
-    public final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("StudyPlanner");
-    public final EntityManager entityManager = entityManagerFactory.createEntityManager();
-    public final EntityTransaction entityTransaction = entityManager.getTransaction();
+    static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("StudyPlanner");
+    static final EntityManager entityManager = entityManagerFactory.createEntityManager();
+    static final EntityTransaction entityTransaction = entityManager.getTransaction();
     /**
      * The Module.
      */
@@ -81,69 +83,77 @@ public class StudyPlanner extends Application {
     @Override
     public void start(Stage stage) {
 
-
-        CalendarView calendarView = new CalendarView();
-
-        calendarEventHandler();
-
-        SchoolTimeTable.setStyle(Style.STYLE2);
-        StudyPlan.setStyle(Style.STYLE3);
+        stage.setMinWidth(1024);
+        stage.setHeight(768);
+        stage.centerOnScreen();
+        stage.setTitle("Study Planer");
+        stage.show();
 
         Platform.runLater(() -> {
+
+
+            CalendarView calendarView = new CalendarView();
+
+            calendarEventHandler();
+
+            SchoolTimeTable.setStyle(Style.STYLE2);
+            StudyPlan.setStyle(Style.STYLE3);
+
+            Platform.runLater(() -> {
 
         /*
         @Marc Load Data from DB and add Module to listbox
          */
-            LoadModulDDB loadModulDDB = new LoadModulDDB();
-            for (Modul modul : loadModulDDB.zeigemodul(entityManager, entityTransaction)) {
-                Module.add(modul);
-                modul.setEcts(modul.gettEcts());
-                Button bt = new Button(modul.toString2());
-                listbox.getItems().add(bt);
-                EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
-                bt.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, bt, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
+                LoadModulDDB loadModulDDB = new LoadModulDDB();
+                for (Modul modul : loadModulDDB.zeigemodul(entityManager, entityTransaction)) {
+                    Module.add(modul);
+                    modul.setEcts(modul.gettEcts());
+                    Button bt = new Button(modul.toString2());
+                    listbox.getItems().add(bt);
+                    EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
+                    bt.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, bt, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
 
-            }
-            LoadEventDB loadEventDB = new LoadEventDB();
-            for (Event event : loadEventDB.zeigeEvent(entityManager, entityTransaction)) {
-                Events.add(event);
-                Entry<?> entry = convertEventToEntry(event);
-                if (Objects.equals(event.getCalendar(), "Stundenplan")) {
-                    SchoolTimeTable.addEntry(entry);
-                } else if (Objects.equals(event.getCalendar(), "Lernplan")) {
-                    StudyPlan.addEntry(entry);
                 }
+                LoadEventDB loadEventDB = new LoadEventDB();
+                for (Event event : loadEventDB.zeigeEvent(entityManager, entityTransaction)) {
+                    Events.add(event);
+                    Entry<?> entry = convertEventToEntry(event);
+                    if (Objects.equals(event.getCalendar(), "Stundenplan")) {
+                        SchoolTimeTable.addEntry(entry);
+                    } else if (Objects.equals(event.getCalendar(), "Lernplan")) {
+                        StudyPlan.addEntry(entry);
+                    }
 
-            }
+                }
+            });
+
+
+
+            helper.initializingCalenderView(calendarView, StudyPlan, SchoolTimeTable);
+
+            Button BtCreateEvent = buttonAndElement.getBtCreateEvent(Module, Events, StudyPlan, SchoolTimeTable, entityManager, entityTransaction);
+            Button BtCreateModul = buttonAndElement.getBtCreateModul(Module, listbox, entityManager, entityTransaction, Events, SchoolTimeTable, StudyPlan);
+            Button BtDeleteModul = buttonAndElement.getBtDeleteModul(Module, Events, SchoolTimeTable, StudyPlan, entityManager, entityTransaction, listbox);
+            Button BtShowQuote = buttonAndElement.getBtShowQuote();
+            Button BtICalExport = buttonAndElement.getBtICalExport(Events);
+            Pane leftSideSplitPane = buttonAndElement.getLeftSideSplitPane(BtCreateEvent, BtCreateModul, BtDeleteModul, listbox, BtShowQuote, BtICalExport);
+
+            BtCreateEvent.setMinWidth(200);
+            BtCreateModul.setMinWidth(200);
+            BtDeleteModul.setMinWidth(200);
+            BtShowQuote.setMinWidth(200);
+
+            listbox.setMaxWidth(200);
+
+            SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
+            leftSideSplitPane.setMaxWidth(200);
+            leftSideSplitPane.setMinWidth(200);
+            Scene sceneO = new Scene(split);
+            stage.setScene(sceneO);
+
+
 
         });
-
-
-        helper.initializingCalenderView(calendarView, StudyPlan, SchoolTimeTable);
-
-        Button BtCreateEvent = buttonAndElement.getBtCreateEvent(Module, Events, StudyPlan, SchoolTimeTable, entityManager, entityTransaction);
-        Button BtCreateModul = buttonAndElement.getBtCreateModul(Module, listbox, entityManager, entityTransaction, Events, SchoolTimeTable, StudyPlan);
-        Button BtDeleteModul = buttonAndElement.getBtDeleteModul(Module, Events, SchoolTimeTable, StudyPlan, entityManager, entityTransaction, listbox);
-        Button BtShowQuote = buttonAndElement.getBtShowQuote();
-        Pane leftSideSplitPane = buttonAndElement.getLeftSideSplitPane(BtCreateEvent, BtCreateModul, BtDeleteModul, listbox, BtShowQuote);
-
-        BtCreateEvent.setMinWidth(200);
-        BtCreateModul.setMinWidth(200);
-        BtDeleteModul.setMinWidth(200);
-        BtShowQuote.setMinWidth(200);
-
-        listbox.setMaxWidth(200);
-
-        SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
-        leftSideSplitPane.setMaxWidth(200);
-        leftSideSplitPane.setMinWidth(200);
-        Scene sceneO = new Scene(split);
-        stage.setScene(sceneO);
-        stage.setMinWidth(1000);
-        stage.setHeight(780);
-        stage.centerOnScreen();
-        stage.setTitle("Study Planer");
-        stage.show();
 
     }
 
