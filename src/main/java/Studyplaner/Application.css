@@ -1,3 +1,16 @@
+.root{
+   -fx-font-family: Helvetica;
+   -fx-font-weight: bold;
+}
+
 .split-pane-divider {
    -fx-background-color: transparent;
+}
+
+.button{
+   -fx-padding: 5;
+}
+.button:hover{
+   -fx-background-color:
+            linear-gradient(#5F9EA0,#1E90FF);
 }

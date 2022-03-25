@@ -24,6 +24,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -37,7 +38,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static Helper.LocalDateTimeConverter.convertEventToEntry;
-
 
 /**
  * The type Study planner.
@@ -74,12 +74,11 @@ public class StudyPlanner extends Application {
      * The entry point of application.
      *
      * @param args
-     *         the input arguments
+     *             the input arguments
      */
     public static void main(String[] args) {
         launch(args);
     }
-
 
     @Override
     public void start(Stage stage) {
@@ -92,7 +91,6 @@ public class StudyPlanner extends Application {
 
         Platform.runLater(() -> {
 
-
             CalendarView calendarView = new CalendarView();
 
             calendarEventHandler();
@@ -102,9 +100,9 @@ public class StudyPlanner extends Application {
 
             Platform.runLater(() -> {
 
-        /*
-        @Marc Load Data from DB and add Module to listbox
-         */
+                /*
+                 * @Marc Load Data from DB and add Module to listbox
+                 */
                 LoadModulDDB loadModulDDB = new LoadModulDDB();
                 for (Modul modul : loadModulDDB.zeigemodul(entityManager, entityTransaction)) {
                     Module.add(modul);
@@ -112,7 +110,8 @@ public class StudyPlanner extends Application {
                     Button bt = new Button(modul.toString2());
                     listbox.getItems().add(bt);
                     EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
-                    bt.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, bt, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
+                    bt.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, bt, entityManager,
+                            entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
 
                 }
                 LoadEventDB loadEventDB = new LoadEventDB();
@@ -128,16 +127,18 @@ public class StudyPlanner extends Application {
                 }
             });
 
-
-
             helper.initializingCalenderView(calendarView, StudyPlan, SchoolTimeTable);
 
-            Button BtCreateEvent = buttonAndElement.getBtCreateEvent(Module, Events, StudyPlan, SchoolTimeTable, entityManager, entityTransaction);
-            Button BtCreateModul = buttonAndElement.getBtCreateModul(Module, listbox, entityManager, entityTransaction, Events, SchoolTimeTable, StudyPlan);
-            Button BtDeleteModul = buttonAndElement.getBtDeleteModul(Module, Events, SchoolTimeTable, StudyPlan, entityManager, entityTransaction, listbox);
+            Button BtCreateEvent = buttonAndElement.getBtCreateEvent(Module, Events, StudyPlan, SchoolTimeTable,
+                    entityManager, entityTransaction);
+            Button BtCreateModul = buttonAndElement.getBtCreateModul(Module, listbox, entityManager, entityTransaction,
+                    Events, SchoolTimeTable, StudyPlan);
+            Button BtDeleteModul = buttonAndElement.getBtDeleteModul(Module, Events, SchoolTimeTable, StudyPlan,
+                    entityManager, entityTransaction, listbox);
             Button BtShowQuote = buttonAndElement.getBtShowQuote();
             Button BtICalExport = buttonAndElement.getBtICalExport(Events);
-            Pane leftSideSplitPane = buttonAndElement.getLeftSideSplitPane(BtCreateEvent, BtCreateModul, BtDeleteModul, listbox, BtShowQuote, BtICalExport);
+            Pane leftSideSplitPane = buttonAndElement.getLeftSideSplitPane(BtCreateEvent, BtCreateModul, BtDeleteModul,
+                    listbox, BtShowQuote, BtICalExport);
 
             BtCreateEvent.setMinWidth(200);
             BtCreateModul.setMinWidth(200);
@@ -167,12 +168,15 @@ public class StudyPlanner extends Application {
     public void calendarEventHandler() {
         Platform.runLater(() -> {
 
-            //Eventhandler für alle arten von Events
+            // Eventhandler für alle arten von Events
             StudyPlan.addEventHandler(event -> {
-                // ToDo: es ist kein check eingebaut falls der Eintrag den Kalender wechselt, muss noch eingebaut werden
-                //check added -> Works without description, need to be changed. Module gets the uuid
+                // ToDo: es ist kein check eingebaut falls der Eintrag den Kalender wechselt,
+                // muss noch eingebaut werden
+                // check added -> Works without description, need to be changed. Module gets the
+                // uuid
                 isEntryAdded(event);
-                //check removed-> Works without description, need to be changed. Module gets the uuid
+                // check removed-> Works without description, need to be changed. Module gets
+                // the uuid
                 isEntryRemoved(event);
                 // Title changed
                 isEntryTitleChanged(event);
@@ -183,9 +187,11 @@ public class StudyPlanner extends Application {
 
         SchoolTimeTable.addEventHandler(event -> {
             Platform.runLater(() -> {
-                //check added -> Works without description, need to be changed. Module gets the uuid
+                // check added -> Works without description, need to be changed. Module gets the
+                // uuid
                 isEntryAdded(event);
-                //check removed-> Works without description, need to be changed. Module gets the uuid
+                // check removed-> Works without description, need to be changed. Module gets
+                // the uuid
                 isEntryRemoved(event);
                 // Title changed
                 isEntryTitleChanged(event);
@@ -199,7 +205,7 @@ public class StudyPlanner extends Application {
      * Is entry added.
      *
      * @param event
-     *         the event
+     *              the event
      */
     public void isEntryAdded(CalendarEvent event) {
         if (event.isEntryAdded()) {
@@ -217,7 +223,7 @@ public class StudyPlanner extends Application {
      * Is entry removed.
      *
      * @param event
-     *         the event
+     *              the event
      */
     public void isEntryRemoved(CalendarEvent event) {
         if (event.isEntryRemoved()) {
@@ -228,13 +234,13 @@ public class StudyPlanner extends Application {
                     helper.changeListBoxButtonText(modul, listbox);
 
                     /*
-                    removes the Events from the Eventlist
+                     * removes the Events from the Eventlist
                      */
-                    List<Event> events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).collect(Collectors.toList());
+                    List<Event> events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId()))
+                            .collect(Collectors.toList());
                     EventsDeleteDB eventsDeleteDB = new EventsDeleteDB();
                     eventsDeleteDB.EventDelete(events, entityManager, entityTransaction);
                     Events.removeAll(events);
-
 
                 }
             }
@@ -246,12 +252,14 @@ public class StudyPlanner extends Application {
      * Is entry title changed.
      *
      * @param event
-     *         the event
+     *              the event
      */
     public void isEntryTitleChanged(CalendarEvent event) {
-        if (!event.isEntryAdded() && !event.isEntryRemoved() && event.getOldInterval() == null && !event.getOldText().equals(event.getEntry().getTitle())) {
+        if (!event.isEntryAdded() && !event.isEntryRemoved() && event.getOldInterval() == null
+                && !event.getOldText().equals(event.getEntry().getTitle())) {
 
-            // ToDo: hier stimmt noch was nicht der Titel wird nicht geändert aber bei Intervall Changed klappt es warum auch immer
+            // ToDo: hier stimmt noch was nicht der Titel wird nicht geändert aber bei
+            // Intervall Changed klappt es warum auch immer
             EventUpdateDB eventUpdateDB = new EventUpdateDB();
 
             Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
@@ -264,16 +272,18 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     * Check´s if the Entry Intervall is Changed and if so it Updates the Event with the same UUID
+     * Check´s if the Entry Intervall is Changed and if so it Updates the Event with
+     * the same UUID
      *
      * @param event
-     *         the event
+     *              the event
      */
     public void isEntryIntervallChanged(CalendarEvent event) {
 
-        // Update Event aus der Datenbank  1
+        // Update Event aus der Datenbank 1
         EventUpdateDB eventUpdateDB = new EventUpdateDB();
-        if (!event.isEntryAdded() && !event.isEntryRemoved() && !(event.getOldInterval() == null) && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
+        if (!event.isEntryAdded() && !event.isEntryRemoved() && !(event.getOldInterval() == null)
+                && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
             Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
                 e.setStartTime(event.getEntry().getStartTime().toString());
                 e.setStarDate(event.getEntry().getStartDate().toString());
@@ -283,11 +293,11 @@ public class StudyPlanner extends Application {
             });
 
             Module.stream().filter(e -> e.getUuid().contains(event.getEntry().getId())).forEach(e -> {
-                        e.getEcts().setDuration(e.getEcts().getDuration().plus(event.getOldInterval().getDuration().minus(event.getEntry().getDuration())));
+                e.getEcts().setDuration(e.getEcts().getDuration()
+                        .plus(event.getOldInterval().getDuration().minus(event.getEntry().getDuration())));
 
-                        helper.changeListBoxButtonText(e, listbox);
-                    }
-            );
+                helper.changeListBoxButtonText(e, listbox);
+            });
         }
     }
 }
