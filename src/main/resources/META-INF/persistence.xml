@@ -8,7 +8,7 @@
 
         <class>Model.Ects</class>
         <class>Model.Modul</class>
-        <class>Model.Event</class>
+        <class>Model.EventTest</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC"/>

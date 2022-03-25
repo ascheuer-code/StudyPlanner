@@ -182,9 +182,6 @@ public class NewEvent {
                     ownEvent.setStarDate(datePicker.getValue().toString());
                     ownEvent.setEndDate(datePicker.getValue().toString());
 
-                    System.out.println(ownEvent.getStarDate());
-
-
                     Module.stream().filter(e -> e.getModulname().equals(replaceName(chPickerModulName.getValue().toString()))).forEach(e -> {
                         e.getUuid().add(ownEvent.getId());
                         ModulUpdateDB modulUpdateDB = new ModulUpdateDB();

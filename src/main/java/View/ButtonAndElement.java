@@ -4,14 +4,13 @@ import Model.Event;
 import Model.ICalender;
 import Model.Modul;
 import com.calendarfx.model.Calendar;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -109,15 +108,13 @@ public class ButtonAndElement {
 
     public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul, Button BtDeleteModul, ListView<Button> listbox, Button btShowQuote, Button btICalExport) {
 
-        BorderPane BPLayoutLeft = new BorderPane();
+        Pane BPLayoutLeft = new StackPane();
         VBox VbButtonBox = new VBox();
-        VbButtonBox.setSpacing(15);
-        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, btShowQuote, btICalExport);
-        BPLayoutLeft.setTop(VbButtonBox);
-        BPLayoutLeft.setBottom(listbox);
-        Pane PBar = new Pane(BPLayoutLeft);// ist die toolbar
-        VbButtonBox.setMinWidth(300);
-        return PBar;
+        BPLayoutLeft.getChildren().add(VbButtonBox);
+        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, btShowQuote, listbox,btICalExport);
+        VbButtonBox.setSpacing(5);
+        VBox.setVgrow(listbox, Priority.ALWAYS);
+        return BPLayoutLeft;
     }
 
     public Button getBtICalExport(List<Event> events) {

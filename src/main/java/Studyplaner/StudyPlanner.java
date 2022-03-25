@@ -1,4 +1,4 @@
-package com.studyplanner.code_ascheuer.github;
+package Studyplaner;
 
 import DataAccess.EventUpdateDB;
 import DataAccess.EventsDeleteDB;
@@ -22,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManager;
@@ -147,11 +148,10 @@ public class StudyPlanner extends Application {
 
             SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
             leftSideSplitPane.setMaxWidth(200);
-            leftSideSplitPane.setMinWidth(200);
             Scene sceneO = new Scene(split);
             stage.setScene(sceneO);
 
-
+            sceneO.getStylesheets().add(getClass().getResource("Application.css").toExternalForm());
 
         });
 

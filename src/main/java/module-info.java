@@ -7,7 +7,7 @@ module com.calendarfx.app {
     requires java.sql;
     requires org.hibernate.orm.core;
 
-    exports com.studyplanner.code_ascheuer.github;
+    exports Studyplaner;
     exports DataAccess;
     exports Model;
     exports Helper;

@@ -177,7 +177,8 @@ public class Event {
                 '}';
     }
 
-    public Event( String title,String calendar,  String starDate, String startTime, String endDate, String endTime) {
+
+    public Event(String title, String calendar, String starDate, String startTime, String endDate, String endTime) {
         this.id = getId();
         this.title = title;
         this.calendar = calendar;

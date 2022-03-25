@@ -1,9 +1,10 @@
-package Model;
+package DataAccess.Model;
 
+import Model.Modul;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * The type Modul test.
@@ -48,16 +49,28 @@ public class ModulTest {
     void setModulnameTest() {
         modul.setModulname("Affe");
         assertEquals("Affe", modul.getModulname());
+
+        assertThrows(IllegalArgumentException.class,() -> {
+            modul.setModulname("");
+        });
+        assertThrows(NullPointerException.class,() -> {
+            modul.setModulname(null);
+        });
     }
 
     /**
      * Sets ects test.
+     * Condition:
+     * Ects and Duration must change properly
      */
     @Test
     void setEctsTest() {
         modul.setEcts(1);
         assertEquals(1, modul.getEcts().getEctsValue());
         assertEquals("PT30H", modul.getEcts().getDuration().toString());
-    }
 
+        modul.setEcts(2);
+        assertEquals(2,modul.getEcts().getEctsValue());
+        assertEquals("PT60H", modul.getEcts().getDuration().toString());
+    }
 }
