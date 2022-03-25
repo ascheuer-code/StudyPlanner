@@ -11,6 +11,6 @@
    -fx-max-width:200px;
 }
 .button:hover{
-   -fx-background-color:
-            linear-gradient(#5F9EA0,#1E90FF);
+   -fx-background-color:linear-gradient(#5F9EA0,#1E90FF);
+   -fx-text-fill:white;
 }
