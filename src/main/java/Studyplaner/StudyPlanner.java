@@ -22,19 +22,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static Helper.LocalDateTimeConverter.convertEventToEntry;
@@ -139,11 +134,6 @@ public class StudyPlanner extends Application {
             Button BtICalExport = buttonAndElement.getBtICalExport(Events);
             Pane leftSideSplitPane = buttonAndElement.getLeftSideSplitPane(BtCreateEvent, BtCreateModul, BtDeleteModul,
                     listbox, BtShowQuote, BtICalExport);
-
-            BtCreateEvent.setMinWidth(200);
-            BtCreateModul.setMinWidth(200);
-            BtDeleteModul.setMinWidth(200);
-            BtShowQuote.setMinWidth(200);
 
             listbox.setMaxWidth(200);
 

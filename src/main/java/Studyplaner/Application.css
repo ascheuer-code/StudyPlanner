@@ -8,7 +8,7 @@
 }
 
 .button{
-   -fx-padding: 5;
+   -fx-max-width:200px;
 }
 .button:hover{
    -fx-background-color:

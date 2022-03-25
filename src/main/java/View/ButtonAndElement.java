@@ -26,13 +26,15 @@ public class ButtonAndElement {
      *
      * @return the bt create event
      */
-    public Button getBtCreateEvent(List<Modul> Module, List<Event> Events, Calendar StudyPlan, Calendar SchoolTimeTable, EntityManager entityManager, EntityTransaction entityTransaction) {
+    public Button getBtCreateEvent(List<Modul> Module, List<Event> Events, Calendar StudyPlan, Calendar SchoolTimeTable,
+            EntityManager entityManager, EntityTransaction entityTransaction) {
 
         Button BtCreateEvent = new Button("Erstellen eines Events");
         BtCreateEvent.setOnAction(
                 event -> {
                     if (event.getSource() == BtCreateEvent) {
-                        NewEvent.createNewEvent(Module, Events, StudyPlan, SchoolTimeTable, entityManager, entityTransaction);
+                        NewEvent.createNewEvent(Module, Events, StudyPlan, SchoolTimeTable, entityManager,
+                                entityTransaction);
                     }
                 });
         return BtCreateEvent;
@@ -43,7 +45,8 @@ public class ButtonAndElement {
      *
      * @return the bt create modul
      */
-    public Button getBtCreateModul(List<Modul> Module, ListView<Button> listbox, EntityManager entityManager, EntityTransaction entityTransaction, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan) {
+    public Button getBtCreateModul(List<Modul> Module, ListView<Button> listbox, EntityManager entityManager,
+            EntityTransaction entityTransaction, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan) {
 
         Button BtCreateModul = new Button("Modul anlegen");
         BtCreateModul.setOnAction(
@@ -51,7 +54,8 @@ public class ButtonAndElement {
                     if (event.getSource() == BtCreateModul) {
                         NewModul newModul = new NewModul();
 
-                        newModul.neuesModul(Module, listbox, entityManager, entityTransaction, Events, SchoolTimeTable, StudyPlan);
+                        newModul.neuesModul(Module, listbox, entityManager, entityTransaction, Events, SchoolTimeTable,
+                                StudyPlan);
                     }
                 });
         return BtCreateModul;
@@ -62,14 +66,16 @@ public class ButtonAndElement {
      *
      * @return the bt create moduldelte
      */
-    public Button getBtDeleteModul(List<Modul> Module, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan, EntityManager entityManager, EntityTransaction entityTransaction, ListView<Button> listbox) {
+    public Button getBtDeleteModul(List<Modul> Module, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan,
+            EntityManager entityManager, EntityTransaction entityTransaction, ListView<Button> listbox) {
 
         Button BtDeleteModul = new Button("Modul löschen");
         BtDeleteModul.setOnAction(
                 event -> {
                     if (event.getSource() == BtDeleteModul) {
                         EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
-                        editandDeleteModul.modullöschen(Module, Events, SchoolTimeTable, StudyPlan, entityManager, entityTransaction, listbox);
+                        editandDeleteModul.modullöschen(Module, Events, SchoolTimeTable, StudyPlan, entityManager,
+                                entityTransaction, listbox);
                     }
                 });
         return BtDeleteModul;
@@ -98,20 +104,22 @@ public class ButtonAndElement {
      * Gets left side split pane.
      *
      * @param BtCreateEvent
-     *         the bt create event
+     *                      the bt create event
      * @param BtCreateModul
-     *         the bt create modul
+     *                      the bt create modul
      *
      * @param btICalExport
      * @return the left side split pane
      */
 
-    public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul, Button BtDeleteModul, ListView<Button> listbox, Button btShowQuote, Button btICalExport) {
+    public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul, Button BtDeleteModul,
+            ListView<Button> listbox, Button btShowQuote, Button btICalExport) {
 
         Pane BPLayoutLeft = new StackPane();
         VBox VbButtonBox = new VBox();
         BPLayoutLeft.getChildren().add(VbButtonBox);
-        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, btShowQuote, listbox,btICalExport);
+        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, btShowQuote, listbox,
+                btICalExport);
         VbButtonBox.setSpacing(5);
         VBox.setVgrow(listbox, Priority.ALWAYS);
         return BPLayoutLeft;
@@ -126,17 +134,16 @@ public class ButtonAndElement {
                     try {
                         ical.iCalenderExport(events, "./export/Studyplaner.ics");
 
-                       Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                       alert.setTitle("Export Success");
-                       alert.setHeaderText("Kalender Export erfolgreich");alert.setContentText("Dateiname: Studyplaner.ics");
-                       alert.show();
-
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.setTitle("Export Success");
+                        alert.setHeaderText("Kalender Export erfolgreich");
+                        alert.setContentText("Dateiname: Studyplaner.ics");
+                        alert.show();
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }
-        );
+                });
         return button;
     }
 }
