@@ -27,7 +27,15 @@ body{
     outline: none;
     margin-left: auto;
     margin-right: auto;
-    content-visibility: hidden;
+    
+}
+.button1 table{
+  display: none;
+}
+.button1:hover table{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 table{
@@ -35,8 +43,8 @@ table{
     margin-right: auto;
 }
 .button1:hover{
-    content-visibility: visible;
-    width: 200px;
+    font-display: none;
+    width: 170px;
     height: 150px;
     box-shadow: inset 200px 0 0 0.1px darkslategrey;
     cursor: pointer;
