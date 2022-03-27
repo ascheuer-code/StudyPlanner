@@ -4,8 +4,8 @@ body{
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 2%;
-    padding-right: 2%;
+    padding-left: 10%;
+    padding-right: 10%;
 }
 .container{
     float: left;
@@ -38,28 +38,24 @@ body{
   margin-right: auto;
 }
 
-table{
-    margin-left: auto;
-    margin-right: auto;
-}
 .button1:hover{
-    font-display: none;
-    width: 170px;
-    height: 150px;
-    box-shadow: inset 200px 0 0 0.1px darkslategrey;
-    cursor: pointer;
-    color: #000;
-    display: inline-block;
-    color: black;
-    animation: fadeIn linear 1s;
-   -webkit-animation: fadeIn linear 1s;
-   -moz-animation: fadeIn linear 1s;
-   -o-animation: fadeIn linear 1s;
-   -ms-animation: fadeIn linear 1s; 
+  font-display: none;
+  width: 170px;
+  height: 150px;
+  box-shadow: inset 200px 0 0 0.1px darkslategrey;
+  cursor: pointer;
+  color: #000;
+  display: inline-block;
+  color: black;
+  animation: fadeIn linear 1s;
+  -webkit-animation: fadeIn linear 1s;
+  -moz-animation: fadeIn linear 1s;
+  -o-animation: fadeIn linear 1s;
+  -ms-animation: fadeIn linear 1s; 
 }
 a{
-    color: white;
-    font-size: 1.5vh;
+  color: white;
+  font-size: 1.5vh;
 }
 
 @keyframes fadeIn {
@@ -86,14 +82,8 @@ a{
   0% {opacity:0;}
   100% {opacity:1;}
 }
-
 table{
     max-height: 100%;
-    
-    
-}
-font{
-
 }
 h1{
     font-weight: 800;
