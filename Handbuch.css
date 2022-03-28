@@ -8,7 +8,6 @@ body{
     padding-right: 10%;
 }
 .container{
-    float: left;
     position: fixed;
     left: 10px;
     top: 10px;
@@ -36,7 +35,7 @@ body{
   display: block;
   margin-left: auto;
   margin-right: auto;
-}
+  }
 
 .button1:hover{
   font-display: none;

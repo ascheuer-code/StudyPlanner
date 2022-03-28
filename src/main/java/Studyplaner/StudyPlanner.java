@@ -1,20 +1,32 @@
 package Studyplaner;
 
-import DataAccess.EventUpdateDB;
-import DataAccess.EventsDeleteDB;
-import DataAccess.LoadEventDB;
-import DataAccess.LoadModulDDB;
-import Model.Event;
-import Model.ICalender;
-import Model.Modul;
-import View.ButtonAndElement;
-import View.EditandDeleteModul;
-import View.Helper;
+import static Helper.LocalDateTimeConverter.convertEventToEntry;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
 import com.calendarfx.model.Calendar;
 import com.calendarfx.model.Calendar.Style;
 import com.calendarfx.model.CalendarEvent;
 import com.calendarfx.model.Entry;
 import com.calendarfx.view.CalendarView;
+
+import DataAccess.EventUpdateDB;
+import DataAccess.EventsDeleteDB;
+import DataAccess.LoadEventDB;
+import DataAccess.LoadModulDDB;
+import Model.Event;
+import Model.Modul;
+import View.ButtonAndElement;
+import View.EditandDeleteModul;
+import View.Helper;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -23,16 +35,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-import static Helper.LocalDateTimeConverter.convertEventToEntry;
 
 /**
  * The type Study planner.

@@ -132,7 +132,7 @@ public class ButtonAndElement {
                 event -> {
                     ICalender ical = new ICalender();
                     try {
-                        ical.iCalenderExport(events, "./export/Studyplaner.ics");
+                        ical.iCalenderExport(events, "./Studyplaner.ics");
 
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Export Success");
