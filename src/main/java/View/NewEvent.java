@@ -34,8 +34,10 @@ public class NewEvent {
         Stage stage = new Stage();
         VBox layout = new VBox();
 
-        Text TxtPflichtfeld = new Text(" Felder die mit (*) markiert sind müssen ausgefüllt werden, da diese Pflichtfelder sind.");
-        Text TxtIntervallPflichtfeld = new Text("Felder die mit (#) gekennzeichnet sind werden zu Pflichtfeldern wenn eins von ihnen ausgefüllt werden.");
+        Text TxtPflichtfeld = new Text(
+                "Felder die mit (*) markiert sind müssen ausgefüllt werden, da diese Pflichtfelder sind.");
+        Text TxtIntervallPflichtfeld = new Text(
+                "Felder die mit (#) gekennzeichnet sind werden zu Pflichtfeldern wenn eins von ihnen ausgefüllt werden.");
 
         Text TxtModulName = new Text("Modulname  (*)");
         ComboBox<?> ChPickerModulName = getChPickerModulName(modulelist);
@@ -56,7 +58,7 @@ public class NewEvent {
         ComboBox<Integer> ChRepetition = getChRepetition();
 
         Text TxtRepetitionEnd = new Text(
-                " Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll    (#)");
+                "Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll    (#)");
         DatePicker datePickerRepetition = getDatePicker();
 
         Text TxtDescription = new Text("Beschreibung");
@@ -68,7 +70,8 @@ public class NewEvent {
 
         layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
                 datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition,
-                TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescriptionField,TxtPflichtfeld,TxtIntervallPflichtfeld);
+                TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescriptionField, TxtPflichtfeld,
+                TxtIntervallPflichtfeld);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(layout);
@@ -77,7 +80,7 @@ public class NewEvent {
 
         stage.setScene(scene);
         stage.setHeight(450);
-        stage.setWidth(600);
+        stage.setWidth(700);
         stage.show();
         scene.getStylesheets().add(getClass().getResource("Application.css").toExternalForm());
     }
