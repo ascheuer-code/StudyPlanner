@@ -136,14 +136,12 @@ public class StudyPlanner extends Application {
             Button BtICalExport = buttonAndElement.getBtICalExport(Events);
             Pane leftSideSplitPane = buttonAndElement.getLeftSideSplitPane(BtCreateEvent, BtCreateModul, BtDeleteModul,
                     listbox, BtShowQuote, BtICalExport);
-
             listbox.setMaxWidth(200);
 
             SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
             leftSideSplitPane.setMaxWidth(200);
             Scene sceneO = new Scene(split);
             stage.setScene(sceneO);
-
             sceneO.getStylesheets().add(getClass().getResource("Application.css").toExternalForm());
 
         });

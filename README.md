@@ -25,15 +25,15 @@ This is how the calendar looks like:
 
 You see your Moduls on the left side and the calendar on the right side.
 
-to see the week click on **Woche** on the middle Top:
+to see the week click on **Week** on the middle Top:
 
 <img src="images/WeekView.png">
 
-for a monthly overview click on **Monat**
+for a monthly overview click on **Month**
 
 <img src="images/MonthView.png">
 
-Or if you want to see the whole year click on **Jahr**:
+Or if you want to see the whole year click on **Year**:
 
 <img src="images/YearView.png">
 

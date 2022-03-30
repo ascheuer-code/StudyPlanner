@@ -23,7 +23,8 @@ public class NewModul {
     /**
      * Neues modul.
      */
-    public void neuesModul(List<Modul> Module, ListView<Button> listbox, EntityManager entityManager, EntityTransaction entityTransaction, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan) {
+    public void neuesModul(List<Modul> Module, ListView<Button> listbox, EntityManager entityManager,
+            EntityTransaction entityTransaction, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan) {
         // Layout des aufgehenden Fensters
         Stage stage = new Stage();
         BorderPane layout = new BorderPane();
@@ -37,7 +38,8 @@ public class NewModul {
         TextField TxtFModul = new TextField();
         TextField TxtFEcts = new NumericTextField();
 
-        Button BtSafe = getBtSafe(stage, TxtFModul, TxtFEcts, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan);
+        Button BtSafe = getBtSafe(stage, TxtFModul, TxtFEcts, entityManager, entityTransaction, Module, listbox, Events,
+                SchoolTimeTable, StudyPlan);
 
         box.getChildren().addAll(TxtModul, TxtFModul, TxtEcts, TxtFEcts, BtSafe);
         layout.setCenter(box);
@@ -46,7 +48,7 @@ public class NewModul {
         stage.setScene(scene);
         stage.setTitle("neues Modul anlegen");
         stage.show();
-
+        scene.getStylesheets().add(getClass().getResource("Application.css").toExternalForm());
 
     }
 
@@ -54,21 +56,22 @@ public class NewModul {
      * Gets bt safe.
      *
      * @param stage
-     *         the stage
+     *                  the stage
      * @param TxtFModul
-     *         the txt f modul
+     *                  the txt f modul
      * @param TxtFEcts
-     *         the txt f ects
+     *                  the txt f ects
      *
      * @return the bt safe
      */
-    public Button getBtSafe(Stage stage, TextField TxtFModul, TextField TxtFEcts, EntityManager entityManager, EntityTransaction entityTransaction, List<Modul> Module, ListView<Button> listbox, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan) {
+    public Button getBtSafe(Stage stage, TextField TxtFModul, TextField TxtFEcts, EntityManager entityManager,
+            EntityTransaction entityTransaction, List<Modul> Module, ListView<Button> listbox, List<Event> Events,
+            Calendar SchoolTimeTable, Calendar StudyPlan) {
 
         Button BtSafe = new Button("Speichern ");
         BtSafe.setDisable(true);
 
         listener(TxtFModul, TxtFEcts, BtSafe);
-
 
         BtSafe.setOnAction(
                 event -> {
@@ -88,7 +91,9 @@ public class NewModul {
                             listbox.getItems().add(BtModul);
 
                             EditandDeleteModul editandDeleteModul = new EditandDeleteModul();
-                            BtModul.setOnAction(actionEvent -> editandDeleteModul.editModul(modul, BtModul, entityManager, entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
+                            BtModul.setOnAction(
+                                    actionEvent -> editandDeleteModul.editModul(modul, BtModul, entityManager,
+                                            entityTransaction, Module, listbox, Events, SchoolTimeTable, StudyPlan));
 
                         }
 
@@ -102,11 +107,11 @@ public class NewModul {
      * Listener.
      *
      * @param TxtFModul
-     *         the txt f modul
+     *                  the txt f modul
      * @param TxtFEcts
-     *         the txt f ects
+     *                  the txt f ects
      * @param BtSafe
-     *         the bt safe
+     *                  the bt safe
      */
     public void listener(TextField TxtFModul, TextField TxtFEcts, Button BtSafe) {
 
@@ -116,9 +121,9 @@ public class NewModul {
             } else if (!TxtFEcts.getText().equals("")) {
                 BtSafe.setDisable(false);
 
-
             } else {
-                TxtFEcts.textProperty().addListener((observableValue1, oldValue1, newValue1) -> BtSafe.setDisable(newValue1.trim().isEmpty()));
+                TxtFEcts.textProperty().addListener(
+                        (observableValue1, oldValue1, newValue1) -> BtSafe.setDisable(newValue1.trim().isEmpty()));
 
             }
         });

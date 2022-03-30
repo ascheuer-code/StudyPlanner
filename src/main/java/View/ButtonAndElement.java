@@ -33,7 +33,8 @@ public class ButtonAndElement {
         BtCreateEvent.setOnAction(
                 event -> {
                     if (event.getSource() == BtCreateEvent) {
-                        NewEvent.createNewEvent(Module, Events, StudyPlan, SchoolTimeTable, entityManager,
+                        NewEvent newEvent = new NewEvent();
+                        newEvent.createNewEvent(Module, Events, StudyPlan, SchoolTimeTable, entityManager,
                                 entityTransaction);
                     }
                 });
