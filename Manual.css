@@ -7,7 +7,11 @@
 }
 
 .goog-te-gadget{
-  font-size: 0px !important; 
+  font-size: 0px !important;
+}
+a.goog-logo-link{
+  content-visibility: hidden !important;
+  font-size: 0px !important;
 }
 #google_translate_element img{
   content-visibility: hidden;
