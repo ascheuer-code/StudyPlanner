@@ -34,26 +34,29 @@ public class NewEvent {
         Stage stage = new Stage();
         VBox layout = new VBox();
 
-        Text TxtModulName = new Text("Modulname");
+        Text TxtPflichtfeld = new Text(" Felder die mit (*) markiert sind müssen ausgefüllt werden, da diese Pflichtfelder sind.");
+        Text TxtIntervallPflichtfeld = new Text("Felder die mit (#) gekennzeichnet sind werden zu Pflichtfeldern wenn eins von ihnen ausgefüllt werden.");
+
+        Text TxtModulName = new Text("Modulname  (*)");
         ComboBox<?> ChPickerModulName = getChPickerModulName(modulelist);
 
-        Text TxtCalendar = new Text("Kalender");
+        Text TxtCalendar = new Text("Kalender  (*)");
         ComboBox<?> ChPickerCalendar = getChPickerCalendar(Studyplan, SchoolTimeTable);
 
-        Text TxtDate = new Text("Datum");
+        Text TxtDate = new Text("Datum  (*)");
         DatePicker datePicker = getDatePicker();
 
-        Text TxtStartTime = new Text("Anfangszeit");
+        Text TxtStartTime = new Text("Anfangszeit  (*)");
         ComboBox<LocalTime> ChPickerStartTime = getChPickerStartTime();
 
-        Text TxtEndTime = new Text("Endzeit");
+        Text TxtEndTime = new Text("Endzeit  (*)");
         ComboBox<LocalTime> ChPickerEndTime = getChPickerEndTime();
 
-        Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
+        Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen   (#)");
         ComboBox<Integer> ChRepetition = getChRepetition();
 
         Text TxtRepetitionEnd = new Text(
-                " Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
+                " Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll    (#)");
         DatePicker datePickerRepetition = getDatePicker();
 
         Text TxtDescription = new Text("Beschreibung");
@@ -65,7 +68,7 @@ public class NewEvent {
 
         layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
                 datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition,
-                TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescriptionField);
+                TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescriptionField,TxtPflichtfeld,TxtIntervallPflichtfeld);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(layout);
