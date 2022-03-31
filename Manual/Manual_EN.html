@@ -20,13 +20,7 @@
 
 
 <body>
-    <div id="google_translate_element">choose language</div>
 
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
-        }
-    </script>
 
     <div class="container">
         <button class="button1"> &equiv;
@@ -54,11 +48,25 @@
                         <a href="#how_to_build">How to Build a Session</a>
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <a href="#how_to_delete_lecture">How to How to delete a lecture</a>
+                    </td>
+                </tr>
             </table>
         </button>
 
     </div>
 
+    <div id="google_translate_element">
+        choose language (internet connection required)
+    </div>
+
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        }
+    </script>
 
     <script type="text/javascript"
         src="http:/translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
@@ -197,7 +205,7 @@
         learning
         session the time you invest in a modul will automatically decrease
     </p>
-    <h2>
+    <h2 id="how_to_delete_lecture">
         How to delete a lecture / learning session
     </h2>
     <p>

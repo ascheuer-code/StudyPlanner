@@ -1,13 +1,17 @@
 #google_translate_element{
-  top: 10px;
-  left: 0px;
-  position: absolute;
-  max-width: 10%;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: auto;
   max-height: 20px;
 }
 
 .goog-te-gadget{
   font-size: 0px !important;
+  
+}
+.goog-te-gadget .goog-te-combo{
+margin-left: auto;
+  margin-right: auto;
 }
 a.goog-logo-link{
   content-visibility: hidden !important;
@@ -29,7 +33,7 @@ body{
 .container{
     position: fixed;
     left: 10px;
-    top: 10px;
+    top: 40px;
     width: 40px;
     height: 40px;
 }
@@ -59,7 +63,7 @@ body{
 .button1:hover{
   font-display: none;
   width: 170px;
-  height: 150px;
+  height: auto;
   box-shadow: inset 200px 0 0 0.1px darkslategrey;
   cursor: pointer;
   color: #000;
