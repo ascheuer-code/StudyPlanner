@@ -11,6 +11,9 @@ import javafx.scene.control.ListView;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * helper class
+ */
 public class Helper {
 
     /**
@@ -31,7 +34,7 @@ public class Helper {
     }
 
     /**
-     * Replace button name string.
+     * Replace button name
      *
      * @param string
      *         the string

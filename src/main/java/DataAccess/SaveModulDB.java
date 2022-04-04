@@ -9,8 +9,17 @@ import Model.Modul;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+/**
+ * data access class to insert a modul in the database
+ */
 public class SaveModulDB {
 
+    /**
+     * method to insert a mudul in the database
+     * @param modul
+     * @param entityManager
+     * @param entityTransaction
+     */
     public void insert(Modul modul, EntityManager entityManager, EntityTransaction entityTransaction) {
 
         try {

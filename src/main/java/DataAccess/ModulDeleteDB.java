@@ -9,9 +9,18 @@ import Model.Modul;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+/**
+ * data access class to delete a modul in the data base
+ */
 public class ModulDeleteDB {
 
 
+    /**
+     * method to delete a modul in the data base
+     * @param modul
+     * @param entityManager
+     * @param entityTransaction
+     */
     public void ModulDelete(Modul modul, EntityManager entityManager, EntityTransaction entityTransaction) {
 
         try {

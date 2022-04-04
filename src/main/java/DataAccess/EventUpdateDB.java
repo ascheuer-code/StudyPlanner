@@ -9,8 +9,17 @@ import Model.Event;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
+/**
+ * data access class to update an event
+ */
 public class EventUpdateDB {
 
+    /**
+     * method to update the event in the database
+     * @param event
+     * @param entityManager
+     * @param entityTransaction
+     */
     public void updateEvent(Event event, EntityManager entityManager, EntityTransaction entityTransaction) {
 
         try {

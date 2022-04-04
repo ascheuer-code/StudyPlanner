@@ -10,7 +10,7 @@ import java.util.UUID;
 import static java.time.temporal.ChronoUnit.MINUTES;
 
 /**
- * The type Event.
+ * The class Event.
  */
 @Entity
 public class Event {
@@ -42,7 +42,6 @@ public class Event {
     /**
      * Sets id.
      */
-
     public void setId() {
         this.id = UUID.randomUUID().toString();
     }
@@ -80,19 +79,19 @@ public class Event {
 
 
     /**
-     * Gets star date.
+     * Gets start date.
      *
-     * @return the star date
+     * @return the start date
      */
     public String getStarDate() {
         return starDate;
     }
 
     /**
-     * Sets star date.
+     * Sets start date.
      *
-     * @param starDate
-     *         the star date
+     * @param starDate,
+     *         the start date
      */
     public void setStarDate(String starDate) {
         this.starDate = starDate;
@@ -178,6 +177,15 @@ public class Event {
     }
 
 
+    /**
+     * event constructor to instantiates an event
+     * @param title
+     * @param calendar
+     * @param starDate
+     * @param startTime
+     * @param endDate
+     * @param endTime
+     */
     public Event(String title, String calendar, String starDate, String startTime, String endDate, String endTime) {
         this.id = getId();
         this.title = title;

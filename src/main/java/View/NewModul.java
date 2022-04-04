@@ -19,9 +19,20 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 
+/**
+ * the class for a new modul
+ */
 public class NewModul {
+
     /**
-     * Neues modul.
+     * method neuesModul to set the window for a new modul
+     * @param Module
+     * @param listbox
+     * @param entityManager
+     * @param entityTransaction
+     * @param Events
+     * @param SchoolTimeTable
+     * @param StudyPlan
      */
     public void neuesModul(List<Modul> Module, ListView<Button> listbox, EntityManager entityManager,
             EntityTransaction entityTransaction, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan) {
@@ -53,7 +64,7 @@ public class NewModul {
     }
 
     /**
-     * Gets bt safe.
+     * Gets button for safe.
      *
      * @param stage
      *                  the stage
@@ -62,7 +73,7 @@ public class NewModul {
      * @param TxtFEcts
      *                  the txt f ects
      *
-     * @return the bt safe
+     * @return the safe button
      */
     public Button getBtSafe(Stage stage, TextField TxtFModul, TextField TxtFEcts, EntityManager entityManager,
             EntityTransaction entityTransaction, List<Modul> Module, ListView<Button> listbox, List<Event> Events,

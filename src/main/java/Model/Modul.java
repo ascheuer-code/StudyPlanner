@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * The type Model.
+ * The class Model.
  *
  * @author Andreas Scheuer mahmoud orabi
  */
@@ -46,8 +46,8 @@ public class Modul {
 
     }
 
-    /*
-     * get
+    /**
+     * getId
      * return String
      */
     public String getId() {
@@ -112,6 +112,11 @@ public class Modul {
         this.ects.setEcts(ects);
     }
 
+    /**
+     * get ects
+     *
+     * @return ects
+     */
     public int gettEcts() {
         return ects.getEctsValue();
 
@@ -122,6 +127,11 @@ public class Modul {
         return Objects.hash(ects, modulname);
     }
 
+    /**
+     * equals method to check if two Objects are equal
+     * @param o
+     * @return
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,6 +141,7 @@ public class Modul {
     }
 
     /**
+     * toString
      * @return String
      */
     public String toString() {
@@ -138,6 +149,10 @@ public class Modul {
 
     }
 
+    /**
+     * toString2
+     * @return String
+     */
     public String toString2() {
         return (this.modulname + "\n" + this.ects.toStringEcts() + "  ");
     }
@@ -145,8 +160,6 @@ public class Modul {
     /**
      * Sets id.
      */
-
-
     public void setId() {
         this.id = UUID.randomUUID().toString();
     }

@@ -37,7 +37,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * The type Study planner.
+ * The class Study planner.
  */
 public class StudyPlanner extends Application {
 
@@ -77,6 +77,11 @@ public class StudyPlanner extends Application {
         launch(args);
     }
 
+
+    /**
+     * start Method to set the stage
+     * @param stage
+     */
     @Override
     public void start(Stage stage) {
 
@@ -192,7 +197,7 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     * Is entry added.
+     * Is entry added method to add the event
      *
      * @param event
      *              the event
@@ -210,7 +215,7 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     * Is entry removed.
+     * Is entry removed, to remove the event
      *
      * @param event
      *              the event
@@ -239,7 +244,7 @@ public class StudyPlanner extends Application {
     }
 
     /**
-     * Is entry title changed.
+     * Is entry title changed, to change the title of the event
      *
      * @param event
      *              the event

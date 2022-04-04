@@ -26,8 +26,20 @@ import java.util.concurrent.CompletableFuture;
 
 import static Helper.LocalDateTimeConverter.convertEventToEntry;
 
+/**
+ * class for a new event
+ */
 public class NewEvent {
 
+    /**
+     * method to create a new event
+     * @param modulelist
+     * @param eventlist
+     * @param Studyplan
+     * @param SchoolTimeTable
+     * @param entityManager
+     * @param entityTransaction
+     */
     public void createNewEvent(List<Modul> modulelist, List<Event> eventlist,
             Calendar Studyplan, Calendar SchoolTimeTable, EntityManager entityManager,
             EntityTransaction entityTransaction) {
@@ -166,6 +178,10 @@ public class NewEvent {
         return ChPickerEndTime;
     }
 
+    /**
+     * method to get the number of repetition from the choice cox
+     * @return ChRepetition, number of repetition
+     */
     public static ComboBox<Integer> getChRepetition() {
         ComboBox<Integer> ChRepetition = new ComboBox<>();
         int[] tage = { 1, 2, 3, 4, 5, 6, 7, 14 };
@@ -174,6 +190,25 @@ public class NewEvent {
         return ChRepetition;
     }
 
+    /**
+     * method to get the safe event button
+     * @param eventListe
+     * @param chPickerModulName
+     * @param chPickerStartTime
+     * @param chPickerEndTime
+     * @param datePicker
+     * @param chPickerCalendar
+     * @param stage
+     * @param Module
+     * @param StudyPlan
+     * @param SchoolTimeTable
+     * @param chRepetition
+     * @param datePickerRepetition
+     * @param txtDescription
+     * @param entityManager
+     * @param entityTransaction
+     * @return button
+     */
     public static Button getBTSafeEventButton(List<Event> eventListe, ComboBox<?> chPickerModulName,
             ComboBox<?> chPickerStartTime, ComboBox<LocalTime> chPickerEndTime, DatePicker datePicker,
             ComboBox<?> chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable,

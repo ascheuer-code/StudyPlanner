@@ -12,10 +12,19 @@ import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * data access class to load a modul
+ */
 public class LoadModulDDB {
 
     List modulList = new ArrayList<>();
 
+    /**
+     * method to load the modul from the database
+     * @param entityManager
+     * @param entityTransaction
+     * @return
+     */
     public List<Modul> zeigemodul(EntityManager entityManager, EntityTransaction entityTransaction) {
 
         try {
