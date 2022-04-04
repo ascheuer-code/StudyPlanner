@@ -12,9 +12,18 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 
+/**
+ * data access class to insert an event in the database
+ */
 public class SaveEventDB {
 
 
+    /**
+     * method to insert an event in the database
+     * @param event
+     * @param entityManager
+     * @param entityTransaction
+     */
     public void insert(Event event, EntityManager entityManager, EntityTransaction entityTransaction) {
 
         try {

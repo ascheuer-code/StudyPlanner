@@ -9,10 +9,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
 
+/**
+ * Data Access class to delete an event
+ */
 
 public class EventsDeleteDB {
 
 
+    /**
+     *  method to delete the event in the database
+     * @param event
+     * @param entityManager
+     * @param entityTransaction
+     */
     public void EventDelete(Event event, EntityManager entityManager, EntityTransaction entityTransaction) {
 
         try {
@@ -29,6 +38,12 @@ public class EventsDeleteDB {
 
     }
 
+    /**
+     * method to delete the event in the database
+     * @param event
+     * @param entityManager
+     * @param entityTransaction
+     */
     public void EventDelete(List<Event> event, EntityManager entityManager, EntityTransaction entityTransaction) {
 
         try {

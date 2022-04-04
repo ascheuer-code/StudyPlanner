@@ -8,8 +8,17 @@ import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * data access class to load an event from the data base
+ */
 public class LoadEventDB {
 
+    /**
+     * method to show the event
+     * @param entityManager
+     * @param entityTransaction
+     * @return
+     */
     public List<Event> zeigeEvent(EntityManager entityManager, EntityTransaction entityTransaction) {
 
         List<Event> events = new ArrayList<>();

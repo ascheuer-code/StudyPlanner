@@ -8,8 +8,17 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * the class ICalender
+ */
 public class ICalender {
 
+    /**
+     * method iCalenderExport, to export the calender
+     * @param eventList
+     * @param filename
+     * @throws IOException
+     */
     public void iCalenderExport(List<Event> eventList, String filename) throws IOException {
         StringBuilder sb = new StringBuilder();
 

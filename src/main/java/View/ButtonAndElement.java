@@ -20,6 +20,9 @@ import javax.persistence.EntityTransaction;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * the class ButtonAndElement
+ */
 public class ButtonAndElement {
     /**
      * Gets bt create event.
@@ -112,7 +115,6 @@ public class ButtonAndElement {
      * @param btICalExport
      * @return the left side split pane
      */
-
     public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul, Button BtDeleteModul,
             ListView<Button> listbox, Button btShowQuote, Button btICalExport) {
 
@@ -126,6 +128,11 @@ public class ButtonAndElement {
         return BPLayoutLeft;
     }
 
+    /**
+     * gets Button for calendar export
+     * @param events
+     * @return button
+     */
     public Button getBtICalExport(List<Event> events) {
         Button button = new Button("Kalender Exportieren");
         button.setMinWidth(200);

@@ -19,7 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Class to edit and delete a modul
+ */
 public class EditandDeleteModul {
+
     /**
      * Edit modul.
      *
@@ -99,6 +103,11 @@ public class EditandDeleteModul {
 
     }
 
+    /**
+     * method getEventDescription, to get the event description
+     * @param string
+     * @return string
+     */
     public String getEventDescription(String string) {
         return string.replaceAll(".*\\R", "");
     }
@@ -106,7 +115,6 @@ public class EditandDeleteModul {
     /**
      * Modul löschen .
      *
-     * @max
      */
     public void modullöschen(List<Modul> Module, List<Event> Events, Calendar SchoolTimeTable,
             Calendar StudyPlan, EntityManager entityManager, EntityTransaction entityTransaction,
@@ -142,6 +150,11 @@ public class EditandDeleteModul {
 
     }
 
+    /**
+     * Method to get the modul name in the choice box
+     * @param modulliste
+     * @return choiceBox, Modul name
+     */
     public static ChoiceBox<Modul> getChPickerModulName(List<Modul> modulliste) {
         // Anfang das Feld anlegen Event
 
@@ -152,6 +165,7 @@ public class EditandDeleteModul {
     }
 
     /**
+     * method to get the button to delete a modul
      * @param CBModulLöschen
      * @param delete
      * @param chPickerModulName
