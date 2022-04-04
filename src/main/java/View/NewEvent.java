@@ -26,20 +26,8 @@ import java.util.concurrent.CompletableFuture;
 
 import static Helper.LocalDateTimeConverter.convertEventToEntry;
 
-/**
- * class for a new event
- */
 public class NewEvent {
 
-    /**
-     * method to create a new event
-     * @param modulelist
-     * @param eventlist
-     * @param Studyplan
-     * @param SchoolTimeTable
-     * @param entityManager
-     * @param entityTransaction
-     */
     public void createNewEvent(List<Modul> modulelist, List<Event> eventlist,
             Calendar Studyplan, Calendar SchoolTimeTable, EntityManager entityManager,
             EntityTransaction entityTransaction) {
@@ -93,6 +81,46 @@ public class NewEvent {
         stage.setScene(scene);
         stage.setHeight(450);
         stage.setWidth(700);
+        stage.show();
+        scene.getStylesheets().add(getClass().getResource("Application.css").toExternalForm());
+    }
+
+    public void createNewFillerEvent(List<Modul> modulelist, List<Event> eventlist,
+            com.calendarfx.model.Calendar Studyplan, EntityManager entityManager, EntityTransaction entityTransaction) {
+        Stage stage = new Stage();
+        VBox layout = new VBox();
+
+        Text TxtDate = new Text("Datum");
+        DatePicker datePicker = getDatePicker();
+
+        Text TxtStartTime = new Text("Anfangszeit");
+        ComboBox<LocalTime> ChPickerStartTime = getChPickerStartTime();
+
+        Text TxtEndTime = new Text("Endzeit");
+        ComboBox<LocalTime> ChPickerEndTime = getChPickerEndTime();
+
+        Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
+        ComboBox<Integer> ChRepetition = getChRepetition();
+
+        Text TxtRepetitionEnd = new Text(
+                " Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
+        DatePicker datePickerRepetition = getDatePicker();
+
+        Button BtSafeFillerEvent = getBTSafeFillerEventButton(eventlist, ChPickerStartTime, ChPickerEndTime, datePicker,
+                stage, modulelist, Studyplan, ChRepetition, datePickerRepetition, entityManager, entityTransaction);
+
+        layout.getChildren().addAll(TxtDate,
+                datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition,
+                TxtRepetitionEnd, datePickerRepetition);
+
+        BorderPane borderPane = new BorderPane();
+        borderPane.setCenter(layout);
+        borderPane.setBottom(BtSafeFillerEvent);
+        Scene scene = new Scene(borderPane);
+
+        stage.setScene(scene);
+        stage.setHeight(450);
+        stage.setWidth(600);
         stage.show();
         scene.getStylesheets().add(getClass().getResource("Application.css").toExternalForm());
     }
@@ -178,10 +206,6 @@ public class NewEvent {
         return ChPickerEndTime;
     }
 
-    /**
-     * method to get the number of repetition from the choice cox
-     * @return ChRepetition, number of repetition
-     */
     public static ComboBox<Integer> getChRepetition() {
         ComboBox<Integer> ChRepetition = new ComboBox<>();
         int[] tage = { 1, 2, 3, 4, 5, 6, 7, 14 };
@@ -190,25 +214,6 @@ public class NewEvent {
         return ChRepetition;
     }
 
-    /**
-     * method to get the safe event button
-     * @param eventListe
-     * @param chPickerModulName
-     * @param chPickerStartTime
-     * @param chPickerEndTime
-     * @param datePicker
-     * @param chPickerCalendar
-     * @param stage
-     * @param Module
-     * @param StudyPlan
-     * @param SchoolTimeTable
-     * @param chRepetition
-     * @param datePickerRepetition
-     * @param txtDescription
-     * @param entityManager
-     * @param entityTransaction
-     * @return button
-     */
     public static Button getBTSafeEventButton(List<Event> eventListe, ComboBox<?> chPickerModulName,
             ComboBox<?> chPickerStartTime, ComboBox<LocalTime> chPickerEndTime, DatePicker datePicker,
             ComboBox<?> chPickerCalendar, Stage stage, List<Modul> Module, Calendar StudyPlan, Calendar SchoolTimeTable,
@@ -295,6 +300,60 @@ public class NewEvent {
 
                     }
 
+                    saveEventDB.insert(newEvents, entityManager, entityTransaction);
+
+                }
+            });
+            stage.close();
+        });
+        return button;
+    }
+
+    public static Button getBTSafeFillerEventButton(List<Event> eventListe, ComboBox<?> chPickerStartTime,
+            ComboBox<LocalTime> chPickerEndTime, DatePicker datePicker, Stage stage, List<Modul> Module,
+            Calendar StudyPlan, ComboBox<Integer> chRepetition, DatePicker datePickerRepetition,
+            EntityManager entityManager, EntityTransaction entityTransaction) {
+
+        Button button = new Button("Event sichern :");
+        button.setOnAction(action -> {
+            CompletableFuture.runAsync(() -> {
+
+                SaveEventDB saveEventDB = new SaveEventDB();
+
+                if (chRepetition.getValue() == null || datePickerRepetition == null) {
+                    Event ownEvent = new Event();
+                    ownEvent.setTitle("Filler");
+                    ownEvent.setStartTime(chPickerStartTime.getValue().toString());
+                    ownEvent.setEndTime(chPickerEndTime.getValue().toString());
+                    ownEvent.setStarDate(datePicker.getValue().toString());
+                    ownEvent.setEndDate(datePicker.getValue().toString());
+                    ownEvent.setCalendar("Lernplan");
+
+                    eventListe.add(ownEvent);
+                    saveEventDB.insert(ownEvent, entityManager, entityTransaction);
+                    Entry<?> entry = convertEventToEntry(ownEvent);
+                    StudyPlan.addEntry(entry);
+
+                }
+                if (chRepetition.getValue() != null && datePickerRepetition != null) {
+                    List<Event> newEvents = new ArrayList<>();
+
+                    for (LocalDate date = datePicker.getValue(); date.isBefore(datePickerRepetition.getValue()
+                            .plusDays(1)); date = date.plusDays(chRepetition.getValue())) {
+                        Event ownEvent = new Event();
+                        ownEvent.setTitle("Filler");
+                        ownEvent.setStartTime(chPickerStartTime.getValue().toString());
+                        ownEvent.setEndTime(chPickerEndTime.getValue().toString());
+                        ownEvent.setStarDate(date.toString());
+                        ownEvent.setEndDate(date.toString());
+                        ownEvent.setCalendar("Lernplan");
+
+                        eventListe.add(ownEvent);
+                        newEvents.add(ownEvent);
+                        Entry<?> entry = convertEventToEntry(ownEvent);
+                        StudyPlan.addEntry(entry);
+
+                    }
                     saveEventDB.insert(newEvents, entityManager, entityTransaction);
 
                 }

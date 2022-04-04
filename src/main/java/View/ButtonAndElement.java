@@ -3,6 +3,7 @@ package View;
 import Model.Event;
 import Model.ICalender;
 import Model.Modul;
+import Model.StudyPlanGenerator;
 import com.calendarfx.model.Calendar;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -20,9 +21,6 @@ import javax.persistence.EntityTransaction;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * the class ButtonAndElement
- */
 public class ButtonAndElement {
     /**
      * Gets bt create event.
@@ -42,6 +40,25 @@ public class ButtonAndElement {
                     }
                 });
         return BtCreateEvent;
+    }
+
+    /**
+     * Gets bt create fillerEvent.
+     *
+     * @return the bt create fillerEvent
+     * @author Leon
+     */
+    public Button getBtCreateFillerEvent(List<Modul> Module, List<Event> Events, Calendar StudyPlan,
+            EntityManager entityManager, EntityTransaction entityTransaction) {
+        Button BtCreateFillerEvent = new Button("Filler-Event erstellen");
+        BtCreateFillerEvent.setOnAction(
+                event -> {
+                    if (event.getSource() == BtCreateFillerEvent) {
+                        NewEvent newEvent = new NewEvent();
+                        newEvent.createNewFillerEvent(Module, Events, StudyPlan, entityManager, entityTransaction);
+                    }
+                });
+        return BtCreateFillerEvent;
     }
 
     /**
@@ -86,6 +103,27 @@ public class ButtonAndElement {
     }
 
     /**
+     * Gets bt generate StudyPlan.
+     *
+     * @return the bt generate StudyPlan
+     * @author Leon
+     */
+    public Button getBtGenerateStudyPlan(List<Modul> module, List<Event> events, Calendar StudyPlan,
+            EntityManager entityManager, EntityTransaction entityTransaction, ListView<Button> listbox) {
+        Button BtGenerateStudyPlay = new Button("Lernplan generieren");
+        BtGenerateStudyPlay.setOnAction(
+                event -> {
+                    if (event.getSource() == BtGenerateStudyPlay) {
+                        StudyPlanGenerator spg = new StudyPlanGenerator(events, module, StudyPlan, entityManager,
+                                entityTransaction);
+                        spg.start();
+                    }
+                });
+
+        return BtGenerateStudyPlay;
+    }
+
+    /**
      * Gets bt create showquote.
      *
      * @return the bt create showquote
@@ -115,24 +153,22 @@ public class ButtonAndElement {
      * @param btICalExport
      * @return the left side split pane
      */
-    public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateModul, Button BtDeleteModul,
-            ListView<Button> listbox, Button btShowQuote, Button btICalExport) {
+
+    public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateFiller, Button BtCreateModul,
+            Button BtDeleteModul,
+            Button BtGenerateSp, ListView<Button> listbox, Button btShowQuote, Button btICalExport) {
 
         Pane BPLayoutLeft = new StackPane();
         VBox VbButtonBox = new VBox();
         BPLayoutLeft.getChildren().add(VbButtonBox);
-        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, btShowQuote, listbox,
+        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateFiller, BtCreateModul, BtDeleteModul, BtGenerateSp,
+                btShowQuote, listbox,
                 btICalExport);
         VbButtonBox.setSpacing(5);
         VBox.setVgrow(listbox, Priority.ALWAYS);
         return BPLayoutLeft;
     }
 
-    /**
-     * gets Button for calendar export
-     * @param events
-     * @return button
-     */
     public Button getBtICalExport(List<Event> events) {
         Button button = new Button("Kalender Exportieren");
         button.setMinWidth(200);

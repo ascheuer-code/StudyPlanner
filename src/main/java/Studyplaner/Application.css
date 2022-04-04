@@ -1,9 +1,10 @@
-.root{
+.root {
    -fx-font-family: sans-serif;
    -fx-font-weight: bold;
 }
-.split-pane{
-     -fx-font-family: sans-serif;
+
+.split-pane {
+   -fx-font-family: sans-serif;
    -fx-font-weight: bold;
 }
 
@@ -11,10 +12,11 @@
    -fx-background-color: transparent;
 }
 
-.button{
-   -fx-max-width:200px;
+.button {
+   -fx-max-width: 200px;
 }
-.button:hover{
-   -fx-background-color:linear-gradient(#5F9EA0,#1E90FF);
-   -fx-text-fill:white;
+
+.button:hover {
+   -fx-background-color: linear-gradient(#5F9EA0, #1E90FF);
+   -fx-text-fill: white;
 }

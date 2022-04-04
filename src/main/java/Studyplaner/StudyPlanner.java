@@ -37,7 +37,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * The class Study planner.
+ * The type Study planner.
  */
 public class StudyPlanner extends Application {
 
@@ -77,11 +77,6 @@ public class StudyPlanner extends Application {
         launch(args);
     }
 
-
-    /**
-     * start Method to set the stage
-     * @param stage
-     */
     @Override
     public void start(Stage stage) {
 
@@ -133,14 +128,18 @@ public class StudyPlanner extends Application {
 
             Button BtCreateEvent = buttonAndElement.getBtCreateEvent(Module, Events, StudyPlan, SchoolTimeTable,
                     entityManager, entityTransaction);
+            Button BtCreateFiller = buttonAndElement.getBtCreateFillerEvent(Module, Events, StudyPlan,
+                    entityManager, entityTransaction);
             Button BtCreateModul = buttonAndElement.getBtCreateModul(Module, listbox, entityManager, entityTransaction,
                     Events, SchoolTimeTable, StudyPlan);
             Button BtDeleteModul = buttonAndElement.getBtDeleteModul(Module, Events, SchoolTimeTable, StudyPlan,
                     entityManager, entityTransaction, listbox);
+            Button BtGenerateSP = buttonAndElement.getBtGenerateStudyPlan(Module, Events, StudyPlan,
+                    entityManager, entityTransaction, listbox);
             Button BtShowQuote = buttonAndElement.getBtShowQuote();
             Button BtICalExport = buttonAndElement.getBtICalExport(Events);
-            Pane leftSideSplitPane = buttonAndElement.getLeftSideSplitPane(BtCreateEvent, BtCreateModul, BtDeleteModul,
-                    listbox, BtShowQuote, BtICalExport);
+            Pane leftSideSplitPane = buttonAndElement.getLeftSideSplitPane(BtCreateEvent, BtCreateFiller,BtCreateModul, BtDeleteModul,
+                    BtGenerateSP ,listbox, BtShowQuote, BtICalExport);
             listbox.setMaxWidth(200);
 
             SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
@@ -162,137 +161,148 @@ public class StudyPlanner extends Application {
      */
     public void calendarEventHandler() {
         Platform.runLater(() -> {
+            StudyPlan.addEventHandler(event -> checkEvent(event));
 
-            // Eventhandler für alle arten von Events
-            StudyPlan.addEventHandler(event -> {
-                // ToDo: es ist kein check eingebaut falls der Eintrag den Kalender wechselt,
-                // muss noch eingebaut werden
-                // check added -> Works without description, need to be changed. Module gets the
-                // uuid
-                isEntryAdded(event);
-                // check removed-> Works without description, need to be changed. Module gets
-                // the uuid
-                isEntryRemoved(event);
-                // Title changed
-                isEntryTitleChanged(event);
-                // Intervall changed, works fine
-                isEntryIntervallChanged(event);
-            });
-        });
-
-        SchoolTimeTable.addEventHandler(event -> {
-            Platform.runLater(() -> {
-                // check added -> Works without description, need to be changed. Module gets the
-                // uuid
-                isEntryAdded(event);
-                // check removed-> Works without description, need to be changed. Module gets
-                // the uuid
-                isEntryRemoved(event);
-                // Title changed
-                isEntryTitleChanged(event);
-                // Intervall changed, works fine
-                isEntryIntervallChanged(event);
-            });
+            SchoolTimeTable.addEventHandler(event -> checkEvent(event));
         });
     }
 
     /**
-     * Is entry added method to add the event
+     * Finds an Event with its ID
+     *
+     * @param id the events id
+     *
+     */
+    private Event findEventId(String id) {
+        for( Event event : Events) {
+            if(event.getId().equals(id)) {
+                return event;
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * checks what changed in the event
+     *
+     * @param event the event
+     *
+     */
+    public void checkEvent(CalendarEvent event) {
+        Event eventId = findEventId(event.getEntry().getId());
+
+        if(event.isEntryAdded()) {
+            isEntryAdded(event);
+        }
+
+        if(event.isEntryRemoved()) {
+            isEntryRemoved(event);
+        }
+
+        if(event.getCalendar() != null && event.getOldCalendar() != null && !event.getCalendar().equals(event.getOldCalendar())) {
+            isEntryCalendarChanged(event);
+        }
+
+        if(event.getOldText() != null && !event.getOldText().equals(event.getEntry().getTitle())) {
+            isEntryTitleChanged(event);
+        }
+
+        if(event.getOldInterval() != null && (!event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration()) || event.isDayChange())) {
+            System.out.println(event.getOldInterval());
+            isEntryIntervallChanged(event);
+        }
+
+        if(eventId != null && !eventId.getStartTime().equals(event.getEntry().getStartTime().toString())) {
+            isEntryIntervallChanged2(event);
+        }
+    }
+
+    public void isEntryIntervallChanged(CalendarEvent event) {
+        EventUpdateDB eventUpdateDB = new EventUpdateDB();
+        Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
+            e.setStartTime(event.getEntry().getStartTime().toString());
+            e.setStarDate(event.getEntry().getStartDate().toString());
+            e.setEndTime(event.getEntry().getEndTime().toString());
+            e.setEndDate(event.getEntry().getEndDate().toString());
+            eventUpdateDB.updateEvent(e, entityManager, entityTransaction);
+        });
+
+
+        Module.stream().filter(e -> e.getUuid().contains(event.getEntry().getId())).forEach(e -> {
+                    e.getEcts().setDuration(e.getEcts().getDuration().plus(event.getOldInterval().getDuration().minus(event.getEntry().getDuration())));
+
+                    helper.changeListBoxButtonText(e, listbox);
+                }
+
+        );
+    }
+
+    public void isEntryIntervallChanged2(CalendarEvent event) {
+        EventUpdateDB eventUpdateDB = new EventUpdateDB();
+        Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
+            e.setStartTime(event.getEntry().getStartTime().toString());
+            e.setEndTime(event.getEntry().getEndTime().toString());
+            e.setStarDate(event.getEntry().getStartDate().toString());
+            e.setEndDate(event.getEntry().getEndDate().toString());
+            eventUpdateDB.updateEvent(e, entityManager, entityTransaction);
+        });
+    }
+
+    public void isEntryTitleChanged(CalendarEvent event) {
+        EventUpdateDB eventUpdateDB = new EventUpdateDB();
+        Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
+            e.setTitle(event.getEntry().getTitle());
+            eventUpdateDB.updateEvent(e, entityManager, entityTransaction);
+        });
+    }
+
+    public void isEntryCalendarChanged(CalendarEvent event) {
+        EventUpdateDB eventUpdateDB = new EventUpdateDB();
+        Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
+            e.setCalendar(event.getCalendar().getName());
+            eventUpdateDB.updateEvent(e, entityManager, entityTransaction);
+        });
+    }
+
+    public void isEntryRemoved(CalendarEvent event) {
+        for (Modul modul : Module) {
+            if (modul.getUuid().contains(event.getEntry().getId())) {
+                modul.getEcts().setDuration(modul.getEcts().getDuration().plus(event.getEntry().getDuration()));
+
+                helper.changeListBoxButtonText(modul, listbox);
+
+                /*
+                removes the Events from the Eventlist
+                */
+                List<Event> events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).collect(Collectors.toList());
+                EventsDeleteDB eventsDeleteDB = new EventsDeleteDB();
+                eventsDeleteDB.EventDelete(events, entityManager, entityTransaction);
+                Events.removeAll(events);
+
+            }
+        }
+        if(event.getEntry().getTitle().equals("Filler")) {
+            List<Event> events = Events.stream().filter((e -> e.getId().equals(event.getEntry().getId()))).collect(Collectors.toList());
+            EventsDeleteDB eventsDeleteDB = new EventsDeleteDB();
+            eventsDeleteDB.EventDelete(events, entityManager, entityTransaction);
+            Events.removeAll(events);
+        }
+    }
+
+    /**
+     * Is entry added.
      *
      * @param event
-     *              the event
+     *         the event
      */
     public void isEntryAdded(CalendarEvent event) {
-        if (event.isEntryAdded()) {
-            for (Modul modul : Module) {
-                if (modul.getUuid().contains(event.getEntry().getId())) {
-                    modul.getEcts().setDuration(modul.getEcts().getDuration().minus(event.getEntry().getDuration()));
+        for (Modul modul : Module) {
+            if (modul.getUuid().contains(event.getEntry().getId())) {
+                modul.getEcts().setDuration(modul.getEcts().getDuration().minus(event.getEntry().getDuration()));
 
-                    helper.changeListBoxButtonText(modul, listbox);
-                }
+                helper.changeListBoxButtonText(modul, listbox);
             }
-        }
-    }
-
-    /**
-     * Is entry removed, to remove the event
-     *
-     * @param event
-     *              the event
-     */
-    public void isEntryRemoved(CalendarEvent event) {
-        if (event.isEntryRemoved()) {
-            for (Modul modul : Module) {
-                if (modul.getUuid().contains(event.getEntry().getId())) {
-                    modul.getEcts().setDuration(modul.getEcts().getDuration().plus(event.getEntry().getDuration()));
-
-                    helper.changeListBoxButtonText(modul, listbox);
-
-                    /*
-                     * removes the Events from the Eventlist
-                     */
-                    List<Event> events = Events.stream().filter(e -> e.getId().equals(event.getEntry().getId()))
-                            .collect(Collectors.toList());
-                    EventsDeleteDB eventsDeleteDB = new EventsDeleteDB();
-                    eventsDeleteDB.EventDelete(events, entityManager, entityTransaction);
-                    Events.removeAll(events);
-
-                }
-            }
-
-        }
-    }
-
-    /**
-     * Is entry title changed, to change the title of the event
-     *
-     * @param event
-     *              the event
-     */
-    public void isEntryTitleChanged(CalendarEvent event) {
-        if (!event.isEntryAdded() && !event.isEntryRemoved() && event.getOldInterval() == null
-                && !event.getOldText().equals(event.getEntry().getTitle())) {
-
-            // ToDo: hier stimmt noch was nicht der Titel wird nicht geändert aber bei
-            // Intervall Changed klappt es warum auch immer
-            EventUpdateDB eventUpdateDB = new EventUpdateDB();
-
-            Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
-                e.setTitle(event.getEntry().getTitle());
-
-                eventUpdateDB.updateEvent(e, entityManager, entityTransaction);
-
-            });
-        }
-    }
-
-    /**
-     * Check´s if the Entry Intervall is Changed and if so it Updates the Event with
-     * the same UUID
-     *
-     * @param event
-     *              the event
-     */
-    public void isEntryIntervallChanged(CalendarEvent event) {
-
-        // Update Event aus der Datenbank 1
-        EventUpdateDB eventUpdateDB = new EventUpdateDB();
-        if (!event.isEntryAdded() && !event.isEntryRemoved() && !(event.getOldInterval() == null)
-                && !event.getOldInterval().getDuration().equals(event.getEntry().getInterval().getDuration())) {
-            Events.stream().filter(e -> e.getId().equals(event.getEntry().getId())).forEach(e -> {
-                e.setStartTime(event.getEntry().getStartTime().toString());
-                e.setStarDate(event.getEntry().getStartDate().toString());
-                e.setEndTime(event.getEntry().getEndTime().toString());
-                e.setEndDate(event.getEntry().getEndDate().toString());
-                eventUpdateDB.updateEvent(e, entityManager, entityTransaction);
-            });
-
-            Module.stream().filter(e -> e.getUuid().contains(event.getEntry().getId())).forEach(e -> {
-                e.getEcts().setDuration(e.getEcts().getDuration()
-                        .plus(event.getOldInterval().getDuration().minus(event.getEntry().getDuration())));
-
-                helper.changeListBoxButtonText(e, listbox);
-            });
         }
     }
 }
