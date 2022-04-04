@@ -5,17 +5,10 @@ import Model.ICalender;
 import Model.Modul;
 import Model.StudyPlanGenerator;
 import com.calendarfx.model.Calendar;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-import javafx.stage.Popup;
-import javafx.stage.Stage;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.io.IOException;
@@ -161,7 +154,7 @@ public class ButtonAndElement {
         Pane BPLayoutLeft = new StackPane();
         VBox VbButtonBox = new VBox();
         BPLayoutLeft.getChildren().add(VbButtonBox);
-        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateFiller, BtCreateModul, BtDeleteModul, BtGenerateSp,
+        VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, BtCreateFiller, BtGenerateSp,
                 btShowQuote, listbox,
                 btICalExport);
         VbButtonBox.setSpacing(5);
