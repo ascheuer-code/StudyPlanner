@@ -2,6 +2,7 @@ package View;
 
 import DataAccess.ModulUpdateDB;
 import DataAccess.SaveEventDB;
+import i18n.i18n;
 import Model.Event;
 import Model.Modul;
 import com.calendarfx.model.Calendar;
@@ -34,44 +35,42 @@ public class NewEvent {
         Stage stage = new Stage();
         VBox layout = new VBox();
 
-        Text TxtPflichtfeld = new Text(
-                "Felder die mit (*) markiert sind müssen ausgefüllt werden, da diese Pflichtfelder sind.");
-        Text TxtIntervallPflichtfeld = new Text(
-                "Felder die mit (#) gekennzeichnet sind werden zu Pflichtfeldern wenn eins von ihnen ausgefüllt werden.");
+        Text requiredTxt = new Text(i18n.get("RequiredTxt"));
+        Text requiredIntervallTxt = new Text(i18n.get("RequiredIntervallTxt"));
 
-        Text TxtModulName = new Text("Modulname  (*)");
+        Text modulNameRequiredTxt = new Text(i18n.get("ModulNameRequiredTxt"));
         ComboBox<?> ChPickerModulName = getChPickerModulName(modulelist);
 
-        Text TxtCalendar = new Text("Kalender  (*)");
+        Text eventCalendarNameRequiredTxt = new Text(i18n.get("EventCalendarNameRequiredTxt"));
         ComboBox<?> ChPickerCalendar = getChPickerCalendar(Studyplan, SchoolTimeTable);
 
-        Text TxtDate = new Text("Datum  (*)");
+        Text eventDateRequiredTxt = new Text(i18n.get("EventDateRequiredTxt"));
         DatePicker datePicker = getDatePicker();
 
-        Text TxtStartTime = new Text("Anfangszeit  (*)");
+        Text eventTimeFromRequiredTxt = new Text(i18n.get("EventTimeFromRequiredTxt"));
         ComboBox<LocalTime> ChPickerStartTime = getChPickerStartTime();
 
-        Text TxtEndTime = new Text("Endzeit  (*)");
+        Text eventTimeToRequiredTxt = new Text(i18n.get("EventTimeToRequiredTxt"));
         ComboBox<LocalTime> ChPickerEndTime = getChPickerEndTime();
 
-        Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen   (#)");
+        Text eventRhytmusTxt = new Text(i18n.get("EventRhytmusTxt"));
         ComboBox<Integer> ChRepetition = getChRepetition();
 
-        Text TxtRepetitionEnd = new Text(
-                "Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll    (#)");
+        Text eventRhytmusDateTxt = new Text(
+                i18n.get("EventRhytmusDateTxt"));
         DatePicker datePickerRepetition = getDatePicker();
 
-        Text TxtDescription = new Text("Beschreibung");
+        Text eventDescriptionTxt = new Text(i18n.get("EventDescriptionTxt"));
         TextField TxtFDescriptionField = new TextField();
 
         Button BtSafeEvent = getBTSafeEventButton(eventlist, ChPickerModulName, ChPickerStartTime, ChPickerEndTime,
                 datePicker, ChPickerCalendar, stage, modulelist, Studyplan, SchoolTimeTable, ChRepetition,
                 datePickerRepetition, TxtFDescriptionField, entityManager, entityTransaction);
 
-        layout.getChildren().addAll(TxtModulName, ChPickerModulName, TxtCalendar, ChPickerCalendar, TxtDate,
-                datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition,
-                TxtRepetitionEnd, datePickerRepetition, TxtDescription, TxtFDescriptionField, TxtPflichtfeld,
-                TxtIntervallPflichtfeld);
+        layout.getChildren().addAll(modulNameRequiredTxt, ChPickerModulName, eventCalendarNameRequiredTxt, ChPickerCalendar, eventDateRequiredTxt,
+                datePicker, eventTimeFromRequiredTxt, ChPickerStartTime, eventTimeToRequiredTxt, ChPickerEndTime, eventRhytmusTxt, ChRepetition,
+                eventRhytmusDateTxt, datePickerRepetition, eventDescriptionTxt, TxtFDescriptionField, requiredTxt,
+                requiredIntervallTxt);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(layout);
@@ -90,28 +89,28 @@ public class NewEvent {
         Stage stage = new Stage();
         VBox layout = new VBox();
 
-        Text TxtDate = new Text("Datum");
+        Text fillerDateTxt = new Text(i18n.get("FillerDateTxt"));
         DatePicker datePicker = getDatePicker();
 
-        Text TxtStartTime = new Text("Anfangszeit");
+        Text fillerFromTxt = new Text(i18n.get("FillerFromTxt"));
         ComboBox<LocalTime> ChPickerStartTime = getChPickerStartTime();
 
-        Text TxtEndTime = new Text("Endzeit");
+        Text fillerToTxt = new Text(i18n.get("FillerToTxt"));
         ComboBox<LocalTime> ChPickerEndTime = getChPickerEndTime();
 
-        Text TxtRepetition = new Text("Wiederholungsrythmus in Tagen ");
+        Text fillerEventRhytmusTxt = new Text(i18n.get("FillerEventRhytmusTxt"));
         ComboBox<Integer> ChRepetition = getChRepetition();
 
-        Text TxtRepetitionEnd = new Text(
-                " Bitte Wählen sie aus bis zu welchem Datum der Wiederholungsrythmus durchgeführt werden soll  ");
+        Text fillerEventRhytmusDateTxt = new Text(
+                i18n.get("FillerEventRhytmusDateTxt"));
         DatePicker datePickerRepetition = getDatePicker();
 
         Button BtSafeFillerEvent = getBTSafeFillerEventButton(eventlist, ChPickerStartTime, ChPickerEndTime, datePicker,
                 stage, modulelist, Studyplan, ChRepetition, datePickerRepetition, entityManager, entityTransaction);
 
-        layout.getChildren().addAll(TxtDate,
-                datePicker, TxtStartTime, ChPickerStartTime, TxtEndTime, ChPickerEndTime, TxtRepetition, ChRepetition,
-                TxtRepetitionEnd, datePickerRepetition);
+        layout.getChildren().addAll(fillerDateTxt,
+                datePicker, fillerFromTxt, ChPickerStartTime, fillerToTxt, ChPickerEndTime, fillerEventRhytmusTxt, ChRepetition,
+                fillerEventRhytmusDateTxt, datePickerRepetition);
 
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(layout);
@@ -158,8 +157,8 @@ public class NewEvent {
     public static DatePicker getDatePicker() {
 
         DatePicker datePicker = new DatePicker();
-        Button button1 = new Button("Datum wählen");
-        button1.setOnAction(action -> {
+        Button btPickDate = i18n.buttonForKey("BtPickDate");
+        btPickDate.setOnAction(action -> {
 
         });
         return datePicker;
@@ -173,9 +172,9 @@ public class NewEvent {
     public static ComboBox<LocalTime> getChPickerStartTime() {
 
         ComboBox<LocalTime> ChPickerStartTime = new ComboBox<>();
-        int stundeanfang = 6;
-        int minuteanfang = 0;
-        LocalTime x = LocalTime.of(stundeanfang, minuteanfang);
+        int startHour = 6;
+        int startMinute = 0;
+        LocalTime x = LocalTime.of(startHour, startMinute);
         for (int i = 0; i <= 95; i++) {
             ChPickerStartTime.getItems().addAll(x);
             x = x.plusMinutes(15);
@@ -194,9 +193,9 @@ public class NewEvent {
     public static ComboBox<LocalTime> getChPickerEndTime() {
 
         ComboBox<LocalTime> ChPickerEndTime = new ComboBox<>();
-        int stundeende = 6;
-        int minuteende = 15;
-        LocalTime y = LocalTime.of(stundeende, minuteende);
+        int endHour = 6;
+        int endMinute = 15;
+        LocalTime y = LocalTime.of(endHour, endMinute);
         for (int i = 0; i <= 95; i++) {
             ChPickerEndTime.getItems().addAll(y);
             y = y.plusMinutes(15);
@@ -220,8 +219,8 @@ public class NewEvent {
             ComboBox<Integer> chRepetition, DatePicker datePickerRepetition, TextField txtDescription,
             EntityManager entityManager, EntityTransaction entityTransaction) {
 
-        Button button = new Button("Event sichern :");
-        button.setOnAction(action -> {
+        Button btEventSave = i18n.buttonForKey("BtEventSave");
+        btEventSave.setOnAction(action -> {
             CompletableFuture.runAsync(() -> {
 
                 SaveEventDB saveEventDB = new SaveEventDB();
@@ -306,7 +305,7 @@ public class NewEvent {
             });
             stage.close();
         });
-        return button;
+        return btEventSave;
     }
 
     public static Button getBTSafeFillerEventButton(List<Event> eventListe, ComboBox<?> chPickerStartTime,
@@ -314,9 +313,10 @@ public class NewEvent {
             Calendar StudyPlan, ComboBox<Integer> chRepetition, DatePicker datePickerRepetition,
             EntityManager entityManager, EntityTransaction entityTransaction) {
 
-        Button button = new Button("Event sichern :");
-        button.setOnAction(action -> {
+        Button btEventSaveFiller = i18n.buttonForKey("BtEventSave");
+        btEventSaveFiller.setOnAction(action -> {
             CompletableFuture.runAsync(() -> {
+
 
                 SaveEventDB saveEventDB = new SaveEventDB();
 
@@ -360,7 +360,7 @@ public class NewEvent {
             });
             stage.close();
         });
-        return button;
+        return btEventSaveFiller;
     }
 
     public static String replaceName(String string) {

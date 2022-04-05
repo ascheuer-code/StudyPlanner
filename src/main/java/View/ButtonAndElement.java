@@ -13,7 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.io.IOException;
 import java.util.List;
-
+import i18n.i18n;
 public class ButtonAndElement {
     /**
      * Gets bt create event.
@@ -23,7 +23,7 @@ public class ButtonAndElement {
     public Button getBtCreateEvent(List<Modul> Module, List<Event> Events, Calendar StudyPlan, Calendar SchoolTimeTable,
             EntityManager entityManager, EntityTransaction entityTransaction) {
 
-        Button BtCreateEvent = new Button("Erstellen eines Events");
+        Button BtCreateEvent = i18n.buttonForKey("BtCreateEvent");
         BtCreateEvent.setOnAction(
                 event -> {
                     if (event.getSource() == BtCreateEvent) {
@@ -43,7 +43,7 @@ public class ButtonAndElement {
      */
     public Button getBtCreateFillerEvent(List<Modul> Module, List<Event> Events, Calendar StudyPlan,
             EntityManager entityManager, EntityTransaction entityTransaction) {
-        Button BtCreateFillerEvent = new Button("Filler-Event erstellen");
+        Button BtCreateFillerEvent = i18n.buttonForKey("BtCreateFillerEvent");
         BtCreateFillerEvent.setOnAction(
                 event -> {
                     if (event.getSource() == BtCreateFillerEvent) {
@@ -62,7 +62,7 @@ public class ButtonAndElement {
     public Button getBtCreateModul(List<Modul> Module, ListView<Button> listbox, EntityManager entityManager,
             EntityTransaction entityTransaction, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan) {
 
-        Button BtCreateModul = new Button("Modul anlegen");
+        Button BtCreateModul = i18n.buttonForKey("BtCreateModul");
         BtCreateModul.setOnAction(
                 event -> {
                     if (event.getSource() == BtCreateModul) {
@@ -83,7 +83,7 @@ public class ButtonAndElement {
     public Button getBtDeleteModul(List<Modul> Module, List<Event> Events, Calendar SchoolTimeTable, Calendar StudyPlan,
             EntityManager entityManager, EntityTransaction entityTransaction, ListView<Button> listbox) {
 
-        Button BtDeleteModul = new Button("Modul löschen");
+        Button BtDeleteModul =i18n.buttonForKey("BtDeleteModul");
         BtDeleteModul.setOnAction(
                 event -> {
                     if (event.getSource() == BtDeleteModul) {
@@ -103,7 +103,7 @@ public class ButtonAndElement {
      */
     public Button getBtGenerateStudyPlan(List<Modul> module, List<Event> events, Calendar StudyPlan,
             EntityManager entityManager, EntityTransaction entityTransaction, ListView<Button> listbox) {
-        Button BtGenerateStudyPlay = new Button("Lernplan generieren");
+        Button BtGenerateStudyPlay = i18n.buttonForKey("BtGenerateStudyPlay");
         BtGenerateStudyPlay.setOnAction(
                 event -> {
                     if (event.getSource() == BtGenerateStudyPlay) {
@@ -123,7 +123,7 @@ public class ButtonAndElement {
      * @author Adrian
      */
     public Button getBtShowQuote() {
-        Button BtShowQuote = new Button("Aktuelles Zitat anzeigen");
+        Button BtShowQuote = i18n.buttonForKey("BtShowQuote");
         BtShowQuote.setOnAction(
                 event -> {
                     if (event.getSource() == BtShowQuote) {
@@ -149,23 +149,23 @@ public class ButtonAndElement {
 
     public Pane getLeftSideSplitPane(Button BtCreateEvent, Button BtCreateFiller, Button BtCreateModul,
             Button BtDeleteModul,
-            Button BtGenerateSp, ListView<Button> listbox, Button btShowQuote, Button btICalExport) {
+            Button BtGenerateSp, ListView<Button> listbox, Button btShowQuote, Button btICalExport, Button btEnglisch, Button btGerman) {
 
         Pane BPLayoutLeft = new StackPane();
         VBox VbButtonBox = new VBox();
         BPLayoutLeft.getChildren().add(VbButtonBox);
         VbButtonBox.getChildren().addAll(BtCreateEvent, BtCreateModul, BtDeleteModul, BtCreateFiller, BtGenerateSp,
                 btShowQuote, listbox,
-                btICalExport);
+                btICalExport, btEnglisch, btGerman);
         VbButtonBox.setSpacing(5);
         VBox.setVgrow(listbox, Priority.ALWAYS);
         return BPLayoutLeft;
     }
 
     public Button getBtICalExport(List<Event> events) {
-        Button button = new Button("Kalender Exportieren");
-        button.setMinWidth(200);
-        button.setOnAction(
+        Button btExportCalendar = i18n.buttonForKey("BtExportCalnedar");
+        btExportCalendar.setMinWidth(200);
+        btExportCalendar.setOnAction(
                 event -> {
                     ICalender ical = new ICalender();
                     try {
@@ -173,14 +173,14 @@ public class ButtonAndElement {
 
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.setTitle("Export Success");
-                        alert.setHeaderText("Kalender Export erfolgreich");
-                        alert.setContentText("Dateiname: Studyplaner.ics");
+                        alert.setHeaderText(i18n.get("CalendarExportSuccessful"));
+                        alert.setContentText(i18n.get("FileName"));
                         alert.show();
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 });
-        return button;
+        return btExportCalendar;
     }
 }

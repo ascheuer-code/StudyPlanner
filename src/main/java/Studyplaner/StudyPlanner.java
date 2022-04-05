@@ -4,6 +4,7 @@ import static Helper.LocalDateTimeConverter.convertEventToEntry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import i18n.i18n;
 
 /**
  * The type Study planner.
@@ -44,6 +46,15 @@ public class StudyPlanner extends Application {
     static final EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("StudyPlanner");
     static final EntityManager entityManager = entityManagerFactory.createEntityManager();
     static final EntityTransaction entityTransaction = entityManager.getTransaction();
+
+    /**
+     * Switch the Language
+     * @param locale
+     */
+    private void switchLanguage(Locale locale) {
+
+        i18n.setLocale(locale);
+    }
     /**
      * The Module.
      */
@@ -126,6 +137,13 @@ public class StudyPlanner extends Application {
 
             helper.initializingCalenderView(calendarView, StudyPlan, SchoolTimeTable);
 
+            Button btEnglish = i18n.buttonForKey("BtEnglish");
+            btEnglish.setOnAction((evt) -> switchLanguage(Locale.ENGLISH));
+
+            Button btGerman = i18n.buttonForKey("BtGerman");
+            btGerman.setOnAction((evt) -> switchLanguage(Locale.GERMAN));
+
+
             Button BtCreateEvent = buttonAndElement.getBtCreateEvent(Module, Events, StudyPlan, SchoolTimeTable,
                     entityManager, entityTransaction);
             Button BtCreateFiller = buttonAndElement.getBtCreateFillerEvent(Module, Events, StudyPlan,
@@ -139,7 +157,7 @@ public class StudyPlanner extends Application {
             Button BtShowQuote = buttonAndElement.getBtShowQuote();
             Button BtICalExport = buttonAndElement.getBtICalExport(Events);
             Pane leftSideSplitPane = buttonAndElement.getLeftSideSplitPane(BtCreateEvent, BtCreateFiller,BtCreateModul, BtDeleteModul,
-                    BtGenerateSP ,listbox, BtShowQuote, BtICalExport);
+                    BtGenerateSP ,listbox, BtShowQuote, BtICalExport, btEnglish, btGerman );
             listbox.setMaxWidth(200);
 
             SplitPane split = new SplitPane(leftSideSplitPane, calendarView);
