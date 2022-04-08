@@ -18,6 +18,7 @@ import javafx.stage.Stage;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import java.util.List;
+import i18n.i18n;
 
 /**
  * the class for a new modul
@@ -42,8 +43,8 @@ public class NewModul {
         VBox box = new VBox();
 
         // Texte die zur Steuerung angezeigt werden
-        Text TxtModul = new Text("Modulname :");
-        Text TxtEcts = new Text("Ects Wert des Moduls:");
+        Text ModulTxt = new Text(i18n.get("Modultext"));
+        Text EctsTxt = new Text(i18n.get("ectsText"));
         // Eingabe Felder
 
         TextField TxtFModul = new TextField();
@@ -52,12 +53,12 @@ public class NewModul {
         Button BtSafe = getBtSafe(stage, TxtFModul, TxtFEcts, entityManager, entityTransaction, Module, listbox, Events,
                 SchoolTimeTable, StudyPlan);
 
-        box.getChildren().addAll(TxtModul, TxtFModul, TxtEcts, TxtFEcts, BtSafe);
+        box.getChildren().addAll(ModulTxt, TxtFModul, EctsTxt, TxtFEcts, BtSafe);
         layout.setCenter(box);
 
         Scene scene = new Scene(layout);
         stage.setScene(scene);
-        stage.setTitle("neues Modul anlegen");
+        stage.setTitle(i18n.get("StTitleNewModul"));
         stage.show();
         scene.getStylesheets().add(getClass().getResource("Application.css").toExternalForm());
 
@@ -79,15 +80,15 @@ public class NewModul {
             EntityTransaction entityTransaction, List<Modul> Module, ListView<Button> listbox, List<Event> Events,
             Calendar SchoolTimeTable, Calendar StudyPlan) {
 
-        Button BtSafe = new Button("Speichern ");
-        BtSafe.setDisable(true);
+        Button BtSave = i18n.buttonForKey("BtSave");
+        BtSave.setDisable(true);
 
-        listener(TxtFModul, TxtFEcts, BtSafe);
+        listener(TxtFModul, TxtFEcts, BtSave);
 
-        BtSafe.setOnAction(
+        BtSave.setOnAction(
                 event -> {
                     Platform.runLater(() -> {
-                        if (event.getSource() == BtSafe) {
+                        if (event.getSource() == BtSave) {
                             Modul modul = new Modul(TxtFModul.getText(),
                                     Integer.parseInt(TxtFEcts.getText()));
 
@@ -111,7 +112,7 @@ public class NewModul {
                     });
                     stage.close();
                 });
-        return BtSafe;
+        return BtSave;
     }
 
     /**

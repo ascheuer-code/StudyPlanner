@@ -18,7 +18,7 @@ import javax.persistence.EntityTransaction;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-
+import i18n.i18n;
 /**
  * Class to edit and delete a modul
  */
@@ -42,15 +42,16 @@ public class EditandDeleteModul {
         VBox box = new VBox();
 
         // Texte die zur Steuerung angezeigt werden
-        Text modulText = new Text("Modulname :");
-        Text etcText = new Text("Ects Wert des Moduls:");
+        Text modulTxt = new Text(i18n.get("Modultext"));
+        Text ectsTxt = new Text(i18n.get("ectsText"));
         // Eingabe Felder + VorhandenDaten
+
         TextField readModulName = new TextField(editModul.getModulname());
         TextField readEcts = new TextField(editModul.getEcts().toString2());
         // Modul in Datenbank ändern 4
         ModulUpdateDB modulUpdateDB = new ModulUpdateDB();
 
-        Button BtEditModul = new Button("Ändern ");
+        Button BtEditModul = i18n.buttonForKey("BtEditModul");
         BtEditModul.setOnAction(
                 event -> {
                     int index = Module.indexOf(editModul);
@@ -93,7 +94,7 @@ public class EditandDeleteModul {
                     stage.close();
                 });
 
-        box.getChildren().addAll(modulText, readModulName, etcText, readEcts, BtEditModul);
+        box.getChildren().addAll(modulTxt, readModulName, ectsTxt, readEcts, BtEditModul);
         layout.setCenter(box);
 
         Scene scene = new Scene(layout);
@@ -125,24 +126,24 @@ public class EditandDeleteModul {
         Scene scene = new Scene(layout);
 
         // Texte die zur Steuerung angezeigt werden
-        Text TxtModulLöschen = new Text("Bitte das zu löschende Modul auswählen ");
-        Text TxtModulLöschenQuestion = new Text("Möchten sie diese Modul wirklich löschen ? ");
+        Text ModulDelteTxt = new Text(i18n.get("ModulDeleteText"));
+        Text ModulDeleteSure = new Text(i18n.get("ModuleDeleteSure"));
         // Button der zur Steuerung gebracuht wird
-        Button delete = new Button("löschen");
+        Button BtDelete = i18n.buttonForKey("BtDelete");
 
         // CheckBox um sicher zugehen das es wir gelöscht werden soll
-        CheckBox CBModulLöschen = new CheckBox("JA");
+        CheckBox CBDeleteModul = i18n.checkBoxForKey("CbDeleteModul");
 
         ChoiceBox<Modul> chPickerModulName = getChPickerModulName(Module);
 
-        getBtModulLöschenNachCheck(chPickerModulName, Module, CBModulLöschen, delete, stage, Events, SchoolTimeTable,
+        getBtModulLöschenNachCheck(chPickerModulName, Module, CBDeleteModul, BtDelete, stage, Events, SchoolTimeTable,
                 StudyPlan, entityManager, entityTransaction, listbox);
 
-        layout.getChildren().addAll(TxtModulLöschen, chPickerModulName, TxtModulLöschenQuestion, CBModulLöschen,
-                delete);
+        layout.getChildren().addAll(ModulDelteTxt, chPickerModulName, ModulDeleteSure, CBDeleteModul,
+                BtDelete);
 
         stage.setScene(scene);
-        stage.setTitle("Modul löschen");
+        stage.setTitle(i18n.get("StTitleDelteModul"));
         stage.setWidth(300);
         stage.setHeight(200);
         stage.show();
