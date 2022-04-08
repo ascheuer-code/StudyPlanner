@@ -1,4 +1,80 @@
- <h1>Studyplaner</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="Manual.css">
+    <style>
+        img {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 100%;
+            min-width: 50vw;
+            height: auto;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="container">
+        <button class="button1"> &equiv;
+            <table>
+                <tr>
+                    <td><a href="#content">Table of Content</a></td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#About"> About the Study Planer</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#how_to_add"> How to add a Modul</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#how_to_delete">How to delete a Modul</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#how_to_build">How to Build a Session</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#how_to_delete_lecture">How to How to delete a lecture</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#Experimental Feature">Automatic learning plan generation</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="#export_events">Export Calendar Entries</a>
+                    </td>
+                </tr>
+            </table>
+        </button>
+    </div>
+    <div id="google_translate_element">
+        choose language (internet connection required)
+    </div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript"
+        src="http:/translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <h1>Studyplaner</h1>
     <h3>The user manual for the Study Planer</h3>
     <p>This app was developed to help students better plan their studies and to better assess the effort required for
         the
@@ -17,46 +93,80 @@
     <p>- How to Export your Events</p>
     <h2 id="About">1. About the Study Planer</h2>
     <h3>This is how the calendar looks like:</h3>
-     <p>You see your Moduls on the left side and the calendar on the right side. to see the week click on
+    <table>
+        <tr>
+            <td>
+                <p>You see your Moduls on the left side and the calendar on the right side. to see the week click on
                     week
                     on the
                     middle Top:</p>
-                    <img src="./images/CalenderOverview.png" alt="CalenderOverview">
-                    <p>for a monthly overview click on month</p>
+                <img src="./images/CalenderOverview.png" alt="CalenderOverview">
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>for a monthly overview click on month</p>
                 <img src="./images/MonthView.png" alt="MonthView">
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <p>Or if you want to see the whole year click on year:</p>
                 <img src="./images/YearView.png" alt="YearView">
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <p>you can change the Language via clicking on the Buttons on the lower corner</p>
                 <img src="./images/language.png" alt="language">
-                <h2 id="how_to_add">How to add a Modul</h2>
+            </td>
+        </tr>
+    </table>
+    <h2 id="how_to_add">How to add a Modul</h2>
     <h3>First Step:</h3>
     <p>You click on the button Modul anlegen to add a new Modul</p>
     <h3> Second Step:</h3>
-    <p>
+    <table>
+        <tr>
+            <td>
+                <p>
                     When you clicked on the Modul anlegen button a window will open in the middle of your Screen.
                 </p>
-                 <p>
+                <p>
                     here you can set a Modul name and the Credit Points for this modul. Then you can click on the
                     save button.
                 </p>
                 <img src="./images/addModulWindow.png" alt="addModulWindow">
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <p>This is how it looks like when you added a Modul: </p>
                 <img src="./images/Moduladded.png" alt="Moduladded">
-                <p>
+            </td>
+        </tr>
+    </table>
+    <p>
         You have to click on the modul you want to change. Then you can set up your changes and click on the change
         button.
     </p>
     <h2 id="how_to_delete">
         How to delete a Modul
     </h2>
-<p>
+    <table>
+        <tr>
+            <td>
+                <p>
                     When you want to delete a modul you have to click on the Modul delete button. Select the modul you
                     want to
                     delete and
                     put a hack into the check box are you sure you want to delete this modul.
                 </p>
                 <img src="./images/DeleteModul.png" alt="DeleteModul">
-                <h2 id="how_to_build">
+            </td>
+        </tr>
+    </table>
+    <h2 id="how_to_build">
         3. How to build a timetable/ learning session
     </h2>
     <p>
@@ -71,7 +181,7 @@
     <p>
         Second step:
     </p>
-      <p>
+    <p>
         A window will open where you have to choose witch Modul you want to add to your timetable. Then you have to
         choose if
         this event is a part of your learning session or your timetable. You also have to choose the starttime and the
@@ -89,7 +199,8 @@
     <p>
         Optionally you can add a description to the event.
         --> The credit points of a Modul will automatically convert into hours, and always when you add a lecture or a
-        learning session the time you invest in a modul will automatically decrease
+        learning
+        session the time you invest in a modul will automatically decrease
     </p>
     <h2 id="how_to_delete_lecture">
         How to delete a lecture / learning session
@@ -123,3 +234,8 @@
         you can find the file in the same directory as the Studyplanner.jar under the name Studyplanner.ics
     </p>
     <img src="./images/exportEvent.png" alt="exportEvent">
+</body>
+<footer>
+</footer>
+
+</html>
