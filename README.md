@@ -21,13 +21,13 @@
                     week
                     on the
                     middle Top:</p>
-                    <img src="../images/CalenderOverview.png" alt="CalenderOverview">
+                    <img src="./images/CalenderOverview.png" alt="CalenderOverview">
                     <p>for a monthly overview click on month</p>
-                <img src="../images/MonthView.png" alt="MonthView">
+                <img src="./images/MonthView.png" alt="MonthView">
                 <p>Or if you want to see the whole year click on year:</p>
-                <img src="../images/YearView.png" alt="YearView">
+                <img src="./images/YearView.png" alt="YearView">
                 <p>you can change the Language via clicking on the Buttons on the lower corner</p>
-                <img src="../images/language.png" alt="language">
+                <img src="./images/language.png" alt="language">
                 <h2 id="how_to_add">How to add a Modul</h2>
     <h3>First Step:</h3>
     <p>You click on the button Modul anlegen to add a new Modul</p>
@@ -39,9 +39,9 @@
                     here you can set a Modul name and the Credit Points for this modul. Then you can click on the
                     save button.
                 </p>
-                <img src="../images/addModulWindow.png" alt="addModulWindow">
+                <img src="./images/addModulWindow.png" alt="addModulWindow">
                 <p>This is how it looks like when you added a Modul: </p>
-                <img src="../images/Moduladded.png" alt="Moduladded">
+                <img src="./images/Moduladded.png" alt="Moduladded">
                 <p>
         You have to click on the modul you want to change. Then you can set up your changes and click on the change
         button.
@@ -55,7 +55,7 @@
                     delete and
                     put a hack into the check box are you sure you want to delete this modul.
                 </p>
-                <img src="../images/DeleteModul.png" alt="DeleteModul">
+                <img src="./images/DeleteModul.png" alt="DeleteModul">
                 <h2 id="how_to_build">
         3. How to build a timetable/ learning session
     </h2>
@@ -81,7 +81,7 @@
         don't
         forget to indicate until when the cycle should end in the field below.
     </p>
-    <img src="../images/Eventadded.png" alt="Eventadded">
+    <img src="./images/Eventadded.png" alt="Eventadded">
     <p>
         The following fields are mandatory: Modulname, calendar, Date, Start Time, End Time, otherwise will be no
         lecture added.
@@ -99,7 +99,7 @@
         delete. Then
         choose to delete or by selecting the event by left click and press delete on your Keyboard.
     </p>
-    <img src="../images/deleteEntry.png" alt="deleteEntry">
+    <img src="./images/deleteEntry.png" alt="deleteEntry">
     <h2 id="Experimental Feature">
         Experimental Feature
     </h2>
@@ -111,7 +111,7 @@
         available
         modules via the button "Create learning plan".
     </p>
-    <img src="../images/createFiller.png" alt="createFiller">
+    <img src="./images/createFiller.png" alt="createFiller">
     <p>Please note that this function is still in an experimental phase.</p>
     <h2 id="export_events">
         4. How to Export all Calendar Events
@@ -122,4 +122,4 @@
     <p>
         you can find the file in the same directory as the Studyplanner.jar under the name Studyplanner.ics
     </p>
-    <img src="../images/exportEvent.png" alt="exportEvent">
+    <img src="./images/exportEvent.png" alt="exportEvent">
