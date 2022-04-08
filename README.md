@@ -53,16 +53,6 @@
             </table>
         </button>
     </div>
-    <div id="google_translate_element">
-        choose language (internet connection required)
-    </div>
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({ pageLanguage: 'en' }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript"
-        src="http:/translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <h1>Studyplaner</h1>
     <h3>The user manual for the Study Planer</h3>
     <p>This app was developed to help students better plan their studies and to better assess the effort required for
