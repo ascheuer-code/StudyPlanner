@@ -7,13 +7,14 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import org.w3c.dom.Text;
+
 
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.Callable;
 
 public class i18n {
+
     /** the current selected Locale. */
     private static final ObjectProperty<Locale> locale;
 
@@ -32,18 +33,23 @@ public class i18n {
     }
 
     /**
-     * get the default locale. This is the systems default if contained in the supported locales, english otherwise.
+     * get the default locale. This is the systems default if contained in the supported locales,
      *
-     * @return
+     * @return Locale.German
      */
     public static Locale getDefaultLocale() {
         Locale sysDefault = Locale.getDefault();
         return getSupportedLocales().contains(sysDefault) ? sysDefault : Locale.GERMAN;
     }
 
+    /**
+     * get the current Locale Language
+     * @return current Locale
+     */
     public static Locale getLocale() {
         return locale.get();
     }
+
 
     public static void setLocale(Locale locale) {
         localeProperty().set(locale);
@@ -119,6 +125,15 @@ public class i18n {
         return button;
     }
 
+    /**
+     * creates a bound CheckBox for the given resourcebundle key
+     *
+     * @param key
+     *         ResourceBundle key
+     * @param args
+     *         optional arguments for the message
+     * @return CheckBox
+     */
     public  static CheckBox checkBoxForKey(final String key, final Object... args){
         CheckBox checkBox = new CheckBox();
         checkBox.textProperty().bind(createStringBinding(key, args));
